@@ -1,0 +1,3483 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@500;600&family=Manrope:wght@600;700&family=Outfit:wght@400;500;600;700&family=Poppins:wght@400;500;600;700;800&family=Roboto:wght@300;400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Nunito&display=swap');
+
+a.active,
+a:focus,
+button:focus,
+button.active {
+    outline: none;
+}
+
+
+a {
+    text-decoration: none;
+}
+
+
+a:focus,
+a:hover,
+a:active {
+    outline: 0;
+    box-shadow: none;
+}
+
+
+a:focus,
+a:hover {
+    text-decoration: none;
+}
+
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    margin: 0;
+    padding: 0;
+}
+
+
+a {
+    text-decoration: none;
+    transition: all 0.5s ease-in-out;
+}
+
+
+a:hover {
+    text-decoration: none;
+}
+
+
+ul,
+ol {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+
+ul li {
+    list-style: none;
+}
+
+
+p {
+    margin: 0;
+    padding: 0;
+}
+
+
+input:focus,
+select:focus,
+textarea:focus {
+    outline: none;
+}
+
+
+.right-content .image-holder {
+    text-align: center;
+}
+
+
+.right-content .image-holder img {
+    border-top-right-radius: 30px;
+    border-top-left-radius: 30px;
+}
+
+
+h1,
+.main-heading {
+    font-size: 48.28px;
+    color: #FFF;
+    text-align: center;
+    font-family: 'Poppins', sans-serif;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 60.35px;
+    /* 125% */
+    letter-spacing: -1.062px;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+}
+
+
+.right-content .text-box p {
+    font-size: 15.087px;
+    color: #EAF0F9;
+    text-align: center;
+    font-family: 'Poppins', sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 24.14px;
+    /* 160% */
+    letter-spacing: -0.287px;
+    margin-bottom: 48px;
+}
+
+
+.right-content .text-box p a {
+    color: #EAF0F9;
+    font-weight: 700;
+}
+
+
+.right-content .text-box {
+    position: absolute;
+    z-index: 999;
+    bottom: 59px;
+    left: 50%;
+    transform: translate(-50%, 0);
+}
+
+
+.nav-show .right-content .text-box {
+    z-index: 0;
+}
+
+.nav-tabs .nav-link.active {
+    background: url(../images/bg-btn.png);
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    color: #FBFCFF;
+    border-radius: 20px;
+}
+
+.nav-tabs .nav-link {
+    font-size: 16px;
+    padding: 4px 24px;
+    color: #AFBCD2;
+    text-align: center;
+    font-family: 'Poppins', sans-serif;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    border: 0 !important;
+    display: flex;
+    align-items: center;
+}
+
+.nav-tabs {
+    border-bottom: 0;
+}
+
+
+.game-inner-hover .image-holder {
+    max-width: 96px;
+    text-align: left;
+    width: 100%;
+}
+
+
+.signup-sec .text-box h5 {
+    color: #FFF;
+    font-size: 32px;
+    font-weight: 500;
+    line-height: normal;
+}
+
+
+input[type="file"] {
+    display: none;
+}
+
+
+.sign-media .nav-link {
+    color: #FFF;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: normal;
+    text-transform: capitalize;
+    width: 144px;
+}
+
+
+.sign-media .nav-pills .nav-link.active {
+    background: #FFF;
+    border-radius: 100px;
+    color: #242424;
+}
+
+
+.avatar-main,
+.avatar-sec .text-box h5 {
+    max-width: 744px;
+    margin: 0 auto;
+}
+
+
+.avatar-sec .text-box {
+    margin-bottom: 30px;
+}
+
+
+.header-2 {
+    padding-top: 5px;
+}
+
+
+.right-list ol li {
+    margin-right: 8px;
+}
+
+
+.right-list ul li:last-child {
+    margin-right: 0;
+}
+
+
+.right-list ol li a {
+  background-color: rgba(29, 29, 29, 0);
+  padding: 13px;
+  width: 56px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 100px;
+
+  /* Glass blur (needs both for best coverage) */
+  -webkit-backdrop-filter: blur(15px);
+  backdrop-filter: blur(15px);
+}
+
+
+
+.left-list ul li {
+    margin-right: 32px;
+}
+
+
+.left-list ul li:last-child {
+    margin-right: 0;
+}
+
+
+.left-list ul li a {
+    font-size: 1rem;
+    color: #E1E9FA;
+    /* Body/Bold */
+    font-family: "Glacial Indifference","Roboto","Helvetica",sans-serif;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 24px;
+    /* 150% */
+    letter-spacing: -0.176px;
+}
+
+
+.header-2 {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 999;
+}
+
+
+.buy-hero {
+    background: url('../images/buy-bg.png');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    position: relative;
+    height: 100vh;
+    background-color: #060c12;
+}
+
+
+.demo {
+    background: url(../images/demo.png)!important;
+    background-size: 100% !important;
+}
+
+
+.emoji-main ul li {
+    margin-right: 0;
+}
+
+
+.emoji-main ul {
+    flex-wrap: wrap;
+}
+
+
+.emoji-main {
+    z-index: 10;
+    border-radius: 20px;
+    background: rgba(255, 255, 255, 0);
+    backdrop-filter: blur(35px);
+    max-width: 496px;
+    min-width: 475px;
+    width: 100%;
+    position: absolute;
+    top: 70px;
+    right: 10px;
+    display: none;
+}
+
+/* ================================
+   Verification Slider
+================================ */
+
+.verification-slider{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:24px;
+  width:100%;
+  height:100%;
+  padding:20px 0;
+}
+
+/* Card container */
+.slide-stage{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  min-width:280px;
+  max-width:420px;
+}
+
+.slide-stage img{
+  max-width:220px;
+  width:100%;
+  height:auto;
+  user-select:none;
+  pointer-events:none;
+}
+
+/* CSS Arrows */
+.slide-arrow{
+  width:42px;
+  height:42px;
+  border:none;
+  background:transparent;
+  cursor:pointer;
+  position:relative;
+}
+
+.slide-arrow::before{
+  content:'';
+  position:absolute;
+  top:50%;
+  left:50%;
+  width:14px;
+  height:14px;
+  border-top:3px solid #fff;
+  border-right:3px solid #fff;
+  transform-origin:center;
+}
+
+/* Left arrow */
+.slide-arrow.prev::before{
+  transform: translate(-40%, -50%) rotate(-135deg);
+}
+
+/* Right arrow */
+.slide-arrow.next::before{
+  transform: translate(-60%, -50%) rotate(45deg);
+}
+
+.slide-arrow:hover::before{
+  border-color:#8391A9;
+}
+
+/* Mobile tightening */
+@media(max-width:640px){
+  .slide-arrow{
+    width:34px;
+    height:34px;
+  }
+  .slide-stage img{
+    max-width:240px;
+  }
+}
+
+
+
+/* ================================
+   GAME HEADER — RIGHT LIST NORMALIZER
+   (scoped so the main header is untouched)
+   ================================ */
+#gameHeader .right-list { display:flex; align-items:center; gap:0; position:relative; z-index:1000; }
+
+
+/* Icon row */
+#gameHeader .right-list > ol {
+  list-style:none; margin:0; padding:0;
+  display:flex; align-items:center; gap:0;
+}
+
+#gameHeader .right-list > ol li { float:none !important; display:inline-flex; }
+
+#gameHeader .right-list > ol li a img { width:24px; height:24px; }
+
+
+/* ================================
+   BOOTSTRAP TABS — HARD RESET (Scoped)
+   Stops global <li> float/right-nav rules from leaking in
+   ================================ */
+#gameHeader .emoji-main .nav-tabs{
+  display:flex; flex-wrap:nowrap; gap:6px;
+  border-bottom:1px solid rgba(255,255,255,.15);
+  margin:0 0 0 0; padding:10px; list-style:none;
+}
+
+#gameHeader .emoji-main .nav-tabs .nav-item{
+  float:none !important; /* nuke any float from site nav */
+  margin:0; padding:0; display:block;
+}
+
+#gameHeader .emoji-main .nav-tabs .nav-link{
+  display:block; padding:6px 10px;
+  color:#e5e9f2; background:transparent; border:0; border-radius:6px;
+  line-height:1; font-weight:600;
+}
+
+#gameHeader .emoji-main .nav-tabs .nav-link.active{
+  background:rgba(255,255,255,.08);
+}
+
+
+/* Tab panes */
+#gameHeader .emoji-main .tab-content{ color:#e5e9f2; }
+
+#gameHeader .emoji-main .tab-pane ul{
+  list-style:none; margin:0; padding:0;
+  display:flex; flex-wrap:wrap; gap:10px;
+}
+
+#gameHeader .emoji-main .chat-input{
+  display:flex; gap:8px; margin-top:8px;
+}
+
+#gameHeader .emoji-main .chat-input input{
+  flex:1; padding:6px 8px; border-radius:6px;
+  border:1px solid rgba(255,255,255,.15); background:#0e1218; color:#fff;
+}
+
+
+
+.header-main {
+    position: relative;
+}
+
+
+.buy-wrap .nav-tabs .nav-link.active {
+    background: url(../images/bg-btn.png);
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    color: #FBFCFF;
+}
+
+
+.buy-wrap .nav-tabs .nav-link {
+    font-size: 16px;
+    padding: 4px 24px;
+    color: #AFBCD2;
+    text-align: center;
+    /* Body Bold */
+    font-family: 'Poppins', sans-serif;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+}
+
+
+.emoji-main ul#myTab {
+    border-radius: 16px 16px 0px 0px;
+    padding: 12px;
+    background: rgba(0, 0, 0, .50);
+    border: 0px solid rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(15px);
+}
+
+
+.chat-main {
+    padding: 8px;
+}
+
+
+.chat-main ul li,
+.chat-input input::placeholder {
+    font-size: 14px;
+    color: #E1E9FA;
+    /* Small Medium */
+    font-family: 'Poppins', sans-serif;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 170%;
+    /* 23.8px */
+    margin-bottom: 8px;
+}
+
+
+.chat-input input {
+    width: 100%;
+    border-radius: 12px;
+    border: .25px solid #151515;
+    background: #151515;
+    padding: 10px 60px 10px 16px;
+    color: #fff;
+    height: 48px;
+}
+
+
+.chat-input input::placeholder {
+    font-weight: 700;
+}
+
+
+.chat-input {
+    position: relative;
+}
+
+
+.chat-input a {
+    position: absolute;
+    top: 50%;
+    right: -5px;
+    transform: translate(0, -50%);
+    background: #fff;
+    padding: 15px;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+.chat-main ul {
+    margin-left: 6px;
+    height: 87.39px;
+    overflow-y: auto;
+}
+
+
+.support-main {
+    padding-top: 48px;
+    padding-bottom: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+.support-main a {
+    font-size: 16px;
+    border: 2px solid #E1E9FA;
+    color: #E1E9FA;
+    text-align: center;
+    font-family: 'Poppins', sans-serif;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    margin-right: 16px;
+    width: 100%;
+    max-width: 144px;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50px;
+}
+
+
+.support-main a:hover {
+    background: #151515;
+    color: #fff;
+}
+
+
+.support-main a:last-child {
+    margin-right: 0;
+}
+
+
+.info-main ul li p {
+    font-size: 14px;
+    color: #E1E9FA;
+    /* Small Medium */
+    font-family: 'Poppins', sans-serif;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 170%;
+    /* 23.8px */
+}
+
+
+.info-main ul li {
+    margin-bottom: 8px;
+}
+
+
+.info-main ul li:last-child {
+    margin-bottom: 0;
+}
+
+
+.info-main {
+    padding: 16px;
+}
+
+
+.buy-hero .text-box h4 {
+    font-size: 24px;
+    color: #FBFCFF;
+    text-align: center;
+    font-family: 'Poppins', sans-serif;
+    /* Header 3/Medium */
+    font-style: normal;
+    font-weight: 500;
+    line-height: 32px;
+    /* 133.333% */
+    letter-spacing: -0.456px;
+    text-transform: capitalize;
+    margin-bottom: 16px;
+}
+
+
+.buy-hero .enter-buy-main2 .text-box h4 {
+    margin-bottom: 89px;
+}
+
+
+.buy-hero .enter-buy-main2 .price-main {
+    margin-bottom: 85px;
+}
+
+
+.camera-setting-main,
+.hand-rank,
+.time-main {
+    background: rgba(0, 0, 0, 0.5);
+    border: 0.751px solid rgba(98, 98, 98, 0.15);
+    backdrop-filter: blur(50px);
+    max-width: 544px;
+    width: 100%;
+    padding-top: 24px;
+    border-radius: 30px;
+    text-align: center;
+    margin: 0 auto;
+    z-index: 9999;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+
+.time-main {
+    height: 441px;
+}
+
+
+.time-main-2 {
+    z-index: 9999;
+}
+
+
+.camera-setting-main .image-holder img {
+    max-width: 274px;
+    border-radius: 25px;
+    object-fit: cover;
+    object-position: center;
+    padding-bottom: 15px;
+}
+
+
+.price-list ul li {
+    font-size: 20px;
+    color: #5D6065;
+    font-family: 'Poppins', sans-serif;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    margin-right: 24px;
+    border-radius: 8px;
+    border: 0.938px solid rgba(255, 255, 255, 0.10);
+    background: #E1E9FA;
+    padding: 7px 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+.price-list ul li:last-child {
+    margin-right: 0;
+}
+
+
+.price-list .price-lst2 {
+    font-size: 24px;
+    padding: 10px 45px;
+    color: #69CB84;
+    border-radius: 16px;
+}
+
+
+.ui-widget.ui-widget-content {
+    max-width: 238px;
+    margin: 0 auto;
+    width: 100%;
+    height: 6px;
+    border: 0.938px solid rgba(255, 255, 255, 0.10);
+    border-radius: 4px;
+    background: rgba(17, 20, 26, 0.50);
+    backdrop-filter: blur(25px);
+}
+
+
+.price-main {
+    max-width: 332px;
+    width: 100%;
+    margin: 0 auto;
+    margin-bottom: 41px;
+}
+
+
+span.ui-slider-handle.ui-corner-all.ui-state-default {
+    border-radius: 30px;
+    border: 0.938px solid rgba(255, 255, 255, 0.10);
+    background: var(--brand-600, #E1E9FA);
+    outline: 0;
+    max-width: 30px;
+    height: 30px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+
+.ui-slider-horizontal .ui-slider-range-min {
+    background: #FBFCFF;
+}
+
+
+.price-list ul {
+    margin-bottom: 24px;
+}
+
+
+.price-main span {
+    font-size: 14px;
+    color: #E1E9FA;
+    /* Small/Medium */
+    font-family: 'Poppins', sans-serif;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 24px;
+    /* 171.429% */
+    letter-spacing: -0.084px;
+}
+
+
+.buy-btn-main ul {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+.buy-btn-main p {
+    font-size: 16px;
+    color: #AFBCD2;
+    /* Body Medium */
+    font-family: 'Poppins', sans-serif;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 140%;
+    /* 22.4px */
+    text-align: center;
+    margin-left: 32px;
+    margin-bottom: 100px;
+}
+
+
+.buy-btn-main p span {
+    font-weight: 700;
+}
+
+
+.buy-watch-btn,
+.buy-play-btn {
+    font-size: 22px;
+    border: 0.751px rgba(255, 255, 255, 0.15);
+    color: #FFF;
+    text-align: center;
+    font-family: 'Poppins', sans-serif;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 72%;
+    /* 15.84px */
+    letter-spacing: 1.1px;
+    max-width: 272px;
+    width: 100%;
+    height: 72px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: url('../images/watch-bg.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+
+.buy-play-btn {
+    background: url('../images/buy-play.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+
+.buy-watch-btn:hover,
+.buy-play-btn:hover {
+    color: #FFF;
+}
+
+
+.buy-btn-main ul li {
+    background: transparent;
+    border: 0;
+}
+
+
+.ui-slider-horizontal .ui-slider-range {
+    top: -1px;
+    height: 6px;
+    left: -1px;
+}
+
+
+.loby-main-inner .text-box h5 {
+    font-size: 18px;
+    color: #FFF;
+    text-align: center;
+    font-family: 'Poppins', sans-serif;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 32px;
+    /* 177.778% */
+    letter-spacing: -0.342px;
+}
+
+
+.loby-main-inner .text-box h4 {
+    font-size: 22px;
+    color: #FBFCFF;
+    text-align: center;
+    font-family: 'Poppins', sans-serif;
+    font-style: normal;
+    font-weight: 800;
+    line-height: normal;
+    margin-bottom: 0;
+    margin-right: 11px;
+    padding-left: 7px;
+}
+
+
+.loby-main-inner .text-box {
+    border-radius: 16px;
+    border: 1px solid #333;
+    opacity: 1;
+    background: #181818;
+    max-width: 152px;
+    margin: 0 auto;
+    width: 100%;
+    margin-top: -2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 40px;
+    position:sticky;
+}
+
+
+.loby-main-inner .text-box .d-loby {
+    color: #38455C;
+    background: #CCD2DF;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    padding-left: 0;
+    margin-left: 5px;
+}
+
+
+.buy-cross {
+    position: absolute;
+    top: 24px;
+    right: 24px;
+}
+
+
+.buy-bottom {
+    position: absolute;
+    width: 100%;
+    bottom: -8px;
+    left: 0px;
+}
+
+
+.buy-text-box {
+    position: absolute;
+    bottom: 90px;
+    right: -30px;
+    border-radius: 16px;
+    border: 1px solid #7386AA;
+    background: #151515;
+    max-width: 152px;
+    height: 40px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+.buy-text-box h5 {
+    font-size: 24px;
+    color: #FFF;
+    text-align: center;
+    font-family: 'Poppins', sans-serif;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 32px;
+    /* 133.333% */
+    letter-spacing: -0.456px;
+}
+
+
+.buy-text-box h5 span {
+    color: #69CB84;
+}
+
+
+.enter-buy-main .text-box h4 {
+    padding-bottom: 89px;
+}
+
+
+.enter-buy-main .price-main {
+    margin-bottom: 44px;
+}
+
+.cards-main-inner {
+    position: absolute;
+    top: 3%;
+    bottom: 84%;
+    /* center horizontally regardless of left/right */
+    left: 50% !important;
+    right: auto !important;
+    transform: translateX(-50%);
+}
+
+
+.cards-main-inner2 {
+    border-radius: 20px;
+    background: rgba(0, 0, 0, 0);
+    backdrop-filter: blur(15px);
+    padding: 10px 24px 10px 24px;
+    margin-bottom: 7px;
+}
+
+
+.cards-main ul {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+
+.cards-main ul li {
+    margin-right: 17px;
+}
+
+
+.cards-main ul li:last-child {
+    margin-right: 0;
+}
+
+
+.hand-rank .buy-cross {
+    top: 15px;
+}
+
+
+.time-inner h2 {
+    text-align: center;
+    /* Header 1 */
+    font-family: 'Poppins', sans-serif;
+    font-size: 64px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 80px;
+    /* 125% */
+    letter-spacing: -1.408px;
+    background: linear-gradient(271deg, #FF6F77 0%, #FEAC99 100%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+
+.time-inner p {
+    font-size: 16px;
+    color: #E1E9FA;
+    text-align: center;
+    /* Small/Medium */
+    font-family: 'Poppins', sans-serif;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 24px;
+    /* 150% */
+    letter-spacing: -0.176px;
+    margin-bottom: 32px;
+}
+
+
+.time-inner .para p {
+    max-width: 386px;
+    margin: 0 auto;
+    width: 100%;
+    padding-bottom: 150px;
+    margin-bottom: 0;
+}
+
+
+.time-main-2 .text-box h4 {
+    padding-bottom: 44px;
+    margin-bottom: 0;
+}
+
+
+.alert-img {
+    margin-bottom: 32px;
+    padding-top: 100px;
+}
+
+
+.alert-inner p {
+    max-width: 289px;
+    font-size: 24px;
+    line-height: 32px;
+}
+
+
+.time-main .time-inner .para p {
+    padding-bottom: 80px;
+}
+
+
+.emoji-main-inner li a img {
+    max-width: 100px;
+    width: 100%;
+    background: transparent;
+
+}
+
+
+.hand-rank.hand-rank-mbl.box-show.d-flex {
+    display: none !important;
+}
+
+
+.fold-main {
+    max-width: 542px;
+    width: 100%;
+    margin: 0 auto;
+    position: absolute;
+    top: 70%;
+    left: 50%;
+    transform: translate(-50%, 0);
+    margin-bottom: 10px;
+}
+
+
+.fold-main .price-main {
+    margin-bottom: 0;
+    border-radius: 8px;
+    background: rgba(18, 18, 18, 0.2);
+    backdrop-filter: blur(15px);
+    padding: 8px;
+    height: 56px;
+    padding-right: 16px;
+    margin-bottom: 18px;
+}
+
+
+#min-price2 {
+    border-radius: 8px;
+    background: rgba(17, 20, 26, 0.50);
+    backdrop-filter: blur(25px);
+    color: #FFF;
+    text-align: center;
+    font-family: 'Poppins', sans-serif;
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    padding: 7px 20px;
+    margin-right: 16px;
+}
+
+
+.fold-main ul li {
+    font-size: 20px;
+    color: #FBFCFF;
+    font-family: 'Poppins', sans-serif;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    border-radius: 8px;
+    background: rgba(17, 20, 26, 0.0);
+    padding: 18px 21px;
+    backdrop-filter: blur(15px);
+    margin-right: 8px;
+}
+
+
+.fold-main ul li:last-child {
+    margin-right: 0;
+}
+
+
+.fold-main ul {
+    margin-bottom: 8px;
+}
+
+
+.prefold-btn,
+.fold-btn,
+.call-btn,
+.preraise-btn,
+.raise-btn {
+    background: url(../images/fold-bg.svg);
+    background-repeat: no-repeat;
+    background-size: cover;
+    width: 168px;
+    height: 65px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(15px);
+    border-radius: 15px;
+}
+
+
+.call-btn {
+    background: rgba(255, 255, 255, 0.10);
+    backdrop-filter: blur(15px);
+    border-radius: 15px;
+}
+
+
+.raise-btn {
+    background: url(../images/raise-btn.svg);
+    backdrop-filter: blur(15px);
+    border-radius: 15px;
+}
+
+
+.fold-btn-main ol li a {
+    font-size: 20px;
+    color: #FFF;
+    text-align: center;
+    font-family: 'Poppins', sans-serif;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+}
+
+
+.fold-btn-main ol li {
+    margin-right: 16px;
+}
+
+
+.fold-btn-main ol li:last-child {
+    margin-right: 0;
+}
+
+
+.react-emoji-main .info-main ul li {
+    width: 100% !important;
+    text-align: center;
+}
+
+
+
+.my-react-img.show {
+    display: block;
+    position: absolute;
+    top: 40px;
+    width: 150%;
+}
+
+
+.camera-setting-main.bg-remove {
+    background: transparent;
+    backdrop-filter: none;
+    z-index: 0;
+}
+
+
+.camera-setting-main.bg-remove .main-bg {
+    display: none;
+}
+
+
+.main-bg {
+    color: #AFBCD2;
+}
+
+
+.buy-hero.z-ind {
+    z-index: 900;
+}
+
+
+.emoji-main-inner.add-after::after {
+    display: block;
+}
+
+
+.buy-cross4 {
+    display: none;
+    z-index: 99;
+}
+
+
+.image-holder.react-video-main {
+    position: relative;
+    min-height: 241px;
+}
+
+
+.image-holder.react-video-main2 {
+    position: relative;
+    top: 185px;
+}
+
+
+.loby-main-inner .text-box .sky-call-main {
+    color: #40AFFF;
+}
+
+
+.loby-main-inner .text-box .yellow-call-main {
+    color: #FFD764;
+}
+
+
+.loby-main-inner .text-box .call-main {
+    font-size: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    width: 100%;
+    color: #55A46B;
+    /* Header 3/Medium */
+    font-family: 'Poppins', sans-serif;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 32px;
+    /* 133.333% */
+    letter-spacing: -0.456px;
+}
+
+
+.loby-main-inner .text-box .yellow-call-main {
+    color: #FFD764;
+}
+
+
+.loby-main-inner .text-box .call-main-font {
+    color: #FF7940;
+}
+
+
+#min-price3 {
+    color: #FFF;
+    text-align: center;
+    font-family: 'Poppins', sans-serif;
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    letter-spacing: -1.44px;
+    max-width: 78px;
+    width: 100%;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: left;
+    border-radius: 8px;
+    border: 1px solid rgba(56, 69, 92, 0.25);
+    background: rgba(17, 20, 26, 0.25);
+    margin-bottom: -4px;
+    position: relative;
+    z-index: 99;
+}
+
+
+.pricerange {
+    max-width: 360px;
+    width: 100%;
+    margin: 0;
+}
+
+
+.price-main3 .ui-slider-horizontal .ui-slider-range {
+    background: #69CB84;
+    height: 28px;
+    border-radius: 16px;
+    top: 1px;
+}
+
+
+.price-main3 .ui-widget.ui-widget-content {
+    height: 31px;
+    border-radius: 16px 0px 0px 16px;
+    border: 1px solid rgba(56, 69, 92, 0.25);
+    background: rgba(17, 20, 26, 0.50);
+    max-width: 300px;
+}
+
+
+.price-main3 span.ui-slider-handle.ui-corner-all.ui-state-default:after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
+    width: 100%;
+    height: 100%;
+}
+
+
+.fold-main .price-main3 {
+    border-radius: 32px;
+    background: rgba(255, 255, 255, 0.10);
+    backdrop-filter: blur(25px);
+    padding: 14px 16px;
+}
+
+
+.price-main3 .ui-slider-horizontal .ui-slider-range {
+    left: 1px;
+}
+
+
+.price-main3 {
+    max-width: 344px;
+}
+
+
+.price-main3 span {
+    max-width: 40px;
+    width: 100%;
+    height: 40px;
+    color: #FFF;
+    text-align: center;
+    font-family: 'Poppins', sans-serif;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 87%;
+    /* 13.92px */
+    letter-spacing: -0.96px;
+    position: absolute;
+    top: 50%;
+    right: 0;
+    transform: translate(0, -50%);
+    background: #69CB84;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+.price-range-inner {
+    display: none;
+}
+
+
+.add-before .fold-main {
+    z-index: -1;
+}
+
+
+.show-popup .camera-setting-main {
+    display: block;
+}
+
+
+.camera-setting-main {
+    display: none;
+}
+
+
+.enter-buy-main {
+    display: none;
+}
+
+
+/* Contact us */
+.contactus .text-box h5 {
+    margin-bottom: 32px;
+}
+
+
+.contactus .contact-info .image-holder {
+    margin-right: 16px;
+}
+
+
+.deposit-history .text-box {
+    text-align: center;
+}
+
+
+.deposit-history .text-box h5 {
+    margin-bottom: 40px;
+}
+
+
+/* transaction */
+.transaction .text-box {
+    text-align: left;
+}
+
+
+/* With draw history  */
+.withdraw-history .text-box {
+    text-align: left;
+}
+
+
+.referrals .text-box h5 {
+    margin-bottom: 75px;
+}
+
+
+.game-logs .text-box h5 {
+    margin-bottom: 50px;
+}
+
+
+/* Commission */
+.commission .text-box h5,
+.support-ticket .text-box h5 {
+    margin-bottom: 50px;
+}
+
+
+.change-password .text-box h5 {
+    margin-bottom: 32px;
+}
+
+
+.two-fa-main p,
+.set-key-main h5,
+.two-factor-bottom .text-box h6,
+.dowload {
+    font-size: 14px;
+    color: #CDCDCD;
+    font-family: 'Poppins', sans-serif;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+}
+
+
+.two-fa-main .image-holder {
+    margin-top: 25px;
+    margin-bottom: 33px;
+}
+
+
+.two-factor-bottom .text-box h6 {
+    color: #E1E9FA;
+    margin-left: 3px;
+}
+
+
+.right-list ol li a.icon-bg,
+.right-list ol li a:hover {
+    background: url(../images/bg-btn.png);
+    background-repeat: no-repeat;
+    background-size: cover;
+    color: #FBFCFF;
+}
+
+
+.image-holder.alert-img img {
+    width: 60px;
+    max-width: none;
+    border-radius: 0;
+}
+
+
+.about-hero-main .right-content .text-box {
+    text-align: center;
+}
+
+
+.about-hero-main .right-content .text-box img {
+    margin-bottom: 45px;
+}
+
+
+.about-hero-main .right-content .text-box p {
+    max-width: 705px;
+    width: 100%;
+    margin: 0 auto;
+}
+
+
+.two-ways .text-box p {
+    font-size: 18px;
+    color: #AFBCD2;
+    font-family: 'Poppins', sans-serif;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    margin-bottom: 47px;
+}
+
+
+.play-immersive .image-holder {
+    margin-bottom: 20px;
+}
+
+
+.about-hero-main .right-content .text-box p {
+    font-size: 16px;
+}
+
+
+.loby-main-inner .text-box .pink-d-loby {
+    font-size: 26px;
+    background: url(../images/progress-shape.svg);
+    color: #FBFCFF;
+    font-family: 'Poppins', sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    letter-spacing: -0.52px;
+    max-width: 45px;
+    height: 62px;
+    margin-right: -28px;
+    margin-left: -3px;
+    background-size: contain;
+    background-position: top;
+    background-repeat: no-repeat;
+    object-fit: cover;
+    object-position: center;
+    width: 100%;
+    margin-left: -16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-shadow: 0px 4.072116374969482px 4.072116374969482px rgba(0, 0, 0, 0.25);
+}
+
+
+.loby-main-inner .text-box .f-red {
+    font-size: 24px;
+    color: #FF6F77;
+    font-family: 'Poppins', sans-serif;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 32px;
+    /* 133.333% */
+    letter-spacing: -0.456px;
+}
+
+ 
+
+.gamevideo {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+
+.dealer-msg {
+    color: #aaaaaa !important;
+}
+
+
+.bgoverflow {
+    overflow: hidden;
+}
+
+
+
+    /* ================================================================
+       BASE PAGE / LAYOUT — (UNCHANGED FROM YOUR FILE)
+       ================================================================ */
+    /* Extracted from UI-avatar.html inline <style> block. */
+        /* Prevent menu shift on close */
+      .site-nav ul.menu {
+        transition: opacity .25s ease !important;
+        position: absolute !important;
+        top: 0;
+        right: 7%;
+        width: 100%;
+      }
+
+    .site-nav:not(.active) ul.menu {
+      pointer-events: none;
+    }
+
+    body, html {
+      height: 100%;
+      margin: 0 !important;
+      padding: 0 !important;
+      overflow: hidden !important; /* Hide scrollbars */
+      background-color: #000 !important;
+    }
+
+    .room { z-index: 1; position: absolute; }
+
+    .tabletop {
+      width: 100%;
+      margin-left: 0%;
+      margin-top: -3%;
+    }
+
+    /* ============================================================
+      LIVE PIP — SEAT-ANCHORED SYSTEM (RESPONSIVE + SCALABLE)
+      ============================================================ */
+
+/* ================================
+   LIVE PIP (NEW SYSTEM)
+   Centered above the overlay .text-box
+   - responsive
+   - max width = text-box (adjustable)
+   - aspect-ratio 9/12
+   ================================ */
+
+/* Make text-box the anchor WITHOUT affecting overlay positioning */
+.overlay-box .text-box{
+  position: absolute; /* keep your existing absolute behavior */
+  overflow: visible;  /* allow pip to sit outside */
+}
+
+/* PIP is positioned relative to the text-box (JS will append it inside .text-box) */
+.overlay-box .text-box .live-pip{
+  position: absolute;
+  left: 50%;
+  bottom: 100%;                 /* pip bottom flush to top of text-box */
+  transform: translateX(-50%);
+  margin: 0;                    /* no gap (set --pip-gap if you want spacing) */
+
+  width: var(--pip-w, 250%);
+  max-width: 250%;
+
+  aspect-ratio: 9 / 13;
+  height: auto;
+
+  border-radius: 17px;
+  object-fit: cover;
+  display: block;
+  z-index: 2;
+  pointer-events: none; /* pip never steals clicks */
+}
+
+/* Optional: add a tiny gap if you want (default 0) */
+.overlay-box .text-box .live-pip{
+  translate: 0 calc(var(--pip-gap, 0px) * -1);
+}
+
+/* Optional sizing knobs (set on :root, .overlay-box, or per seat overlay) */
+/* :root { --pip-w: 90%; --pip-gap: 0px; } */
+
+/* ================================
+   Live PIP Responsive Tuning
+   ================================ */
+   video.live-pip { visibility: hidden; }
+
+/* Mobile */
+@media (max-width: 768px) {
+  :root {
+    --pip-w: 100%;
+  }
+}
+
+/* Tablet */
+@media (min-width: 769px) and (max-width: 1199px) {
+  :root {
+    --pip-w: 110%;
+  }
+}
+
+/* Laptop */
+@media (min-width: 1200px) and (max-width: 1399px) {
+  :root {
+    --pip-w: 130%;
+  }
+}
+
+/* Desktop / Large screens */
+@media (min-width: 1400px) and (max-width: 2499px){
+  :root {
+    --pip-w: 170%;
+  }
+}
+
+/* TV screens */
+@media (min-width: 2500px) {
+  :root {
+    --pip-w: 225%;
+  }
+}
+
+
+    :root{
+      --focus-blur: 0px;      /* adjust focus: 0..30+px */
+      --focus-dim: 0;
+      --focus-brightness: 100%;
+      --focus-contrast: 100%;
+      --focus-saturate: 100%;
+
+      /* ===== Zoom Area + BG video prep ===== */
+      --zoom-area-width: 20vw;
+      --zoom-area-height: 15vh;
+      --zoom-area-outline: 2px dashed rgba(255,255,255,.0);
+      --zoom-max: 1.75;
+      --zoom-in-speed: 1.4;
+      --zoom-out-speed: 2.0;
+
+      /* position vars for #zoomArea */
+      --zoom-left: 50%;
+      --zoom-top: 76%;
+
+      /* ===== BG video crossfade-to-black knobs ===== */
+      --bgfade-duration: 10ms;
+      --bgfade-ease: cubic-bezier(.22,.61,.36,1);
+      --bgfade-color: transparent;
+      --bgfade-opacity: .5;
+
+      /* ===== Characters + overlay fade (simple knobs) ===== */
+      --chars-fade-delay: 0s;
+      --chars-fade-duration: .24s;
+
+      /* ===== Pot positioning (AUTO by default now) ===== */
+      --pot-mode: manual;       /* manual | auto */
+      /* Manual knobs (used only if --pot-mode:manual) */
+      --pot-left: 30%;
+      --pot-top: 68%;
+      --pot-width: 100px;
+
+      /* Auto-follow offsets (relative to zoomArea RIGHT edge, Y centered) */
+      --pot-offset-x: 0px;
+      --pot-offset-y: 0px;
+
+      /* Default stack offsets (overridable per seat if ever needed) */
+      --stack-shift-x: 0px;
+      --stack-shift-y: 22px;
+      --stack-scale: .95;
+
+      /* ===== Chip flight + collect tuning ===== */
+      --chip-flight-duration: 1s;   /* move time into pot */
+      --chip-fade-duration: .00s;   /* chip opacity ease */
+      --collect-stagger: .06s;      /* delay between each player's chip flight on collect */
+
+      /* ==========================================================
+         [TOP KNOBS] ALL-IN ANIMATION (DISTANCE/SPEED/DELAY)
+         These power the 'dip' + 'push' when All-In is selected.
+         ========================================================== */
+      /* Distances (⇣ positive Y = down | positive X = right) */
+      --allin-bump-px: 35px;      /* instant dip DOWN when All-In selected */
+      --allin-push-px: 0px;      /* slow glide FORWARD after the dip */
+
+      /* Timing / easing */
+      --allin-push-duration: .55s;
+      --allin-push-delay: .02s;
+      --allin-ease: cubic-bezier(.22,.61,.36,1);
+
+      /* Bump (the quick dip) */
+      --allin-bump-duration: 3s;        /* speed of the dip; 0s = instant */
+      --allin-bump-delay: 2s;           /* wait before the dip starts */
+
+      /* Push (the slow glide forward) */
+      --allin-push-duration: 600ms;     /* speed of the forward glide */
+      --allin-push-delay: 120ms;        /* wait after the bump before gliding */
+
+      --stack-hit-dx: 0px;  /* +right / -left tweak */
+      --stack-hit-dy: 80px;  /* +down  / -up   tweak */
+
+      /* ==========================================================
+         [TOP KNOBS] STACK → POT MOVE (on "Betting")
+         Controls how fast/when the full stack slides into pot.
+         ========================================================== */
+      --stack-to-pot-duration: .65s;
+      --stack-to-pot-delay: 0s;
+    }
+
+    /* ⬇️ ALL-IN ANIMATION-these must NOT be inside :root */
+      .stack-character2-seat1{
+        --allin-bump-px: 0px;
+        --allin-push-px: -100px;
+        --allin-push-y:  0px;      /* no downward drift */
+        --allin-bump-duration: 0;
+        --allin-bump-delay: 2s;
+        --allin-push-duration: 3s;
+      }
+      .stack-character3-seat1{
+        --allin-bump-px: 0;
+        --allin-push-px: -100px;
+        --allin-push-y:  0px;
+        --allin-bump-duration: 0;
+        --allin-bump-delay: 1.5s;
+        --allin-push-duration: 3s;
+      }
+      .stack-character7-seat1{
+        --allin-bump-px: 0px;      /* no dip */
+        --allin-push-px: 80px;    /* right */
+        --allin-push-y:  0px;      /* ⬅ prevent the “down” */
+        --allin-bump-duration: 0;
+        --allin-bump-delay: 2s;
+        --allin-push-duration: 3s;
+      }
+
+      .stack-character8-seat1{
+        --allin-bump-px: 0;
+        --allin-push-px: 80px;   /* right */
+        --allin-push-y:  0;   /* up */
+        --allin-bump-duration: 0s;
+        --allin-bump-delay: 2s;
+        --allin-push-duration: 3s;
+      }
+ 
+
+
+    /* === Pot hit-point (landing spot) === */
+    :root{
+      /* Tune these to move where chips land */
+      --pot-hit-x: 70%;   /* 0% left edge … 100% right edge */
+      --pot-hit-y: 0%;    /* 0% TOP of pot … 100% bottom of pot (smaller = higher) */
+      --pot-hit-size: 1px; /* invisible target box size */
+    }
+
+    #potTarget{
+      position:absolute;
+      width: var(--pot-hit-size);
+      height: var(--pot-hit-size);
+      left: calc(var(--pot-hit-x) - var(--pot-hit-size)/2);
+      top:  calc(var(--pot-hit-y) - var(--pot-hit-size)/2);
+      pointer-events:none;
+      /* uncomment for debugging:
+      outline: 1px dashed rgba(0,255,255,.6);
+      */
+    }
+
+    /* stack holds bg + room + overlay */
+    .bg-stack{ position:fixed; inset:0; z-index:0; overflow:hidden; }
+
+    /* background video (base) */
+    #backgroundVideo{
+      position:absolute; inset:0;
+      width:100%; height:100%;
+      object-fit:cover;
+      z-index:0;
+      transform-origin: 50% 50%;
+      will-change: transform;
+    }
+
+    /* room image is also behind the blur */
+    .room{
+      position:fixed;
+      z-index:0;                  /* IMPORTANT: below the overlay */
+      margin-top: -45%;
+      margin-left: -25%;
+      width: 153%;
+    }
+
+    /* focus overlay (visual tint only; backdrop-filter disabled below for perf) */
+    .focus-overlay{
+      position:absolute; inset:0;
+      z-index:1;
+      pointer-events:none;
+      background: rgba(0,0,0,calc(var(--focus-dim) + 0.001));
+      transition: background-color .3s ease;
+    }
+
+    /* things that should stay CRISP */
+    .tabletop{ position:absolute; z-index:2; }
+    .video-container{ position:absolute; inset:0; z-index:4; }
+
+    /* quick presets */
+    .focus-off   { --focus-blur:0px;  --focus-dim:0; }
+    .focus-soft  { --focus-blur:6px;  --focus-dim:.05; }
+    .focus-strong{ --focus-blur:16px; --focus-dim:.12; }
+    .focus-max   { --focus-blur:28px; --focus-dim:.18; }
+
+    @supports not ((backdrop-filter: blur(1px))) {
+      #backgroundVideo, .room { filter: blur(var(--focus-blur)); }
+      .focus-overlay{ background: rgba(0,0,0,var(--focus-dim)); }
+    }
+
+    /* Per-time-of-day hooks */
+    .bg-morning  #backgroundVideo { object-fit: cover; top: -63%; }
+    .bg-day      #backgroundVideo { object-fit: cover; top: -64%; }
+    .bg-evening  #backgroundVideo { object-fit: cover; top: -63%; }
+    .bg-night    #backgroundVideo { object-fit: cover; top: -51%; }
+
+    /* ===== Window / blur layer tint, dim & shadow knobs ===== */
+    .bg-morning  .focus-overlay{
+      --focus-blur: 0px; --focus-dim: 0.4; --shadow-strength: 0.20; --shadow-angle: 100deg;
+      box-shadow:
+        inset 0 0 80px rgba(30, 30, 40, var(--shadow-strength)),
+        inset 0px 60px 100px rgba(0, 0, 50, calc(var(--shadow-strength) * 0.7));
+      background:
+        linear-gradient(var(--shadow-angle), rgba(0, 0, 50, calc(var(--shadow-strength) * 0.6)) 0%, rgba(0, 0, 0, .4) 50%),
+        rgba(0, 0, 0, calc(var(--focus-dim) + 0.001));
+    }
+
+    .bg-day .focus-overlay{
+      --focus-blur: 0px; --focus-dim: 0.4; --shadow-strength: 0.15; --shadow-angle: 100deg;
+      box-shadow:
+        inset 0 0 80px rgba(0, 11, 40, var(--shadow-strength)),
+        inset 0px 60px 100px rgba(0, 0, 50, calc(var(--shadow-strength) * 0.7));
+      background:
+        linear-gradient(var(--shadow-angle), rgba(0, 0, 50, calc(var(--shadow-strength) * 0.6)) 0%, rgba(0, 0, 0, .4) 50%),
+        rgba(0, 0, 0, calc(var(--focus-dim) + 0.15));
+    }
+
+    .bg-evening .focus-overlay{
+      --focus-blur: 0px; --focus-dim: 0.4; --shadow-strength: 0.45; --shadow-angle: 100deg;
+      box-shadow:
+        inset 0 0 80px rgba(30, 30, 40, var(--shadow-strength)),
+        inset 0px 60px 100px rgba(0, 0, 50, calc(var(--shadow-strength) * 0.7));
+      background:
+        linear-gradient(var(--shadow-angle), rgba(0, 0, 50, calc(var(--shadow-strength) * 0.6)) 0%, rgba(0, 0, 0, .4) 50%),
+        rgba(0, 0, 0, calc(var(--focus-dim) + 0.001));
+    }
+
+    .bg-night .focus-overlay{
+      --focus-blur: 0px; --focus-dim: 0.4; --shadow-strength: 0.45; --shadow-angle: 100deg;
+      box-shadow:
+        inset 0 0 80px rgba(30, 30, 40, var(--shadow-strength)),
+        inset 0px 60px 100px rgba(0, 0, 50, calc(var(--shadow-strength) * 0.7));
+      background:
+        linear-gradient(var(--shadow-angle), rgba(0, 0, 50, calc(var(--shadow-strength) * 0.6)) 0%, rgba(0, 0, 0, .4) 50%),
+        rgba(0, 0, 0, calc(var(--focus-dim) + 0.001));
+    }
+
+    /* Fullscreen background video — single source of truth */
+    #backgroundVideo {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: 0;
+      transform-origin: 50% 50%;
+      will-change: transform;
+    }
+
+    /* put near your other table styles */
+    .tabletop, .table {
+      transform-origin: 50% 50%;
+      will-change: transform;
+    }
+
+    .video-container {
+      position: absolute;
+      top: 47px; left: 0;
+      width: 100%; height: 100%;
+      z-index: 2; /* Above the background */
+      overflow: hidden;
+      isolation: isolate; /* stability hint */
+    }
+
+    video { position: absolute; }
+
+    /* Keep layout jumps crisp; only fade if you want */
+    .video-container video {
+      transition: none !important;
+      will-change: transform;
+    }
+
+    .chairs-layer{ position:absolute; inset:0; z-index:3; pointer-events:none; }
+
+
+    #controls {
+      position: fixed;
+      bottom: 10px;
+      left: 10px;
+      z-index: 10;
+      color: aliceblue;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 10px;
+      align-items: center;
+      font: 14px/1.2 system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+    }
+
+    select, input, label, button { color: initial; }
+    #controls select, #controls input, #controls button {
+      color:#eee; background:#111; border:1px solid #444; border-radius:8px; padding:6px 8px;
+    }
+    #controls button { cursor:pointer; }
+
+    label {
+      color: aliceblue;
+      display: inline-flex;
+      gap: 6px;
+      align-items: center;
+    }
+
+    .glass {
+      position: fixed;
+      z-index: 0;
+      margin-top: -47%;
+      margin-left: -25%;
+      width: 153%;
+      opacity: 100%;
+    }
+
+    /* --------- Overlay badge styles --------- */
+    .overlay-box {
+      position: absolute;     /* positioned in JS to match video rect */
+      z-index: 9;             /* above the videos */
+      pointer-events: none;   /* never block clicks */
+    }
+    .overlay-box .text-box {
+      position: absolute;
+      padding: 6px 10px;
+      border-radius: 11px;
+      background: rgba(0,0,0,0);
+      color: #fff;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+      line-height: 1;
+      border: 0px solid rgba(255,255,255,0.15);
+      backdrop-filter: blur(15px);
+      min-width: 90px;
+      z-index: 1;
+    }
+    .overlay-box .call-main {
+      margin: 0;
+      font-size: 16px;
+      font-weight: 700;
+      gap: 6px; 
+      align-items: center;
+      text-align: center;
+    }
+    .overlay-box .call {
+      width: 20px; height: 20px; border-radius: 10px;
+      display: inline-flex; align-items: center; justify-content: center;
+      background:#2ecc71; color:#0b1b12; font-size:13px; font-weight:800;
+    }
+
+    /* click+hold rectangle; position via CSS vars */
+    #zoomArea{
+      position: fixed;
+      left: var(--zoom-left);
+      top: var(--zoom-top);
+      width: var(--zoom-area-width);
+      height: var(--zoom-area-height);
+      transform: translate(-50%, -50%);
+      outline: var(--zoom-area-outline);
+      border-radius: 16px;
+      z-index: 6;
+      background: transparent;
+      cursor: zoom-in;
+      pointer-events: auto;
+    }
+
+    .bg-fader{
+      position:absolute; inset:0;
+      background: var(--bgfade-color);
+      opacity: 0;
+      pointer-events: none;
+      z-index: 1; /* above the bg video, below the overlay */
+      transition: opacity var(--bgfade-duration) var(--bgfade-ease);
+    }
+    .bg-fader.is-on{ opacity: var(--bgfade-opacity); }
+
+    /* === Character & overlay fade controls === */
+    #videoContainer video { opacity: 1; }
+    #videoContainer .overlay-box { opacity: 1; }
+    #videoContainer .overlay-box {
+      transition: opacity var(--chars-fade-duration, .24s) ease var(--chars-fade-delay, 0s);
+    }
+    #videoContainer.no-fade video,
+    #videoContainer.no-fade .overlay-box {
+      transition: none !important;
+    }
+    #videoContainer.chars-hidden video,
+    #videoContainer.chars-hidden .overlay-box {
+      opacity: 0;
+    }
+
+    /* Fade the pot in sync with character fades */
+    #pot {
+      opacity: 1;
+      transition: opacity var(--chars-fade-duration, .24s) ease var(--chars-fade-delay, 0s);
+    }
+
+    /* When characters are hidden, hide the pot too */
+    #videoContainer.chars-hidden ~ #pot {
+      opacity: 0;
+    }
+
+    /* When we're doing an instant hide, make the pot hide instantly as well */
+    #videoContainer.no-fade ~ #pot {
+      transition: none !important;
+    }
+
+
+    /* === Zoom-area per-size tweaks  === */
+
+    /* Overlay text anchoring per character */
+      [id^="overlay_video_character1_"] .text-box { top: 62%; left: 32%; right: auto; bottom: auto; }
+      [id^="overlay_video_character2_"] .text-box { top: 52%; left: 10%; right: auto; bottom: auto; }
+      [id^="overlay_video_character3_"] .text-box { top: 53%; left: 25%; right: auto; bottom: auto; }
+      [id^="overlay_video_character4_"] .text-box { top: 53%; left: 25%; right: auto; bottom: auto; }
+      [id^="overlay_video_character5_"] .text-box { top: 53%; left: 25%; right: auto; bottom: auto; }
+      [id^="overlay_video_character6_"] .text-box { top: 53%; left: 25%; right: auto; bottom: auto; }
+      [id^="overlay_video_character7_"] .text-box { top: 54%; left: 68%; right: auto; bottom: auto; }
+      [id^="overlay_video_character8_"] .text-box { top: 63%; left: 52%; right: auto; bottom: auto; }
+      [id^="overlay_video_character9_"] .text-box { top: 60%; left: 49%; right: auto; bottom: auto; }
+
+    /* Base positions  */
+      .video-container video.character1-seat1 { width: 17%; height:auto; left: 60%; top: -5%; right:auto; bottom:auto; }
+      .video-container video.character2-seat1 { width: 20%; height:auto; left: 76%; top: -5%;  right:auto; bottom:auto; }
+      .video-container video.character3-seat1 { width: 25%; height:auto; left: 83%; top: 8%; right:auto; bottom:auto; }
+      .video-container video.character7-seat1 { width: 22%; height:auto; left: -13%; top: 5%; right:auto; bottom:auto; }
+      .video-container video.character8-seat1 { width: 17%; height:auto; left: 4%;  top: -55px; right:auto; bottom:auto; }
+      .video-container video.character9-seat1 { width: 15%; height:auto; left: 23%; top: -5%;  right:auto; bottom:auto; }
+    
+    /* Mobile bands  */
+
+
+
+
+ 
+
+
+
+    /* --- OTHER SCALING BANDS --- */
+
+
+    /* FIX: allow videos to fade opacity (keep transforms instant) — keep LAST */
+    #videoContainer video{
+      transition: opacity var(--chars-fade-duration, .24s) ease var(--chars-fade-delay, 0s) !important;
+    }
+
+    /* ================================================================
+       CHIP SYSTEM CSS (UNCHANGED + NEW ALL-IN RULES)
+       ================================================================ */
+
+    /* Pot container — manual or auto */
+    .pot-container{
+      position: fixed;
+      z-index:5;
+      pointer-events:none;
+      width: var(--pot-width);
+      height:auto;
+      left: var(--pot-left);
+      top: var(--pot-top);
+      transform-origin:bottom left;
+      will-change: transform, opacity, left, top;
+    }
+    .pot-img{ width:100%; height:auto; display:block; }
+
+    /* Layered pot visuals */
+    #potLayers{
+      position:absolute; inset:0;
+      pointer-events:none;
+    }
+    .pot-layer{
+      position:absolute;
+      left:0; right:0; bottom:0;
+      width:100%; height:auto; opacity:0;
+      transform: translateY(10px) scale(.98) rotate(var(--rot, 0deg));
+      will-change: opacity, transform;
+    }
+    .pot-layer.is-on{
+      opacity:1;
+      transform: translateY(0) scale(1) rotate(var(--rot, 0deg));
+    }
+
+    /* Pot text label (CSS-adjustable positioning) */
+    .pot-text-anchor {
+      position: fixed;
+      pointer-events: none;
+      z-index: 5000;
+      white-space: nowrap;
+      color: #fff;
+      background: rgba(0, 0, 0, 0);
+      backdrop-filter: blur(5px);
+      padding: 5px 10px;
+      border-radius: 11px;
+      line-height: 1;
+      min-width: 90px;
+ 
+      /* Center anchor */
+      transform:
+        translate(-50%, -100%)
+        translate(var(--pot-text-offset-x, 0px),
+                  var(--pot-text-offset-y, 40px));
+    }
+
+    /* ============================
+   Pot text sizing (isolated)
+   ============================ */
+    .pot-text-anchor .pot-call-main {
+      font-size: var(--pot-text-font-size, 18px);
+      line-height: var(--pot-text-line-height, 1);
+      letter-spacing: var(--pot-text-letter-spacing, 0px);
+    }
+
+    /* Fade the pot text label in sync with character fades */
+    .pot-text-anchor {
+      opacity: 1;
+      transition: opacity var(--chars-fade-duration, .24s) ease var(--chars-fade-delay, 0s);
+    }
+
+    /* When characters/pot are hidden, hide the pot label too */
+    #videoContainer.chars-hidden ~ .pot-text-anchor {
+      opacity: 0;
+    }
+
+    /* When we're doing an instant hide, make the label hide instantly as well */
+    #videoContainer.no-fade ~ .pot-text-anchor {
+      transition: none !important;
+    }
+
+
+    /* Flying chips (placard → pot) */
+    .chip-fly{
+      position:absolute;
+      z-index:7;
+      width:72px; height:auto;
+      opacity:0;
+      transform: translate3d(0,0,0) scale(.9);
+      will-change: transform, opacity;
+      transition:
+        opacity var(--chip-fade-duration, .24s) cubic-bezier(.22,.61,.36,1),
+        transform var(--chip-flight-duration, .65s) cubic-bezier(.22,.61,.36,1);
+      filter: drop-shadow(0 2px 8px rgba(0,0,0,.7));
+      pointer-events:none;
+    }
+    .chip-fly.is-live{ opacity:1; }
+    .chip-fly.is-arrived{ opacity:0; transform: translate3d(var(--tx,0), var(--ty,0), 0) scale(1); }
+
+    /* Bet placard — in front of video */
+    .bet-placard{
+      position:absolute;
+      z-index:8;
+      width:110px; height:auto; opacity:0;
+      filter: drop-shadow(0 4px 14px rgba(0,0,0,.65));
+      pointer-events:none;
+    }
+    .bet-placard.is-on{ opacity:1; }
+    .bet-placard-img{ width:100%; height:auto; display:block; }
+
+    /* Player chip stacks — behind and below video */
+   /* one place to control size */
+:root { --stack-scale: 1; } /* update this when table zooms */
+
+.chip-stack {
+  position: absolute;
+  z-index: 3;
+  width: 80px;        /* fixed base width */
+  height: auto;
+  transform: scale(var(--stack-scale));
+  transform-origin: bottom center;
+  filter: drop-shadow(0 3px 10px rgba(0,0,0,.5));
+  transition: transform .2s ease;
+}
+
+/* ===== SHOW CARDS (CLEAN, NO LAYOUT SHIFT) =====
+   CSS file is /css/, images are /images/ => use ../images/
+*/
+:root{
+  --pcard-w: 35px;
+  --pcard-h: 50px;
+  --pcards-y: -50px;
+  --pcards-gap: 1px; /* adjust gap here */
+}
+
+/* only on selected overlays, only when both gates are on */
+body.show-player-cards.user-cards-on .overlay-box.showcards-on .text-box.buy-btn{
+  position: relative;
+  overflow: visible;
+}
+
+/* use ::after so we never conflict with OPEN ::before */
+body.show-player-cards.user-cards-on .overlay-box.showcards-on .text-box.buy-btn::after{
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: var(--pcards-y);
+  transform: translateX(-50%);
+  width: calc((var(--pcard-w) * 2) + var(--pcards-gap));
+  height: var(--pcard-h);
+
+  background-image: url("../images/black-k.png"), url("../images/red-k.png");
+  background-repeat: no-repeat, no-repeat;
+  background-size: var(--pcard-w) auto, var(--pcard-w) auto;
+  background-position: 0 0, calc(var(--pcard-w) + var(--pcards-gap)) 0;
+
+  pointer-events: none;
+  z-index: 50;
+}
+
+/* Prevent player textbox from stretching when cards are shown */
+body.show-player-cards.user-cards-on .overlay-box.showcards-on:not([data-empty="1"]) .text-box.buy-btn{
+  display: inline-flex !important;
+  width: fit-content !important;
+  max-width: max-content !important;
+  white-space: nowrap !important;
+  justify-content: center !important;
+  align-items: center !important;
+}
+
+body.show-player-cards.user-cards-on .overlay-box.showcards-on:not([data-empty="1"]) .text-box.buy-btn .call-main{
+  margin: 0 !important;
+  text-align: center !important;
+}
+
+
+    /* SHOW "OPEN" ON EMPTY SEATS WHEN BODY HAS .show-open-seats */
+    body.show-open-seats .overlay-box[data-empty="1"] .text-box{
+      display: block !important;                /* override the global hide */
+      background: rgba(8, 187, 80, .75);            /* semi-transparent green */
+      color: #fff;
+      font-weight: 600;
+      backdrop-filter: blur(1px);                /* same blur as current */
+      text-align: center;
+    }
+
+    /* Hide action buttons area (fold-main) */
+    .fold-main#gameHeader.is-hidden {
+    opacity: 0 !important;
+    pointer-events: none;  /* prevents clicks */
+    user-select: none;
+    }
+
+
+    /* Hide the normal B/$ amount when showing OPEN */
+    body.show-open-seats .overlay-box[data-empty="1"] .text-box .call-main{
+      display: none !important;
+    }
+
+    /* Inject the OPEN label via CSS so no JS HTML swap needed */
+    body.show-open-seats .overlay-box[data-empty="1"] .text-box::before{
+      content: "OPEN";
+      display: block;
+      font-size: 16px;
+      font-weight: 600;                          /* bold */
+      letter-spacing: .3px;
+    }
+
+    /* Bring OPEN state above videos & chairs, and layer text above the chair PNG */
+body.show-open-seats .overlay-box[data-empty="1"]{
+  z-index: 9999 !important;               /* top of the whole stack */
+}
+
+body.show-open-seats .overlay-box[data-empty="1"] .empty-seat{
+  z-index: 0 !important;                  /* chair image lower */
+}
+
+#userShowCardsWrap { 
+  position: absolute !important; 
+  left: -70px;
+}
+
+
+
+
+        /* All-In bump and push states override the base transition */
+    .chip-stack.is-allin-bump{
+      transition: transform var(--allin-bump-duration, 120ms)
+                            var(--allin-ease, cubic-bezier(.22,.61,.36,1))
+                            var(--allin-bump-delay, 0ms) !important;
+    }
+
+    .chip-stack.is-allin-push{
+      transition: transform var(--allin-push-duration, 800ms)
+                            var(--allin-ease, cubic-bezier(.22,.61,.36,1))
+                            var(--allin-push-delay, 0ms) !important;
+    }
+
+
+    /* Place stacks & placards via overlay anchors  */
+    .overlay-box .chip-stack,
+    .overlay-box .bet-placard{
+      position:absolute;
+      pointer-events:none;
+    }
+
+    /* Put empty-seat overlays behind character videos and hide any UI inside them */
+    .overlay-box[data-empty="1"]{
+      z-index: 1;              /* video-container is z-index:2, so videos sit on top */
+    }
+
+    .overlay-box[data-empty="1"] .text-box,
+    .overlay-box[data-empty="1"] .chip-stack,
+    .overlay-box[data-empty="1"] .bet-placard,
+    .overlay-box[data-empty="1"] .live-pip{
+      display: none !important; /* don’t show badges/placards/pip on empty seats */
+    }
+
+    /* (Optional) slightly dim the empty-seat art if you want it to recede */
+    .overlay-box[data-empty="1"] .empty-seat{
+      opacity: 1;
+    }
+
+    /* Put EMPTY seats behind the videos */
+    .overlay-box[data-empty="1"] { z-index: 1 !important; }  /* videos are z=2 */
+
+    /* Move specific empty chairs (Seat 1 examples) */
+    #overlay_video_character1_seat1 .empty-seat { transform: translate(0%, 0%); }
+    #overlay_video_character2_seat1 .empty-seat { transform: translate(-8%, -11%); }
+    #overlay_video_character3_seat1 .empty-seat { transform: scale(0.5) translate(45%, 13%); }
+    #overlay_video_character7_seat1 .empty-seat { transform: scale(0.5) translate(0%, 15%); }
+    #overlay_video_character8_seat1 .empty-seat { transform: translate(1%, 1%); }
+    #overlay_video_character9_seat1 .empty-seat { transform: translate(0%, 0%); }
+
+    /* Optional: nudge ALL empty chairs globally, then fine-tune per seat above */
+    .overlay-box[data-empty="1"] .empty-seat { transform: translate(0,0); }
+
+
+    /* --- CHIP STACK ANCHORS (match text-box positions) --- */
+    [id^="overlay_video_character1_"] .chip-stack { bottom: 16%; left: 50%; transform: translateX(-50%); }
+    [id^="overlay_video_character2_"] .chip-stack { bottom: 27%; right: 76%; transform: translateX(50%); }
+    [id^="overlay_video_character3_"] .chip-stack { bottom: 35%; right: 70%; transform: translateX(50%); }
+    [id^="overlay_video_character4_"] .chip-stack { top: 8px; left: 8px; transform: translate(0,0); }
+    [id^="overlay_video_character5_"] .chip-stack { top: 50%; left: 50%; transform: translate(-50%, -50%); }
+    [id^="overlay_video_character6_"] .chip-stack { bottom: 8px; left: 50%; transform: translateX(-50%); }
+    [id^="overlay_video_character7_"] .chip-stack { bottom: 30%; right: 5%; transform: translate(50%,-50%); }
+    [id^="overlay_video_character8_"] .chip-stack { top: 74%; left: 55%; transform: translate(-0%,-50%); }
+    [id^="overlay_video_character9_"] .chip-stack { bottom: 20%; left: 50%; transform: translateX(-50%); }
+
+    /* --- BET PLACARD ANCHORS  --- */
+    [id^="overlay_video_character1_"] .bet-placard { bottom: 8%; left: 50%; width: 35%; transform: translateX(-50%); }
+    [id^="overlay_video_character2_"] .bet-placard { bottom: 27%; right: 105%; width: 30%; transform: translateX(50%); }
+    [id^="overlay_video_character3_"] .bet-placard { top: 55%; right: 110%; width: 20%; transform: translateX(50%); }
+    [id^="overlay_video_character4_"] .bet-placard { top: 8px; left: 8px; width: 30%; transform: translate(0,0); }
+    [id^="overlay_video_character5_"] .bet-placard { top: 50%; left: 50%; width: 30%; transform: translate(-50%, -50%); }
+    [id^="overlay_video_character6_"] .bet-placard { bottom: 8px; left: 50%; width: 30%; transform: translateX(-50%); }
+    [id^="overlay_video_character7_"] .bet-placard { top: 59%; right: -10%; width: 22%; transform: translate(50%,-50%); }
+    [id^="overlay_video_character8_"] .bet-placard { top: 75%; left: 82%; width: 26%; transform: translate(-0%,-50%); }
+    [id^="overlay_video_character9_"] .bet-placard { bottom: 14%; left: 40%; width: 33%; transform: translateX(-50%); }
+
+    /* Bet Placard Appearance Timing */
+    :root{
+      --placard-fade-duration: .35s;
+      --placard-stagger: .08s;
+    }
+    [id^="overlay_video_character"] .bet-placard{
+      opacity: 0;
+      will-change: opacity;
+      transition: opacity var(--placard-fade-duration) ease var(--placard-delay, 0s);
+      pointer-events: none;
+    }
+    [id^="overlay_video_character"] .bet-placard.is-on{ opacity: 1; }
+    [id^="overlay_video_character1_"] .bet-placard { --placard-delay: calc(var(--placard-stagger) * 27); }
+    [id^="overlay_video_character2_"] .bet-placard { --placard-delay: calc(var(--placard-stagger) * 27); }
+    [id^="overlay_video_character3_"] .bet-placard { --placard-delay: calc(var(--placard-stagger) * 27); }
+    [id^="overlay_video_character4_"] .bet-placard { --placard-delay: calc(var(--placard-stagger) * 27); }
+    [id^="overlay_video_character5_"] .bet-placard { --placard-delay: calc(var(--placard-stagger) * 27); }
+    [id^="overlay_video_character6_"] .bet-placard { --placard-delay: calc(var(--placard-stagger) * 27); }
+    [id^="overlay_video_character7_"] .bet-placard { --placard-delay: calc(var(--placard-stagger) * 27); }
+    [id^="overlay_video_character8_"] .bet-placard { --placard-delay: calc(var(--placard-stagger) * 27); }
+    [id^="overlay_video_character9_"] .bet-placard { --placard-delay: calc(var(--placard-stagger) * 27); }
+    .no-placard-stagger [id^="overlay_video_character"] .bet-placard { --placard-delay: 0s !important; }
+
+    /* ================================================================
+       ALL-IN STACK MOTION USING TRANSFORM-INDIVIDUAL 'translate'
+       (COMPOSES with anchor transforms; doesn’t overwrite them)
+       ================================================================ */
+    .chip-stack.allin-bump{
+      transition: translate var(--allin-bump-duration) var(--allin-ease) var(--allin-bump-delay);
+      translate: 0 var(--allin-bump-px);
+    }
+
+    .chip-stack.allin-push{
+      transition: translate var(--allin-push-duration) var(--allin-ease) var(--allin-push-delay);
+      translate: var(--allin-push-px) var(--allin-bump-px);
+    }
+    /* Flag to identify stacks that have armed an All-In (used by JS) */
+    .chip-stack.is-allin-armed{ /* style optional; marker class only */ }
+
+    /* ================================================================
+       STACK → POT SHOVE (on "Betting" after All-In)
+       JS will set inline: element.style.translate = "<dx>px <dy>px"
+       ================================================================ */
+    .chip-stack.moving-to-pot{
+      transition: translate var(--stack-to-pot-duration) var(--allin-ease) var(--stack-to-pot-delay);
+    }
+
+    /* =========================
+       PERF: GPU / COMPOSITOR HINTS
+       ========================= */
+    .video-container video {
+      backface-visibility: hidden;
+      will-change: transform, opacity;
+    }
+    .focus-overlay{
+      backdrop-filter: none !important;
+      -webkit-backdrop-filter: none !important;
+    }
+
+    /* Put overlays (name badges, placards, etc.) above their own videos */
+    #videoContainer .overlay-box:not([data-empty="1"]) {
+      z-index: 200 !important; /* higher than any video */
+    }
+
+    /* Keep characters 3 & 7 above other characters (but below overlays) */
+    #videoContainer video[id^="video_character3_"],
+    #videoContainer video[id^="video_character7_"]{
+      z-index: 20 !important;   /* above others (z~2), below overlay-box (200) */
+    }
+
+  
+    
+/* ——— Hamburger button ——— */
+.menu-btn{
+  position: fixed;
+  top: 12px; left: 12px;
+  width: 36px; height: 26px;
+  display: flex; flex-direction: column; justify-content: space-between;
+  background: transparent; border: none; padding: 0; cursor: pointer;
+  z-index: 10000; /* above everything */
+}
+.menu-btn .bar{
+  width: 100%; height: 3px; border-radius: 2px;
+  background: #fff;
+}
+
+/* ——— Convert existing #controls into a top dropdown ——— */
+/* We don't touch its children; just reposition and animate the panel itself */
+#controls{
+  position: fixed !important;
+  top: 0; left: 0; right: 0;
+  bottom: auto;               /* override old bottom placement */
+  margin: 0;
+  padding: 10px 75px;
+  background: rgba(0,0,0,.72);
+  backdrop-filter: blur(6px);
+  transform: translateY(-100%);                 /* hidden */
+  transition: transform .25s cubic-bezier(.22,.61,.36,1);
+  z-index: 9999;                                /* just beneath the button */
+}
+
+/* When open, slide down */
+body.menu-open #controls{ transform: translateY(0); }
+
+/* Optional: while open, push page clicks through the panel’s gaps nicely */
+#controls *{ pointer-events: auto; }
+
+/* Smooth fade-in/out for menu button */
+#menuButton {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .4s ease;
+}
+
+/* Each “button” takes 1/4 of the bar, no visible borders */
+.lobby-btn{
+  flex: 1 1 0;
+  border: 0;
+  background: transparent;
+  color: #afbcd2;
+  font: 700 14px/1 system-ui, -apple-system, Segoe UI, Roboto, Arial;
+  cursor: pointer;
+  transition: background-color .18s ease, color .18s ease;
+  padding: 0 16px;
+}
+.lobby-btn:hover{ background: rgba(255,255,255,.03); color: #afbcd2;}
+.lobby-btn.is-active{  
+    color: #afbcd2;
+    background: url('../images/but-bg.png') no-repeat center/cover;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;}
+.lobby-btn:focus-visible{
+  outline: 2px solid rgba(255,255,255,.35);
+  outline-offset: -2px;
+}
+
+
+
+/* Show/Hide helper for media targets */
+.table-media.is-hidden{ display: none !important; }
+
+/* Wrap + Title */
+.lobby-section {
+  position: fixed;
+  left: 50%;
+  bottom: 25px; /* same offset as your bar */
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 9500;
+}
+
+/* Title above bar */
+.lobby-title {
+  color: #afbcd2;
+  font: 700 20px/1.2 system-ui, -apple-system, Segoe UI, Roboto, Arial;
+  text-align: center;
+  margin-bottom: 8px;
+  letter-spacing: 1px;
+  opacity: 0.9;
+}
+
+/* Adjusted menu (no position since parent handles it) */
+.lobby-menu {
+  position: initial;
+  transform: none;
+  bottom: auto;
+  width: min(820px, 92vw);
+  height: 48px;
+  display: flex;
+  gap: 0;
+  background: rgba(0, 0, 0, .5);
+  border: 0.75px solid rgba(98, 98, 98, 0.15);
+  backdrop-filter: blur(50px);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 15px 40px rgba(0,0,0,.5);
+}
+
+/* ===== EXACT LANDING HEADER, SAFELY SCOPED ===== */
+.landing-header.header-top {
+  position: fixed; top: 0; left: 0; right: 0; width: 100%; height: auto; z-index: 10;
+  display: -webkit-box; display: flex; align-items: center; justify-content: space-between;
+  padding: 0 56px;
+  transition: transform .3s ease, opacity .2s ease;
+  will-change: transform, opacity;
+}
+
+/* Logo */
+.landing-header .logo-wrapper { position: relative; float: left; margin-left: 0; margin-top: 12px; }
+.landing-header .logo-wrapper .logo {
+  font-family: "Glacial Indifference","Roboto","Helvetica",sans-serif;
+  text-transform: uppercase; font-size: 24px; color: #fff;
+}
+.landing-header .logo-wrapper .logo img { max-height: 40px; width: auto; margin-right: 8px; }
+
+/* Primary nav */
+.landing-header .site-nav { float: right; margin-right: 20px; }
+.landing-header .site-nav li {
+  float: left; display: block;
+  font-family: "Glacial Indifference","Roboto","Helvetica",sans-serif;
+  margin-left: 8px; position: relative;
+}
+.landing-header .site-nav li a {
+  margin-top: 8px; display: block; padding: 8px; color: #E1E9FA; text-decoration: none;
+}
+.landing-header .site-nav li a:after{
+  content:""; position:absolute; width:0; height:0;
+  background: rgba(255,255,255,0.3); left:50%; bottom:-4px; margin-left:0;
+  border-radius:8px; transition:.3s;
+}
+.landing-header .site-nav li.separator{ color:#fff; }
+.landing-header .site-nav li:hover a:after,
+.landing-header .site-nav li.active a:after{
+  width:8px; height:8px; bottom:-8px; margin-left:-4px;
+}
+.landing-header .site-nav li.active a:after{ background:#afbcd2; }
+
+/* Hamburger */
+.landing-header .menu-icon{
+  display:none; float:right; position:fixed; top:8px; right:8px; padding:8px 16px; transition:.3s;
+}
+.landing-header .menu-icon .bars{ content:""; display:block; width:32px; height:32px; float:right; }
+.landing-header .menu-icon .bars .bar1,
+.landing-header .menu-icon .bars .bar2,
+.landing-header .menu-icon .bars .bar3{
+  float:right; display:block; content:""; height:2px; width:32px; background:#fff; margin-bottom:10px; transition:.3s;
+}
+.landing-header .menu-icon .bars .bar2{ width:16px; }
+.landing-header.menu-visible .menu-icon .bars .bar1,
+.landing-header.menu-visible .menu-icon .bars .bar3{ width:16px; }
+.landing-header.menu-visible .menu-icon .bars .bar2{ width:32px; }
+
+/* Mobile behavior (exact layout, scoped) */
+
+*, *::before, *::after {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+/* Lock the landing header to the exact height and center contents */
+.landing-header.header-top{
+  height: 56px;              /* exact landing height */
+  min-height: 56px;
+  padding-left: 56px;          /* keep the horizontal padding from landing */
+  padding-right: 56px;
+  align-items: center;         /* vertical centering of children */
+}
+ 
+
+/* Keep the same visual sizes, but let flex do the vertical alignment */
+.landing-header .logo-wrapper .logo img{
+  max-height: 25px;            /* landing value */
+  width: auto;
+}
+
+
+/* Ensure consistent box model (landing uses border-box) */
+.landing-header,
+.landing-header *::before,
+.landing-header *::after{
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+.header-top .site-nav {
+    float: right;
+    margin-right: 20px;
+}
+
+.header-top .site-nav {
+    margin-left: auto;
+    font-size: 1rem;
+}
+
+.header-top .play-btn {
+    font-family: "Glacial Indifference", "Roboto", "Helvetica", sans-serif;
+    font-size: 16px;
+    font-weight: bold;
+    background: #F20F4F;
+    color: #fff;
+    border-radius: 50px;
+    display: inline-table;
+    padding: 12px 50px;
+    line-height: 1;
+    -webkit-transition: 0.3s;
+    transition: 0.3s;
+    margin-top: 15px;
+}
+
+.header-top .logo-wrapper {
+    position: relative;
+    float: left;
+    margin-left: 0px;
+    margin-top: 20px !important;
+}
+
+ 
+.landing-header .play-btn,
+.landing-header .play-btn:hover,
+.landing-header .play-btn:focus {
+  text-decoration: none !important;
+}
+
+/* Hover media card — reusable single element */
+.lobby-hover-card {
+  position: fixed;            /* placed via JS */
+  z-index: 10050;             /* above menus */
+  width: 280px;               /* JS overrides to button width */
+  aspect-ratio: 16/9;         /* safe default; JS honors this for positioning */
+  border-radius: 12px;
+  overflow: hidden;
+  background: #0b0f14;
+  border: 1px solid rgba(255,255,255,0.12);
+  box-shadow: 0 18px 50px rgba(0,0,0,.55);
+  pointer-events: none;       /* never blocks clicks */
+  transform: translateY(8px);
+  opacity: 0;
+  transition: opacity .16s ease, transform .16s ease;
+}
+
+.lobby-hover-card.is-on {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Media inside the card */
+.lobby-hover-card__media {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;
+}
+
+/* Title overlay */
+.lobby-hover-card__title {
+  position: absolute; inset: 0;
+  display: grid; place-items: center;
+  padding: 12px;
+  text-align: center;
+  font: 700 14px/1.2 system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+  color: #e9eef7;
+  text-shadow: 0 1px 2px rgba(0,0,0,.7);
+  background: linear-gradient(to top, rgba(0,0,0,.45), rgba(0,0,0,.05));
+  letter-spacing: .3px;
+}
+
+/* Only one room section is visible at a time */
+.room-section { display: none; }
+.room-section.active { display: block; }
+
+/* Game Mode fade helpers (keeps your header/side panels behavior) */
+.left-nav, .right-list { opacity: 0; pointer-events: none; transition: opacity .25s ease; }
+body.game-mode-active .left-nav,
+body.game-mode-active .right-list { opacity: 1; pointer-events: auto; }
+.header-top { transition: opacity .25s ease; }
+body.game-mode-active .header-top { opacity: 0; pointer-events: none; }
+
+/* =========================================================
+   APPEND-ONLY: Make Rooms 2–4 identical to Room 1 defaults
+   (No changes to Room 1 — this only targets the appended rooms)
+   ========================================================= */
+
+/* --- Section shell & layering identical to base --- */
+#room2Section .bg-stack,
+#room3Section .bg-stack,
+#room4Section .bg-stack{
+  position: fixed;            /* same as base bg-stack usage */
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+}
+
+/* Background video inside each room section (mirror #backgroundVideo) */
+#room2Section .bg-stack > video{
+  position: absolute;
+  inset: 0;
+  width: 250%;
+  height: auto;
+  object-fit: cover;
+  z-index: 0;
+  transform-origin: 50% 50%;
+  will-change: transform;
+  top: -85rem;
+  left: -75%;
+  overflow: visible;
+}
+
+#room3Section .bg-stack > video{
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  z-index: 0;
+  transform-origin: 50% 50%;
+  will-change: transform;
+  overflow: visible;
+  left: 0%;
+  top: -14.5rem;
+}
+#room4Section .bg-stack > video{
+position: absolute;
+    inset: 0;
+    width: 60%;
+    height: auto;
+    object-fit: cover;
+    z-index: 0;
+    transform-origin: 50% 50%;
+    will-change: transform;
+    left: 20%;
+    top: -10rem;
+    overflow: visible;
+}
+
+
+/* Glass layer identical to Room 1 (position & sizing) */
+#room2Section .glass,
+#room3Section .glass,
+#room4Section .glass{
+  position: fixed;
+  z-index: 0;
+  margin-top: -47%;
+  margin-left: -25%;
+  width: 153%;
+  opacity: 100%;
+}
+
+/* Focus overlay identical to base */
+#room2Section .focus-overlay,
+#room3Section .focus-overlay,
+#room4Section .focus-overlay{
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background: rgba(0,0,0,calc(var(--focus-dim) + 0.001));
+  transition: background-color .3s ease;
+}
+
+/* Room still image identical to Room 1 .room */
+#room2Section img.room{
+  position: fixed;
+  z-index: 0;
+  margin-top: -45%;
+  margin-left: -25%;
+  width: 153%;
+}
+
+#room3Section img.room{
+  position: fixed;
+  z-index: 0;
+  margin-top: -15%;
+  margin-left: 0%;
+  width: 100%;
+}
+
+#room4Section img.room{
+  position: fixed;
+  z-index: 0;
+  margin-top: -25%;
+  margin-left: 0%;
+  width: 100%;
+}
+
+/* Table image identical to base .tabletop */
+#room2Section img.tabletop,
+#room3Section img.tabletop,
+#room4Section img.tabletop{
+  position: absolute;
+  z-index: 2;
+  width: 100%;
+  margin-left: 0%;
+  margin-top: -3%;
+  transform-origin: 50% 50%;
+  will-change: transform;
+}
+
+/* Chairs layer identical to #chairsLayer */
+#chairsLayer_2, #chairsLayer_3, #chairsLayer_4{
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+}
+
+/* Video container identical to #videoContainer */
+#videoContainer_2{
+  position: absolute;
+  top: 5%;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2;                /* above background */
+  overflow: hidden;
+  isolation: isolate;
+}
+
+/* Video container identical to #videoContainer */
+#videoContainer_3{
+  position: absolute;
+  top: 47px;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2;                /* above background */
+  overflow: hidden;
+  isolation: isolate;
+}
+
+/* Video container identical to #videoContainer */
+#videoContainer_4{
+  position: absolute;
+  top: 47px;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2;                /* above background */
+  overflow: hidden;
+  isolation: isolate;
+}
+/* Character videos in sections inherit the same video rules */
+#videoContainer_2 video,
+#videoContainer_3 video,
+#videoContainer_4 video{
+  position: absolute;
+  transition: none !important;    /* keep transforms instant like base */
+  backface-visibility: hidden;
+  will-change: transform, opacity;
+}
+
+/* Time-of-day offsets: ROOM 1 ONLY */
+.bg-morning  #backgroundVideo { object-fit: cover; top: -63%; overflow: visible;}
+.bg-day      #backgroundVideo { object-fit: cover; top: -61%; overflow: visible;}
+.bg-evening  #backgroundVideo { object-fit: cover; top: -63%; overflow: visible;}
+.bg-night    #backgroundVideo { object-fit: cover; top: -51%; overflow: visible;}
+
+#room2Section .bg-stack > video,
+#room3Section .bg-stack > video,
+#room4Section .bg-stack > video {
+  display: block;            /* avoids inline baseline quirks */
+  contain: paint;            /* isolates repaints on loop */
+  transform: translate3d(var(--bg-x, 0), var(--bg-y, 0), 0) scale(var(--bg-scale, 1));
+}
+
+
+/* === Fader in sections behaves like base === */
+#bgFader_2, #bgFader_3, #bgFader_4{
+  position: absolute;
+  inset: 0;
+  background: var(--bgfade-color);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 1; /* above bg video, below overlay */
+  transition: opacity var(--bgfade-duration) var(--bgfade-ease);
+}
+#bgFader_2.is-on, #bgFader_3.is-on, #bgFader_4.is-on{
+  opacity: var(--bgfade-opacity);
+}
+
+/* === Per-room section visibility (kept minimal & scoped) === */
+#room2Section, #room3Section, #room4Section{ display: none; }
+#room2Section.active, #room3Section.active, #room4Section.active{ display: block; }
+
+/* (Optional) keep pot containers visual parity if you added per-room pots */
+#pot_2, #pot_3, #pot_4{
+  position: fixed;
+  z-index: 5;
+  pointer-events: none;
+  width: var(--pot-width);
+  height: auto;
+  left: var(--pot-left);
+  top: var(--pot-top);
+  transform-origin: bottom left;
+  will-change: transform, opacity, left, top;
+}
+
+/* ================================
+   Layer order fix for Rooms 2–4
+   (Room 1 untouched)
+   bg video < room still < table < characters/chips < pot/overlays
+   ================================ */
+
+#room2Section, #room3Section, #room4Section {
+  position: relative;           /* ensure local stacking context */
+  isolation: isolate;           /* prevent outside z-index bleed */
+}
+
+/* Background video (stay behind) */
+#backgroundVideo_2, #backgroundVideo_3, #backgroundVideo_4 {
+  position: absolute;
+  z-index: 0;
+}
+
+/* Room still (same plane as bg) */
+#room2Section img.room,
+#room3Section img.room,
+#room4Section img.room {
+  position: absolute;
+  z-index: 0;
+}
+
+/* Table below characters */
+#room2Section img.tabletop,
+#room3Section img.tabletop,
+#room4Section img.tabletop {
+  position: absolute;
+  z-index: 10;
+}
+
+/* Characters / seat videos ABOVE the table */
+#videoContainer_2, #videoContainer_3, #videoContainer_4 {
+  position: absolute;
+  z-index: 20;
+  pointer-events: none;         /* match Room 1 behavior if used */
+}
+#videoContainer_2 video,
+#videoContainer_3 video,
+#videoContainer_4 video {
+  position: absolute;           /* ensure per-seat transforms work */
+  z-index: 21;                  /* inside container, still above table */
+}
+
+/* Chairs layer (if used as highlight frame) above characters */
+#chairsLayer_2, #chairsLayer_3, #chairsLayer_4 {
+  position: absolute;
+  z-index: 25;
+  pointer-events: none;
+}
+
+/* Pot / chip stacks ABOVE characters */
+#pot_2, #pot_3, #pot_4 {
+  position: absolute;           /* or fixed if your Room 1 uses fixed */
+  z-index: 30;
+  pointer-events: none;
+}
+
+/* Optional: keep glass/fader/overlay under table+characters if present */
+#bgFader_2, #bgFader_3, #bgFader_4,
+#room2Section .focus-overlay,
+#room3Section .focus-overlay,
+#room4Section .focus-overlay,
+#room2Section .glass,
+#room3Section .glass,
+#room4Section .glass {
+  position: absolute;
+  z-index: 5;                   /* between bg and table */
+  pointer-events: none;
+}
+
+/* Rooms 2–4: ensure table < videos < chip stacks < overlays */
+#videoContainer_2, #videoContainer_3, #videoContainer_4 { position: absolute; z-index: 20; }
+#videoContainer_2 video, #videoContainer_3 video, #videoContainer_4 video { position: absolute; z-index: 21; }
+#room2Section .tabletop, #room3Section .tabletop, #room4Section .tabletop { position: absolute; z-index: 10; }
+
+/* Make Rooms 2–4 video containers identical to Room 1 sizing */
+#videoContainer_2,
+#videoContainer_3,
+#videoContainer_4 {
+  position: absolute;  /* you already have this */
+  inset: 0;            /* <— fill the section like Room 1 */
+  width: 100%;
+  height: 100%;
+  pointer-events: none;/* you already have this */
+}
+
+/* Second (Game) Header visibility rules */
+
+/* Default: original header visible, game header hidden */
+#gameHeader {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .25s ease;
+  /* It inherits all sizing/position from .landing-header.header-top */
+}
+
+/* When Game Mode is active: show game header, hide original */
+body.game-mode-active #gameHeader {
+  opacity: 1 !important;
+  pointer-events: auto !important;
+  z-index: 9998; /* ensure it’s above content, below any menus you want */
+}
+
+/* Hide the original ONLY when not the gameHeader */
+body.game-mode-active .landing-header.header-top:not(#gameHeader) {
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+/* If your global CSS already fades .header-top in game mode,
+   the specificity above ensures the game header still shows. */
+
+/* Flip site navigation to the left */
+.landing-header .site-nav {
+  margin-left: 0 !important;
+  margin-right: auto !important;
+  justify-content: flex-start !important;
+  text-align: left;
+}
+
+/* If flex or float is used elsewhere, override with this */
+.landing-header .site-nav li {
+  float: none !important;
+  display: inline-block !important;
+}
+
+/* Keep menu spacing clean when on the left */
+.landing-header .site-nav li + li {
+  margin-left: 1rem;
+}
+
+/* ================================
+   GAME HEADER (scoped-only styles)
+   Nav on LEFT, Logo on RIGHT
+   ================================ */
+
+/* Treat the game header as a flex row */
+#gameHeader.header-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* Nav LEFT */
+#gameHeader .site-nav {
+  order: 1;
+  margin-left: 0 !important;
+  margin-right: auto !important;
+  justify-content: flex-start !important;
+  text-align: left;
+}
+
+/* Logo RIGHT */
+#gameHeader .logo-wrapper {
+  order: 2;
+  margin-left: auto !important;
+  margin-right: 0 !important;
+  text-align: right;
+}
+
+/* Optional: keep menu icon to the far right of the logo */
+#gameHeader .menu-icon {
+  order: 3;
+  margin-left: 1rem;
+}
+
+/* Spacing between nav items in the game header only */
+#gameHeader .site-nav li + li {
+  margin-left: 1rem;
+}
+
+/* ================================
+   VISIBILITY TOGGLE (unchanged)
+   Show game header only in Game Mode
+   ================================ */
+#gameHeader {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .25s ease;
+}
+body.game-mode-active #gameHeader {
+  opacity: 1 !important;
+  pointer-events: auto !important;
+  z-index: 9998;
+}
+body.game-mode-active .landing-header.header-top:not(#gameHeader) {
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+/* ================================
+   SAFETY RESET for MAIN HEADER
+   (Neutralize any previous global flips)
+   ================================ */
+.landing-header.header-top:not(#gameHeader) .site-nav {
+  margin-left: auto !important;    /* nav defaults back to right side */
+  margin-right: 0 !important;
+  justify-content: flex-end !important;
+  text-align: right;
+}
+.landing-header.header-top:not(#gameHeader) .logo-wrapper {
+  margin-right: auto !important;   /* logo defaults back to left side */
+  margin-left: 0 !important;
+  text-align: left;
+}
+
+/* Hide Lobby Menu in Game Mode */
+body.game-mode-active .lobby-section {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+/* Base style for any background overlay image (hidden by default) */
+.bg-overlay-image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 1;           /* above video, below glass/focus */
+  pointer-events: none;
+  display: none;        /* don't show unless a scene enables it */
+}
+
+/* Show the overlay only for Location 3, matching Room 3’s layout */
+.bgs {
+  display: block;
+  top: -27.9%;
+  clip-path: inset(0 37% 0 0); /* top right bottom left */
+}
+
+
+video.character2-seat1 {
+  clip-path: inset(0% 0% 0% 0%);
+}
+
+/* WRONG ORIENTATION - SHOW MESSAGE, HIDE CONTENT */
+
+/* Default: keep the rotate message hidden */
+#turn {
+  display: none;
+  position: fixed;
+  inset: 0;                 /* full screen */
+  z-index: 99999;           /* above all your bg/video layers */
+  background: #000;         /* black background */
+  color: aliceblue;
+  text-align: center;
+  padding-top: 70%;
+  font-size: 28px;
+}
+
+/* Portrait = WRONG orientation for this layout */
+
+/* Too-small device override: works in portrait AND landscape */
+body.device-too-small > :not(#turn) {
+  display: none !important;
+}
+
+body.device-too-small #turn {
+  display: block;
+}
+
+/* Center text only when device-too-small is active */
+body.device-too-small #turn {
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+
+  text-align: center;
+  padding-top: 0;        /* overrides rotate padding */
+  padding: 0 20px;       /* slight margins for phones */
+}
+
+
+
+
+
+/* ===========================
+   HOTFIX: Regular (non-game) header should behave like working header in main.css
+   Scope to the first header (not #gameHeader) to avoid breaking game header.
+   =========================== */
+
+.landing-header.header-top:not(#gameHeader){
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  width: 100% !important;
+  height: auto !important;
+  z-index: 10 !important;
+  display: block !important;        /* avoid flex stacking-context quirks */
+  pointer-events: auto !important;
+}
+
+.landing-header.header-top:not(#gameHeader) .logo-wrapper{
+  position: relative !important;
+  float: left !important;
+  margin-left: 0 !important;
+  margin-top: 12px !important;
+}
+
+.landing-header.header-top:not(#gameHeader) .site-nav{
+  position: relative !important;
+  float: right !important;
+  margin-right: 20px !important;
+  margin-left: 0 !important;
+  display: block !important;
+  pointer-events: auto !important;
+}
+
+.landing-header.header-top:not(#gameHeader) .site-nav ul{
+  margin: 0 !important;
+  padding: 0 !important;
+  list-style: none !important;
+}
+
+.landing-header.header-top:not(#gameHeader) .site-nav li{
+  position: relative !important;
+  float: left !important;
+  display: block !important;
+  pointer-events: auto !important;
+}
+
+.landing-header.header-top:not(#gameHeader) .site-nav li a{
+  position: relative !important;
+  display: block !important;
+  pointer-events: auto !important;
+}
+
+/* Ensure no global overrides flip the regular nav left */
+.landing-header.header-top:not(#gameHeader) .site-nav{
+  justify-content: flex-end !important;
+  text-align: right !important;
+}
+
+/* If any overlay is catching clicks, force header above via stacking isolation */
+.landing-header.header-top:not(#gameHeader){
+  isolation: isolate !important;
+}
+
+
+
+/* ================================
+   FIX: Landing header menu layout (regular mode)
+   Force horizontal nav like game header
+   ================================ */
+.header-top.landing-header .site-nav{
+  float: none !important;
+  margin: 0 !important;
+  order: 3;
+}
+.header-top.landing-header .site-nav ul.menu{
+  position: static !important;
+  top: auto !important;
+  right: auto !important;
+  width: auto !important;
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: nowrap !important;
+  align-items: center !important;
+  justify-content: flex-end !important;
+  gap: 16px;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+.header-top.landing-header .site-nav ul.menu li{
+  float: none !important;
+  display: block !important;
+  margin: 0 !important;
+}
+.header-top.landing-header .site-nav ul.menu li.separator{
+  display:none !important;
+}
+
+
+
+/* ==== Emoji Reaction (GIF) overlay ==== */
+:root{
+  --react-size: 38%;
+  --react-y: 22%;
+  --react-gif-ms: 2200;
+}
+.overlay-box .reaction-layer{
+  position:absolute;
+  left:50%;
+  top: var(--react-y);
+  transform: translate(-50%, -50%);
+  width: var(--react-size);
+  aspect-ratio: 1 / 1;
+  pointer-events:none;
+  z-index: 80;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.overlay-box .reaction-layer img.react-gif{
+  width:100%;
+  height:100%;
+  object-fit:contain;
+  display:none;
+  filter: drop-shadow(0 8px 18px rgba(0,0,0,.45));
+}
