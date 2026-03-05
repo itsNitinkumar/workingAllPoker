@@ -1,0 +1,440 @@
+.user-window-container {
+  position: relative;
+  z-index: 10;
+}
+
+.beting-list ul li.player1 {
+  position: relative;
+  margin-left: 0;
+  position: absolute;
+  top: calc(15% + 200px);
+  left: calc(20% - 100px);
+}
+
+.beting-list ul li.player2 {
+  position: relative;
+  margin-left: 0;
+  position: absolute;
+  top: 35%;
+  left: 10%;
+  top: 15%;
+  left: calc(20% - 100px);
+}
+
+.beting-list ul li.player3 {
+  position: relative;
+  margin-left: 0;
+  position: absolute;
+  top: 20%;
+  left: 20%;
+  top: 15%;
+  left: calc(33% - 100px);
+}
+
+.beting-list ul li.player4 {
+  position: relative;
+  margin-left: 0;
+  position: absolute;
+  top: 15%;
+  left: 35%;
+  top: 15%;
+  left: calc(46% - 100px);
+}
+
+.beting-list ul li.player5 {
+  position: relative;
+  margin-left: 0;
+  position: absolute;
+  top: 15%;
+  left: 50%;
+  top: 15%;
+  left: calc(59% - 100px);
+}
+
+.beting-list ul li.player6 {
+  position: relative;
+  margin-left: 0;
+  position: absolute;
+  top: 15%;
+  left: 65%;
+  top: 15%;
+  left: calc(72% - 100px);
+}
+
+.beting-list ul li.player7 {
+  position: relative;
+  margin-left: 0;
+  position: absolute;
+  top: 20%;
+  left: 80%;
+  top: 15%;
+  left: calc(85% - 100px);
+}
+
+.beting-list ul li.player8 {
+  position: relative;
+  margin-left: 0;
+  position: absolute;
+  top: 40%;
+  left: 80%;
+  top: calc(40% - 70px);
+  left: calc(85% - 100px);
+}
+
+.beting-list ul li.player9 {
+  position: relative;
+  margin-left: 0;
+  position: absolute;
+  top: 60%;
+  left: 80%;
+  top: calc(60% - 70px);
+  left: calc(85% - 100px);
+}
+
+.user-window {
+  transition: 500ms;
+}
+
+.user-window.hide {
+  left: -500px;
+}
+
+.winner.bls-inner {
+  color: #fff;
+  background: #55a46b;
+}
+
+.wintext {
+  color: #55a46b;
+}
+
+/* span.bcsvr2 {
+  left: 20px;
+  top: 10px;
+} */
+
+.cardback {
+  width: 85px;
+}
+
+span.bcsvr2 {
+  position: sticky;
+}
+
+.gameflow-bg iframe {
+  width: 100%;
+  height: 100%;
+  min-width: 100vw;
+  min-width: 178vh;
+  min-height: 56.25vw;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.seat55-hero .pot-main {
+  transition: 2s;
+}
+
+.seat55-hero .pot-main.mpot-1 {
+  /* top: auto;
+  bottom: 160px; */
+  top: calc(100% - 250px);
+  top: calc(100% - 350px);
+}
+
+.seat55-hero .pot-main.mpot-2 {
+  /* top: auto;
+  bottom: 290px; */
+  top: calc(100% - 400px);
+  top: calc(100% - 500px);
+}
+
+.seat55-hero .pot-main.mpot-3 {
+  /* top: auto;
+  bottom: 290px; */
+  top: calc(100% - 400px);
+  top: calc(100% - 500px);
+  right: 50%;
+  right: calc(61% - 165px);
+}
+
+.seat55-hero .pot-main.mpot-4 {
+  /* top: auto;
+  bottom: 290px; */
+  top: calc(100% - 400px);
+  top: calc(100% - 500px);
+  right: 40%;
+  right: calc(61% - 330px);
+}
+
+.seat55-hero .pot-main.player-1 {
+  top: calc(19% + 114px);
+  right: calc(24% + 44px);
+}
+
+.seat55-hero .pot-main.player-2 {
+  top: calc(25.5% + 114px);
+  right: calc(12% + 44px);
+}
+
+.seat55-hero .pot-main.player-3 {
+  top: calc(50% + 0px);
+  right: calc(1% + 0px);
+}
+
+.seat55-hero .pot-main.player-4 {
+  top: calc(70% + 0px);
+  right: calc(15% + 95px);
+}
+
+.seat55-hero .pot-main.player-6 {
+  top: calc(70% + 0px);
+  right: calc(85% - 185px);
+}
+
+.seat55-hero .pot-main.player-7 {
+  top: calc(50% + 0px);
+  right: calc(100% - 178px);
+}
+
+.seat55-hero .pot-main.player-8 {
+  top: calc(38% + 0px);
+  right: calc(88% - 178px);
+}
+
+.seat55-hero .pot-main.player-9 {
+  top: calc(35% + 0px);
+  right: calc(75% - 178px);
+}
+
+.chip-stack-img {
+  width: 140px;
+  height: 100px;
+  object-fit: contain;
+  margin-top: 50px;
+}
+
+.seat55-hero .loby-main.box-1 {
+  bottom: 25vh;
+  left: 15%;
+}
+
+.seat55-hero .loby-main.box-9 {
+  bottom: 25vh;
+  left: 70%;
+}
+
+/* ========================== */
+/* Video Container Start */
+/* ========================== */
+
+/* Base styles for specific characters */
+
+.video-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  /* z-index: 2; */
+}
+
+.video-container video {
+  position: absolute;
+  width: auto;
+  height: auto;
+  background: none !important;
+  top: auto;
+  left: auto;
+  right: auto;
+  bottom: auto;
+}
+
+.video-container video.character1-seat1 {
+  bottom: 300px;
+  right: 365px;
+  width: 25%;
+}
+.video-container video.character2-seat1 {
+  bottom: 75px;
+  right: 37px;
+  width: 27%;
+}
+.video-container video.character3-seat1 {
+  top: -135px;
+  right: -175px;
+  height: 150%;
+  z-index: 3; /* Ensure character 3 is in front */
+}
+.video-container video.character7-seat1 {
+  top: -40px;
+  left: -200px;
+  height: 142%;
+  z-index: 3; /* Ensure character 7 is in front */
+}
+.video-container video.character8-seat1 {
+  bottom: 55px;
+  left: 30px;
+  height: 115%;
+}
+.video-container video.character9-seat1 {
+  bottom: 273px;
+  left: 408px;
+  height: 83%;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1200px) {
+  .video-container video.character1-seat1 {
+    bottom: 325px;
+    left: 640px;
+  }
+  .video-container video.character2-seat1 {
+    bottom: 175px;
+    left: 840px;
+  }
+  .video-container video.character3-seat1 {
+    top: -140px;
+    left: 810px;
+    z-index: 3; /* Ensure character 3 is in front */
+    width: 40%;
+  }
+  .video-container video.character7-seat1 {
+    top: 115px;
+    left: -135px;
+    height: 95%;
+    z-index: 3; /* Ensure character 7 is in front */
+  }
+  .video-container video.character8-seat1 {
+    bottom: 130px;
+    left: -10px;
+    height: 90%;
+  }
+  .video-container video.character9-seat1 {
+    bottom: 295px;
+    left: 245px;
+    height: 58%;
+  }
+}
+
+@media (max-width: 992px) {
+  .video-container video.character1-seat1 {
+    bottom: 228px;
+    left: 304px;
+  }
+  .video-container video.character2-seat1 {
+    bottom: 58px;
+    left: 536px;
+  }
+  .video-container video.character3-seat1 {
+    top: -100px;
+    left: 600px;
+    height: 120%;
+    z-index: 3; /* Ensure character 3 is in front */
+  }
+  .video-container video.character7-seat1 {
+    top: -14px;
+    right: 640px;
+    height: 113%;
+    z-index: 3; /* Ensure character 7 is in front */
+  }
+  .video-container video.character8-seat1 {
+    bottom: 44px;
+    right: 520px;
+    height: 89.6%;
+  }
+  .video-container video.character9-seat1 {
+    bottom: 214px;
+    right: 252px;
+    height: 68%;
+  }
+}
+
+@media (max-width: 768px) {
+  .video-container video.character1-seat1 {
+    bottom: 114px;
+    left: 152px;
+  }
+  .video-container video.character2-seat1 {
+    bottom: 29px;
+    left: 268px;
+  }
+  .video-container video.character3-seat1 {
+    top: -50px;
+    left: 300px;
+    height: 60%;
+    z-index: 3; /* Ensure character 3 is in front */
+  }
+  .video-container video.character7-seat1 {
+    top: -7px;
+    right: 320px;
+    height: 57%;
+    z-index: 3; /* Ensure character 7 is in front */
+  }
+  .video-container video.character8-seat1 {
+    bottom: 22px;
+    right: 260px;
+    height: 44.8%;
+  }
+  .video-container video.character9-seat1 {
+    bottom: 107px;
+    right: 126px;
+    height: 34%;
+  }
+}
+
+@media (max-width: 576px) {
+  .video-container video.character1-seat1 {
+    bottom: 57px;
+    left: 76px;
+  }
+  .video-container video.character2-seat1 {
+    bottom: 14px;
+    left: 134px;
+  }
+  .video-container video.character3-seat1 {
+    top: -25px;
+    left: 150px;
+    height: 30%;
+    z-index: 3; /* Ensure character 3 is in front */
+  }
+  .video-container video.character7-seat1 {
+    top: -3px;
+    right: 160px;
+    height: 28.5%;
+    z-index: 3; /* Ensure character 7 is in front */
+  }
+  .video-container video.character8-seat1 {
+    bottom: 11px;
+    right: 130px;
+    height: 22.4%;
+  }
+  .video-container video.character9-seat1 {
+    bottom: 53px;
+    right: 63px;
+    height: 17%;
+  }
+}
+
+/* ========================== */
+/* Video Container End */
+/* ========================== */
+
+/* Progress Text */
+.loby-main-inner .pink-progress {
+  position: relative;
+}
+
+.loby-main-inner .progress-bar {
+  position: absolute;
+  height: 100% !important;
+}
+
+.loby-main-inner .text-box .pink-progress h5 {
+  width: 100%;
+  padding-right: 20px;
+  line-height: 40px;
+  z-index: 1;
+}

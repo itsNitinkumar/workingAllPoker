@@ -1,0 +1,468 @@
+<!-- (A) THIS WILL SHOW ON THE WRONG ORIENTATION -->
+<div id="turn">Please rotate your device!</div>
+
+<!-- (B) CONTENTS AS USUAL -->
+<div class="buy-wrap" id="container">
+  <div class="header-2">
+    <div class="container-fluid">
+      <div
+        class="header-main d-flex align-items-center justify-content-between"
+      >
+        <!-- <div class="left-list">
+          <ul class="d-flex align-items-center justify-content-center">
+            <li><a href="https://allcardroom.com/lobby-poker ">Lobby</a></li>
+            <li><a href="#" class="deposit-nav-btn">Buy Coins</a></li>
+          </ul>
+        </div> -->
+        <div class="right-list hidelist">
+          <ol class="d-flex align-items-center justify-content-center">
+            <li>
+              <a class="smily">
+                <img src="assets/images/smily.png" alt="" class="img-fluid" />
+              </a>
+            </li>
+            <li>
+              <a class="mute-sound">
+                <img
+                  src="assets/images/sound-mute.svg"
+                  alt=""
+                  class="img-fluid"
+                />
+              </a>
+            </li>
+            <li>
+              <a class="message">
+                <img src="assets/images/message.svg" alt="" class="img-fluid" />
+              </a>
+            </li>
+            <li>
+              <a class="video-icon">
+                <img src="assets/images/camera.svg " alt="" class="img-fluid" />
+              </a>
+            </li>
+            <li>
+              <a class="support">
+                <img src="assets/images/support.svg" alt="" class="img-fluid" />
+              </a>
+            </li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <section class="buy-hero seat55-hero demo sec-level">
+    <div *ngIf="backgroundUrl" class="gameflow-bg" style="overflow: hidden">
+      <iframe [src]="backgroundUrl" frameborder="0" allowfullscreen></iframe>
+    </div>
+
+    <div class="video-container" id="videoContainer">
+      <!-- Placeholder for video elements -->
+      <div
+        *ngFor="let e of [].constructor(9); let i = index"
+        [ngClass]="
+          getUserDetails(i + 1) && !getUserDetails(i + 1)?.showCam
+            ? ''
+            : 'd-none'
+        "
+      >
+        <video
+          id="video_character{{ i + 1 }}_seat1"
+          class="generatedVideo overlay character{{ i + 1 }}-seat1"
+          src="assets/video/character{{ i + 1 }}-seat1.webm"
+          autoplay="false"
+          muted="true"
+          autostart="0"
+        ></video>
+      </div>
+    </div>
+
+    <div class="container1">
+      <div
+        *ngFor="let e of [].constructor(9); let i = index"
+        [ngClass]="getUserClass(i + 1)"
+        class="loby-main"
+      >
+        <span *ngIf="!getUserDetails(i + 1)">
+          <div class="image-holder">
+            <img src="assets/images/a7.png" alt="" class="img-fluid hidelist" />
+          </div>
+          <a (click)="modalOpen(i + 1, content)" class="loby-main-inner">
+            <div class="text-box align-items-center myseatopen myarea">
+              <h5 *ngIf="checkSeatOpen(i + 1)">SEAT OPEN</h5>
+              <h5 *ngIf="!checkSeatOpen(i + 1)">SEAT BOOKED</h5>
+            </div>
+          </a>
+        </span>
+
+        <a *ngIf="getUserDetails(i + 1)" class="loby-main-inner">
+          <div class="image-holder react-video-main">
+            <img
+              src="assets/images/a{{ i + 1 }}.png"
+              class="img-fluid d-none"
+              [ngClass]="getUserDetails(i + 1)?.showCam ? 'd-none' : 'd-block'"
+            />
+
+            <video
+              id="table_view_cam{{ i + 1 }}"
+              autoplay
+              class="react-video opacity-100"
+              [ngClass]="getUserDetails(i + 1)?.showCam ? 'd-block' : 'd-none'"
+              style="background: #000"
+            ></video>
+          </div>
+
+          <span>
+            <!-- On Turn -->
+            <div
+              *ngIf="showType(i + 1, 'turn', false)"
+              class="text-box align-items-center progress-text-box"
+            >
+              <h4 class="d-loby pink-d-loby">{{ countDownVal }}</h4>
+              <div class="progress pink-progress">
+                <div
+                  class="progress-bar"
+                  role="progressbar"
+                  [style.width]="progressBarWidth + '%'"
+                ></div>
+                <h5>${{ getUserDetails(i + 1)?.callValue }}</h5>
+              </div>
+            </div>
+
+            <!-- Not On Turn -->
+            <div
+              *ngIf="!showType(i + 1, 'turn', false)"
+              class="text-box align-items-center"
+              [ngClass]="[
+                getUserDetails(i + 1)?.turnStatus == 'call'
+                  ? 'call-text-box justify-content-start'
+                  : '',
+                getUserDetails(i + 1)?.turnStatus == 'smallBlind' ||
+                getUserDetails(i + 1)?.turnStatus == 'bigBlind'
+                  ? 'justify-content-start'
+                  : ''
+              ]"
+            >
+              <!-- Check -->
+              <h5
+                *ngIf="getUserDetails(i + 1)?.turnStatus == 'check'"
+                class="call-main call-main-font"
+              >
+                <span class="call check-main-tick">
+                  <img src="assets/images/check.svg" />
+                </span>
+                Check
+              </h5>
+
+              <!-- Call -->
+              <h5 *ngIf="getUserDetails(i + 1)?.turnStatus == 'call'">
+                <span>C</span> ${{ getUserDetails(i + 1)?.callValue }}
+              </h5>
+
+              <!-- Bet -->
+              <h5
+                *ngIf="getUserDetails(i + 1)?.turnStatus == 'bet'"
+                class="call-main"
+              >
+                <span class="call">B</span> ${{
+                  getUserDetails(i + 1)?.callValue
+                }}
+              </h5>
+
+              <!-- Raise -->
+              <h5
+                *ngIf="getUserDetails(i + 1)?.turnStatus == 'raise'"
+                class="call-main yellow-call-main"
+              >
+                <span class="call yellow-call">
+                  <img src="assets/images/arw-icon.svg" />
+                </span>
+                ${{ getUserDetails(i + 1)?.callValue }}
+              </h5>
+
+              <!-- Fold -->
+              <h5
+                *ngIf="
+                  getUserDetails(i + 1)?.turnStatus == 'fold' &&
+                  !getUserDetails(i + 1)?.sittingOut
+                "
+                class="call-main foldtext"
+              >
+                <span class="call foldicon">X</span> Fold
+              </h5>
+
+              <!-- Winner -->
+              <h5
+                *ngIf="getUserDetails(i + 1)?.turnStatus == 'winner'"
+                class="call-main"
+                style="padding-left: 15px"
+              >
+                WINNER
+              </h5>
+
+              <!-- Small Blind -->
+              <h4 *ngIf="getUserDetails(i + 1)?.turnStatus == 'smallBlind'">
+                SB
+              </h4>
+
+              <!-- Big Blind -->
+              <h4 *ngIf="getUserDetails(i + 1)?.turnStatus == 'bigBlind'">
+                BB
+              </h4>
+
+              <!-- Small/Big Blind -->
+              <h5
+                *ngIf="
+                  getUserDetails(i + 1)?.turnStatus == 'smallBlind' ||
+                  getUserDetails(i + 1)?.turnStatus == 'bigBlind'
+                "
+                class="text-center"
+              >
+                ${{ getUserDetails(i + 1)?.callValue }}
+              </h5>
+
+              <!-- Normal -->
+              <h5
+                *ngIf="
+                  !getUserDetails(i + 1)?.turnStatus &&
+                  !getUserDetails(i + 1)?.sittingOut
+                "
+                class="text-center"
+              >
+                ${{ getUserDetails(i + 1)?.callValue }}
+              </h5>
+
+              <!-- Sitting Out -->
+              <h5 *ngIf="getUserDetails(i + 1)?.sittingOut" class="text-center">
+                Sitting Out
+              </h5>
+            </div>
+
+            <!-- Not User -->
+            <div
+              *ngIf="
+                !showHandCards(i) &&
+                !getUserDetails(i + 1)?.fold &&
+                !getUserDetails(i + 1)?.sittingOut
+              "
+              class="cardback"
+            >
+              <span
+                *ngFor="
+                  let card of getUserDetails(i + 1)?.myCards;
+                  let i = index
+                "
+                class="bcsvr1 bcsvr{{ i + 1 }}"
+              >
+                <img src="assets/images/BackCardVariants.png" />
+              </span>
+            </div>
+
+            <div *ngIf="showHandCards(i)" class="mycardback">
+              <span class="bcsvr1">
+                <ul class="d-flex align-items-center">
+                  <li
+                    *ngFor="
+                      let card of getUserDetails(i + 1)?.myCards;
+                      let i = index
+                    "
+                  >
+                    <img
+                      src="assets/cards/{{ card.code }}.svg"
+                      class="fold-img"
+                    />
+                  </li>
+                </ul>
+              </span>
+            </div>
+          </span>
+        </a>
+
+        <div *ngIf="selfEmoji(i + 1)" class="image-holder my-react-img d-block">
+          <img src="{{ selfEmoji(i + 1) }}" class="react-gif" />
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="serveCards.length || cardMessage" class="cards-main">
+      <div
+        class="cards-main-inner"
+        style="
+          bottom: auto;
+          right: auto;
+          left: 50%;
+          top: 30px;
+          transition: inherit;
+          transform: translateX(-50%);
+        "
+      >
+        <div class="cards-main-inner2">
+          <ul
+            *ngIf="serveCards.length"
+            class="mb-3"
+            style="justify-content: center"
+          >
+            <li *ngFor="let card of serveCards">
+              <a class="cards-list">
+                <img src="assets/cards/{{ card.code }}.svg" class="img-fluid" />
+              </a>
+            </li>
+          </ul>
+
+          <p
+            *ngIf="cardMessage"
+            class="text-center"
+            style="font-size: 14px; color: #fff"
+          >
+            {{ cardMessage }}
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="potValue" class="pot-main">
+      <h5 class="pot">
+        Pot: <span>${{ potValue }}</span>
+      </h5>
+      <img src="assets/images/pot.png" />
+    </div>
+
+    <!-- <div class="container1">
+      <div class="loby-main box-6">
+        <div class="image-holder">
+          <img src="assets/images/a7.png" alt="" class="img-fluid hidelist" />
+        </div>
+        <a (click)="modalOpen(1, content)" class="loby-main-inner">
+          <div class="text-box align-items-center myseatopen myarea">
+            <h5 *ngIf="checkSeatOpen(1)">SEAT OPEN</h5>
+            <h5 *ngIf="!checkSeatOpen(1)">SEAT BOOKED</h5>
+          </div>
+        </a>
+      </div>
+
+      <div class="loby-main box-7">
+        <div class="image-holder">
+          <img src="assets/images/a7.png" alt="" class="img-fluid hidelist" />
+        </div>
+        <a (click)="modalOpen(2, content)" class="loby-main-inner">
+          <div class="text-box align-items-center myseatopen myarea">
+            <h5 *ngIf="checkSeatOpen(2)">SEAT OPEN</h5>
+            <h5 *ngIf="!checkSeatOpen(2)">SEAT BOOKED</h5>
+          </div>
+        </a>
+      </div>
+
+      <div class="loby-main box-8">
+        <div class="image-holder">
+          <img src="assets/images/a7.png" alt="" class="img-fluid hidelist" />
+        </div>
+        <a (click)="modalOpen(3, content)" class="loby-main-inner">
+          <div class="text-box align-items-center myseatopen myarea">
+            <h5 *ngIf="checkSeatOpen(3)">SEAT OPEN</h5>
+            <h5 *ngIf="!checkSeatOpen(3)">SEAT BOOKED</h5>
+          </div>
+        </a>
+      </div>
+
+      <div class="loby-main box-2">
+        <div class="image-holder">
+          <img src="assets/images/a7.png" alt="" class="img-fluid hidelist" />
+        </div>
+        <a (click)="modalOpen(7, content)" class="loby-main-inner">
+          <div class="text-box align-items-center myseatopen myarea">
+            <h5 *ngIf="checkSeatOpen(7)">SEAT OPEN</h5>
+            <h5 *ngIf="!checkSeatOpen(7)">SEAT BOOKED</h5>
+          </div>
+        </a>
+      </div>
+
+      <div class="loby-main box-3">
+        <div class="image-holder">
+          <img src="assets/images/a7.png" alt="" class="img-fluid hidelist" />
+        </div>
+        <a (click)="modalOpen(8, content)" class="loby-main-inner">
+          <div class="text-box align-items-center myseatopen myarea">
+            <h5 *ngIf="checkSeatOpen(8)">SEAT OPEN</h5>
+            <h5 *ngIf="!checkSeatOpen(8)">SEAT BOOKED</h5>
+          </div>
+        </a>
+      </div>
+
+      <div class="loby-main box-4">
+        <div class="image-holder">
+          <img src="assets/images/a7.png" alt="" class="img-fluid hidelist" />
+        </div>
+        <a (click)="modalOpen(9, content)" class="loby-main-inner">
+          <div class="text-box align-items-center myseatopen myarea">
+            <h5 *ngIf="checkSeatOpen(9)">SEAT OPEN</h5>
+            <h5 *ngIf="!checkSeatOpen(9)">SEAT BOOKED</h5>
+          </div>
+        </a>
+      </div>
+    </div> -->
+  </section>
+</div>
+
+<!--  -->
+<ng-template #content let-modal let-closeModal="close">
+  <div
+    class="camera-setting-main buy-hero camera-setting-main2 d-block my-5"
+    style="position: static; transform: none; height: auto"
+  >
+    <div class="main-bg">
+      <div class="text-box text-box1">
+        <h4>Camera Settings</h4>
+      </div>
+      <div class="image-holder">
+        <img src="assets/images/camera-main.png" alt="" class="img-fluid" />
+      </div>
+      <div class="text-box">
+        <h4>Enter Buy-In Amount</h4>
+      </div>
+      <div class="price-list">
+        <ul class="d-flex align-items-center justify-content-center">
+          <li>$500</li>
+          <li class="price-lst2">
+            <span id="min-price">${{ betAmount }}</span>
+          </li>
+          <li>${{ profileDetails.cash_balance }}</li>
+        </ul>
+
+        <div class="d-flex align-items-center price-main">
+          <span>Min</span>
+          <div id="price-range" class="ui-widget" style="width: 100%">
+            <input
+              [(ngModel)]="betAmount"
+              type="range"
+              min="500"
+              max="{{ profileDetails.cash_balance }}"
+              step="5"
+              class="form-range"
+            />
+          </div>
+          <span>Max</span>
+        </div>
+
+        <div class="buy-btn-main">
+          <p>
+            Available Social Cash:
+            <span>${{ profileDetails.cash_balance }}</span>
+          </p>
+          <div
+            *ngIf="availSeat"
+            class="d-flex align-items-center justify-content-between buy-bottom"
+          >
+            <a class="buy-watch-btn"> Watch </a>
+            <a (click)="addUserToGame(closeModal)" class="buy-play-btn">
+              Play Now
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <a (click)="modal.close()" class="buy-cross buy-cross3">
+      <img src="assets/images/cross.svg" alt="" />
+    </a>
+  </div>
+</ng-template>

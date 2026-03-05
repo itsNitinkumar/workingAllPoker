@@ -1,0 +1,336 @@
+<body>
+       <!-- Header -->
+       <header class="header-top landing-header">
+              <div class="logo-wrapper">
+                     <h2 class="logo"><img alt="Logo" src="/assets/new/img/logo@2x.png" /></h2>
+              </div>
+              <a aria-label="Toggle menu" class="menu-icon clearfix" role="button" tabindex="0">
+                     <div class="bars">
+                            <div class="bar1"></div>
+                            <div class="bar2"></div>
+                            <div class="bar3"></div>
+                     </div>
+              </a>
+              <nav class="site-nav" id="site-nav">
+                     <ul class="menu clearfix qmenu">
+                            <li class="active" data-menuanchor="lobby"><a href="#lobby">Lobby</a></li>
+                            <li data-menuanchor="account"><a href="#account">Account</a></li>
+                            <li data-menuanchor="cashier"><a href="#cashier">Cashier</a></li>
+                            <li class="separator"></li>
+                     </ul>
+              </nav>
+       </header>
+       <header aria-label="Game Header" class="landing-header header-top game-header" id="gameHeader">
+              <div class="logo-wrapper">
+              </div>
+              <ul class="site-nav list-unstyled m-0">
+                     <li><a href="#">Lobby</a></li>
+                     <li><a href="#">Sit Out</a></li>
+              </ul>
+       </header>
+       <!-- Top-left hamburger -->
+       <button aria-label="Open controls" class="menu-btn" id="menuButton" title="Open controls">
+              <span class="bar"></span>
+              <span class="bar"></span>
+              <span class="bar"></span>
+       </button>
+       <!-- ================================================================
+       BACKGROUND STACK (character video + tint + glass + table) 
+       (ROOM 1 MEDIA CONTENT SHOWN BELOW)
+       ================================================================ -->
+       <div class="bg-stack focus-soft">
+              <video autoplay="" decoding="async" disablepictureinpicture="" id="backgroundVideo" loop="" muted=""
+                     playsinline="" preload="auto"></video>
+              <img alt="" class="glass" src="/assets/new/video/glass.png" />
+              <div aria-hidden="true" class="bg-fader" id="bgFader"></div>
+              <div aria-hidden="true" class="focus-overlay"></div>
+       </div>
+       <img alt="room" class="room" src="/assets/new/video/room1.webp" />
+       <!-- Table overlay media (also the hover-card target for $5-10 NLH) -->
+       <img alt="Table A" class="table-media tabletop" data-media="video/table4.png" data-title="City Room"
+              data-type="image" src="/assets/new/video/table4.png" />
+       <!-- ================================================================
+       CHARACTER VIDEO STAGE (videos are injected)
+       ================================================================ -->
+       <div aria-hidden="true" class="chairs-layer" id="chairsLayer"></div>
+       <div class="video-container" id="videoContainer">
+              <!-- Character videos injected here -->
+       </div>
+       <!-- ================================================================
+       CONTROL PANEL 
+       ================================================================ -->
+       <div id="controls">
+              <label>Seat View:
+                     <select id="characterSelector">
+                            <option value="1">Seat 1</option>
+                            <option value="2">Seat 2</option>
+                            <option value="3">Seat 3</option>
+                            <option value="4">Seat 4</option>
+                            <option value="5">Seat 5</option>
+                            <option value="6">Seat 6</option>
+                            <option value="7">Seat 7</option>
+                            <option value="8">Seat 8</option>
+                            <option value="9">Seat 9</option>
+                     </select>
+              </label>
+              <label>Gesture:
+                     <select id="gestureSelector">
+                            <option value="0.00">Angry (0:00.00-0:03.00)</option>
+                            <option value="3.00">Bet (0:03.50-0:08.50)</option>
+                            <option value="7.00">Fake Bet Check (0:08.50-0:11.00)</option>
+                            <option value="9.50">Disbelief (0:11.50-0:17.00)</option>
+                            <option value="14.50">Look At Cards (0:17.00-0:22.00)</option>
+                            <option value="18.00">Check (0:22.00-0:26.00)</option>
+                            <option value="21.50">Happy (0:26.00-0:30.00)</option>
+                            <option value="26.00">All-In (0:30.00-0:34.00)</option>
+                            <option value="30.50">Idle (0:30.00-0:34.00)</option>
+                     </select>
+              </label>
+              <!-- Chip System controls -->
+              <label>Bet:
+                     <input id="betAmount" min="1" placeholder="e.g. 325" step="1" type="number" value="150" />
+              </label>
+              <label>Blinds:
+                     <select id="blindsSelector">
+                            <option value="none">None</option>
+                            <option value="sb">Small Blind</option>
+                            <option value="bb">Big Blind</option>
+                     </select>
+              </label>
+              <button disabled="" id="collectBetsBtn">Collect Bets</button>
+              <button id="resetPotBtn">Reset Pot</button>
+              <button class="buy-btn">Buy-In</button>
+              <div id="checkboxContainer" style="display:block; width:100%;"></div>
+              <!-- Camera toggle for Character 1 / Seat 1 -->
+              <button id="btnLiveC1" style="display:inline-flex;align-items:center;gap:8px;"
+                     title="Toggle Live for Character 1 (Seat 1)">
+                     <img alt="Go Live" class="img-fluid" src="/assets/new/img/camera.png"
+                            style="height:18px;width:18px;" />
+                     <span>Go Live (C1)</span>
+              </button>
+              <button>Game Mode</button>
+       </div>
+       <!-- ================================================================
+       INTERACTION OVERLAY AREA (zoom)
+       ================================================================ -->
+       <div id="zoomArea" title="Click + hold to zoom in on cards"></div>
+       <!-- ================================================================
+       POT (image + dynamic layers + invisible hit-point)
+       ================================================================ -->
+       <div aria-label="Pot" class="pot-container" id="pot">
+              <img alt="Pot" class="pot-img" id="potImg" src="/assets/new/img/chips/p-blinds.png" />
+              <div aria-hidden="true" id="potLayers"></div>
+              <div aria-hidden="true" id="potTarget"></div>
+       </div>
+       <!-- ================================================================
+       ROOMS FOR GAMES SYSTEM
+       ================================================================ -->
+       <!-- Room 2 (deferred media: only data-src set) -->
+       <div aria-hidden="true" class="room-section" data-bg="video/bg-beach.mp4" data-room="video/room2.png"
+              data-table="video/table4.png" id="room2Section">
+              <div class="bg-stack focus-soft">
+                     <video id="backgroundVideo_2" loop="" muted="" playsinline="" preload="none"></video>
+                     <img alt="" class="glass" src="/assets/new/video/glass.png" />
+                     <div aria-hidden="true" class="bg-fader" id="bgFader_2"></div>
+                     <div aria-hidden="true" class="focus-overlay"></div>
+              </div>
+              <img alt="room" class="room" />
+              <img alt="Table B" class="table-media tabletop" />
+              <div aria-hidden="true" class="chairs-layer" id="chairsLayer_2"></div>
+              <div class="video-container" id="videoContainer_2"></div>
+              <div id="zoomArea_2" title="Click + hold to zoom in on cards"></div>
+              <div aria-label="Pot" class="pot-container" id="pot_2">
+                     <img alt="Pot" class="pot-img" id="potImg_2" src="/assets/new/img/chips/p-blinds.png" />
+                     <div aria-hidden="true" id="potLayers_2"></div>
+                     <div aria-hidden="true" id="potTarget_2"></div>
+              </div>
+       </div>
+       <!-- Room 3 -->
+       <div aria-hidden="true" class="room-section" data-bg="video/bg-sky.mp4" data-room="video/room3.png"
+              data-table="video/table4.png" id="room3Section">
+              <div class="bg-stack focus-soft">
+                     <video id="backgroundVideo_3" loop="" muted="" playsinline="" preload="none"></video>
+                     <img alt="" class="bg-overlay-image" src="/assets/new/video/1167.png" />
+                     <img alt="" class="glass" src="/assets/new/video/glass.png" />
+                     <div aria-hidden="true" class="bg-fader" id="bgFader_3"></div>
+                     <div aria-hidden="true" class="focus-overlay"></div>
+              </div>
+              <img alt="room" class="room" />
+              <img alt="Table C" class="table-media tabletop" />
+              <div aria-hidden="true" class="chairs-layer" id="chairsLayer_3"></div>
+              <div class="video-container" id="videoContainer_3"></div>
+              <div id="zoomArea_3" title="Click + hold to zoom in on cards"></div>
+              <div aria-label="Pot" class="pot-container" id="pot_3">
+                     <img alt="Pot" class="pot-img" id="potImg_3" src="/assets/new/img/chips/p-blinds.png" />
+                     <div aria-hidden="true" id="potLayers_3"></div>
+                     <div aria-hidden="true" id="potTarget_3"></div>
+              </div>
+       </div>
+       <!-- Room 4 -->
+       <div aria-hidden="true" class="room-section" data-bg="" data-room="video/room4.png" data-table="video/table4.png"
+              id="room4Section">
+              <div class="bg-stack focus-soft">
+                     <video id="backgroundVideo_4" loop="" muted="" playsinline="" preload="none"></video>
+                     <img alt="" class="glass" src="/assets/new/video/glass.png" />
+                     <div aria-hidden="true" class="bg-fader" id="bgFader_4"></div>
+                     <div aria-hidden="true" class="focus-overlay"></div>
+              </div>
+              <img alt="room" class="room" />
+              <img alt="Table D" class="table-media tabletop" />
+              <div aria-hidden="true" class="chairs-layer" id="chairsLayer_4"></div>
+              <div class="video-container" id="videoContainer_4"></div>
+              <div id="zoomArea_4" title="Click + hold to zoom in on cards"></div>
+              <div aria-label="Pot" class="pot-container" id="pot_4">
+                     <img alt="Pot" class="pot-img" id="potImg_4" src="/assets/new/img/chips/p-blinds.png" />
+                     <div aria-hidden="true" id="potLayers_4"></div>
+                     <div aria-hidden="true" id="potTarget_4"></div>
+              </div>
+       </div>
+       <!-- ================================================================
+       LOBBY MENU SYSTEM
+       ================================================================ -->
+       <!-- Hidden media targets used by hover cards for buttons 2–4.
+       Replace src values with your real assets. Keep them hidden. -->
+       <div aria-hidden="true" style="display:none;">
+              <div data-media="video/l-city.png" data-title="City Room" data-type="image" id="tableMedia1"></div>
+              <div data-media="video/l-ocean.png" data-title="Ocean Room" data-type="image" id="tableMedia2"></div>
+              <div data-media="video/l-sky.png" data-title="Oasis Room" data-type="image" id="tableMedia3"></div>
+              <div data-media="video/l-baller.png" data-title="AllPoker Room" data-type="image" id="tableMedia4"></div>
+       </div>
+       <!-- Bottom Lobby Section -->
+       <div class="lobby-section">
+              <h2 class="lobby-title">SELECT A GAME</h2>
+              <div aria-label="Game lobby menu" class="lobby-menu" id="lobbyMenu" role="tablist">
+                     <button aria-selected="true" class="lobby-btn is-active" data-target="#tableMedia1"
+                            role="tab">$5-10 NLH</button>
+                     <button aria-selected="false" class="lobby-btn" data-target="#tableMedia2" role="tab">$10-20
+                            NLH</button>
+                     <button aria-selected="false" class="lobby-btn" data-target="#tableMedia3" role="tab">$50-100
+                            NLH</button>
+                     <button aria-selected="false" class="lobby-btn" data-target="#tableMedia4" role="tab">$100-200
+                            NLH</button>
+              </div>
+       </div>
+       <div class="camera-setting-main enter-buy-main">
+              <div class="main-bg">
+                     <div class="text-box">
+                            <h4>Enter Buy-In Amount</h4>
+                     </div>
+                     <div class="price-list">
+                            <ul class="d-flex align-items-center justify-content-center">
+                                   <li>5000</li>
+                                   <li class="price-lst2"><span id="min-price5">$5000</span></li>
+                                   <li>55K</li>
+                            </ul>
+                            <div class="d-flex align-items-center price-main">
+                                   <span>Min</span>
+                                   <div id="price-range5"></div>
+                                   <span>Max</span>
+                            </div>
+                            <div class="buy-btn-main">
+                                   <p>Available Funds: <span> $55,000.00</span></p>
+                                   <div class="d-flex align-items-center justify-content-between buy-bottom">
+                                          <a class="buy-watch-btn" href="#">Cancel</a>
+                                          <a class="buy-play-btn" href="#">Buy-In</a>
+                                   </div>
+                            </div>
+                     </div>
+              </div>
+              <a class="buy-cross fund-cross" href="#"><img alt="" src="/assets/new/images/cross.svg" /></a>
+       </div>
+       <!-- ================================================================
+       USER INTERFACE SYSTEM SCRIPTS
+       ================================================================ -->
+       <!-- ================================================================
+       EMPTY SEAT SYSTEM
+       ================================================================ -->
+
+
+
+       <!-- ================================================================
+       rVFC LOOP TO KEEP OVERLAYS SYNCED
+       ================================================================ -->
+
+       <!-- ================================================================
+       CHARACTERS + CHIP SYSTEM (WITH NEW ALL-IN LOGIC)
+       ================================================================ -->
+
+       <!-- ================================================================
+     DRAG VIDEOS (PATCHED to move empty-seat overlays)
+     ================================================================ -->
+
+       <!-- ================================================================
+     ZOOM TABLE MEDIA (replaces the old "ZOOM BACKGROUND" block)
+     ================================================================ -->
+
+       <!-- ================================================================
+       CHARACTERS / OVERLAYS FADE TIMING 
+       ================================================================ -->
+
+       <!-- ================================================================
+       CHARACTERS / CUSTOM FADE SYNCING  
+       ================================================================ -->
+       <!-- Seats 3/7/8 + POT fade sync using FILTER opacity (leaves transitions/animations alone)
+     - Fades ONLY when VC.classList toggles 'chars-hidden'
+     - On other DOM changes (e.g., checkmark clicks), just snap to current state (no fade)
+     - Preserves all CSS transforms/animations/timings -->
+
+       <!-- ================================================================
+       TIME-OF-DAY BACKGROUND SWITCHER 
+       ================================================================ -->
+
+       <!-- ================================================================
+       LIVE PIP CAMERA 
+       ================================================================ -->
+
+       <!-- ================================================================
+      CUSTOM CHIP STACK — PIN SEATS 1, 2, 9 ABOVE VIDEOS; DEMOTE OTHERS
+      ================================================================ -->
+
+       <!-- ================================================================
+       CONTROLS MENU - TOP HEADER DROP-DOWN
+       ================================================================ -->
+
+       <!-- ================================================================
+       CONTROLS MENU - MAKES MENU BUTTON HIDE ON MOUSE STOP
+       ================================================================ -->
+
+       <!-- ================================================================
+       GAME LOBBY MENU AND GAME BUTTON OPTIONS
+       ================================================================ -->
+
+
+       <!-- ================================================================
+       EMPTY SEAT - OPEN SEAT FUNCTION
+       ================================================================ -->
+
+
+       <!-- ================================================================
+       GAME LOBBY MENU HOVER OVER CARDS
+       ================================================================ -->
+
+       <!-- ================================================================
+       SCRIPT FOR ADDING EXTRA GAME ROOMS INTO THE LOBBY
+       ================================================================ -->
+
+       <!-- ================================================================
+       INTERNAL TESTING SCRIPTS
+       ================================================================ -->
+
+       <!-- ================================================================
+       INTERNAL TESTING SCRIPT 
+       ================================================================ -->
+
+       <!-- ================================================================
+       BACKGROUND VIDEO SPEED SCRIPT 
+       ================================================================ -->
+
+       <!-- ================================================================
+       GAME HEADER SCRIPT 
+       ================================================================ -->
+
+
+
+
+
+</body>

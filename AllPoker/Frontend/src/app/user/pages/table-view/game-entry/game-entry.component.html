@@ -1,0 +1,963 @@
+<body class="poker_board_zset table-view-qt">
+  <div class="table-seat-mainouter">
+    <div
+      class="table-seat-main game-entry winning-table low_bandwidth-disconnect low_bandwidth_specific_player"
+      style="background-image: url('assets/images/gameflow-board.png')"
+    >
+      <!-- <img src="assets/images/gameflow-board.png" alt="" />
+       -->
+      <div class="table-seat-inner">
+        <div class="table-seat-header">
+          <div class="top_left">
+            <ul class="f_menu">
+              <li><a href="#">Lobby </a></li>
+              <li><a href="#">Deposit </a></li>
+            </ul>
+            <ul class="t_menu">
+              <!-- changes -->
+              <li><a href="#">Table View </a></li>
+              <li><a href="#" class="active">Game View </a></li>
+              <li>
+                <a
+                  href="http://15.206.182.76/html/poker/user-game-flow-live-view-fourteen-live-cc.html"
+                >
+                  Live View
+                </a>
+              </li>
+              <!-- <li>
+                <a href="javascript:void(0)" id="fullScreen" (click)="fullScreen(compNativeElement)">Full Screen </a>
+               </li>
+              <li>
+                <a href="javascript:void(0)" (click)="exitFullScreen()">Exit Full Screen </a>
+               </li> -->
+            </ul>
+          </div>
+          <div class="top_right">
+            <ul>
+              <li>
+                <a href="#">
+                  <img src="assets/images/video_Icon.svg" alt="" />
+                </a>
+              </li>
+              <li>
+                <a href="#">
+                  <img src="assets/images/Sound_Mute.svg" alt="" />
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="user-window-container">
+          <button class="toggle" id="slide" (click)="show_live_streaming()">
+            <img src="assets/images/webcam-cam-web-svgrepo-com.png" alt="" />
+          </button>
+          <div class="user-window hidden specific_person" id="target">
+            <!-- <img src="assets/images/userview.png" alt="" /> -->
+            <video id="table_view_video" autoplay></video>
+            <!-- poster="assets/images/userview.png" -->
+            <span
+              class="user_poor_network_icon"
+              *ngIf="other_user_connection_error"
+            >
+              <img src="assets/images/ios-wifi.svg" alt="" />
+            </span>
+          </div>
+        </div>
+        <div class="beting-list">
+          <ul>
+            <li class="player1" data-aos="fade-right" data-aos-duration="600">
+              <div
+                class="show_seat_availability"
+                *ngIf="player1_show_seat_availability"
+              >
+                <a
+                  href="javascript:void(0)"
+                  class="open-seat-point"
+                  (click)="update_seat_status('player1', 'show_card_amount')"
+                >
+                  SEAT OPEN
+                </a>
+              </div>
+              <div
+                class="bls show_card_amount"
+                *ngIf="player1_show_card_amount"
+              >
+                <div
+                  class="card-point"
+                  [ngClass]="{ 'highligt-option': player1_active_highlight }"
+                >
+                  <div class="timer" *ngIf="player1_active_highlight">
+                    {{ time_left }}
+                  </div>
+                  <!-- <div class="progressBar">
+                    <div class="bar"> </div>
+                   </div> -->
+                  <span> $2100 </span>
+                  <div class="hnd-card" *ngIf="player1_serve_card">
+                    <div class="back" *ngIf="!player1_active_fold">
+                      <span class="bcsvr1">
+                        <img src="assets/images/BackCardVariants.png" alt="" />
+                      </span>
+                      <span class="bcsvr2">
+                        <img src="assets/images/BackCardVariants.png" alt="" />
+                      </span>
+                    </div>
+                    <!-- after fold press blank cards will show -->
+                    <div class="back" *ngIf="player1_active_fold">
+                      <span class="bcsvr1">
+                        <img src="assets/images/trans-card2.png" alt="" />
+                      </span>
+                      <span class="bcsvr2">
+                        <img src="assets/images/trans-card2.png" alt="" />
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                <span
+                  id="bls-one-inter"
+                  class="up bls-inner"
+                  *ngIf="player1_active_highlight && !player1_active_fold"
+                >
+                  <span class="me-2 up_icon">
+                    <i class="fa-solid fa-angle-up"> </i>
+                  </span>
+                  $100
+                </span>
+                <!-- <span id="bls-one-inter" class="wifi-low bls-inner">
+                  <span class="me-2 wifi_icon"
+                    > <img src="assets/images/ios-wifi.svg" alt=""
+                  /> </span>
+                  Connecting..
+                 </span> -->
+                <span
+                  id="bls-three-inter"
+                  class="fold bls-inner"
+                  *ngIf="player1_active_fold && !winner_status"
+                >
+                  <span class="me-2 fold_icon">
+                    <i class="fa-solid fa-xmark"> </i>
+                  </span>
+                  Fold
+                </span>
+                <span
+                  id="bls-one-inter"
+                  class="winner bls-inner"
+                  *ngIf="winner_status"
+                >
+                  WINNER
+                </span>
+              </div>
+            </li>
+            <li class="player2" data-aos="fade-right" data-aos-duration="1000">
+              <div
+                class="show_seat_availability"
+                *ngIf="player2_show_seat_availability"
+              >
+                <a
+                  href="javascript:void(0)"
+                  class="open-seat-point"
+                  (click)="update_seat_status('player2', 'show_card_amount')"
+                >
+                  SEAT OPEN
+                </a>
+              </div>
+              <div
+                class="bls show_card_amount"
+                *ngIf="player2_show_card_amount"
+              >
+                <div
+                  class="card-point"
+                  [ngClass]="{ 'highligt-option': player2_active_highlight }"
+                >
+                  <div class="timer" *ngIf="player2_active_highlight">
+                    {{ time_left }}
+                  </div>
+                  <span> $2200 </span>
+                  <div class="hnd-card" *ngIf="player2_serve_card">
+                    <div class="back" *ngIf="!player2_active_fold">
+                      <span class="bcsvr1">
+                        <img src="assets/images/BackCardVariants.png" alt="" />
+                      </span>
+                      <span class="bcsvr2">
+                        <img src="assets/images/BackCardVariants.png" alt="" />
+                      </span>
+                    </div>
+                    <!-- after fold press blank cards will show -->
+                    <div class="back" *ngIf="player2_active_fold">
+                      <span class="bcsvr1">
+                        <img src="assets/images/trans-card2.png" alt="" />
+                      </span>
+                      <span class="bcsvr2">
+                        <img src="assets/images/trans-card2.png" alt="" />
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                <span
+                  id="bls-two-inter"
+                  class="green bls-inner"
+                  *ngIf="player2_active_highlight && !player2_active_fold"
+                >
+                  <span class="me-2 warning_icon">C </span>
+                  $200
+                </span>
+                <span
+                  id="bls-three-inter"
+                  class="fold bls-inner"
+                  *ngIf="player2_active_fold"
+                >
+                  <span class="me-2 fold_icon">
+                    <i class="fa-solid fa-xmark"> </i>
+                  </span>
+                  Fold
+                </span>
+              </div>
+            </li>
+            <li
+              class="player3"
+              data-aos="fade-down-right"
+              data-aos-duration="1400"
+            >
+              <div
+                class="show_seat_availability"
+                *ngIf="player3_show_seat_availability"
+              >
+                <a
+                  href="javascript:void(0)"
+                  class="open-seat-point"
+                  (click)="update_seat_status('player3', 'show_card_amount')"
+                >
+                  SEAT OPEN
+                </a>
+              </div>
+              <div
+                class="bls show_card_amount"
+                *ngIf="player3_show_card_amount"
+              >
+                <div
+                  class="card-point"
+                  [ngClass]="{ 'highligt-option': player3_active_highlight }"
+                >
+                  <div class="timer" *ngIf="player3_active_highlight">
+                    {{ time_left }}
+                  </div>
+                  <span>$2300 </span>
+                  <div class="hnd-card" *ngIf="player3_serve_card">
+                    <div class="back" *ngIf="!player3_active_fold">
+                      <span class="bcsvr1">
+                        <img src="assets/images/BackCardVariants.png" alt="" />
+                      </span>
+                      <span class="bcsvr2">
+                        <img src="assets/images/BackCardVariants.png" alt="" />
+                      </span>
+                    </div>
+                    <!-- after fold press blank cards will show -->
+                    <div class="back" *ngIf="player3_active_fold">
+                      <span class="bcsvr1">
+                        <img src="assets/images/trans-card2.png" alt="" />
+                      </span>
+                      <span class="bcsvr2">
+                        <img src="assets/images/trans-card2.png" alt="" />
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                <span
+                  id="bls-three-inter"
+                  class="green bls-inner"
+                  style="display: inline"
+                  *ngIf="player3_active_highlight && !player3_active_fold"
+                >
+                  <span class="me-2 sucess_icon">R </span> $300
+                </span>
+                <span
+                  id="bls-three-inter"
+                  class="fold bls-inner"
+                  *ngIf="player3_active_fold"
+                >
+                  <span class="me-2 fold_icon">
+                    <i class="fa-solid fa-xmark"> </i>
+                  </span>
+                  Fold
+                </span>
+              </div>
+            </li>
+            <li class="player4" data-aos="fade-down" data-aos-duration="1600">
+              <div
+                class="show_seat_availability"
+                *ngIf="player4_show_seat_availability"
+              >
+                <a
+                  href="javascript:void(0)"
+                  class="open-seat-point"
+                  (click)="update_seat_status('player4', 'show_card_amount')"
+                >
+                  SEAT OPEN
+                </a>
+              </div>
+              <div
+                class="bls show_card_amount"
+                *ngIf="player4_show_card_amount"
+              >
+                <div
+                  class="card-point"
+                  [ngClass]="{ 'highligt-option': player4_active_highlight }"
+                >
+                  <div class="timer" *ngIf="player4_active_highlight">
+                    {{ time_left }}
+                  </div>
+                  <span> $2400 </span>
+                  <div class="hnd-card" *ngIf="player4_serve_card">
+                    <div class="back" *ngIf="!player4_active_fold">
+                      <span class="bcsvr1">
+                        <img src="assets/images/BackCardVariants.png" alt="" />
+                      </span>
+                      <span class="bcsvr2">
+                        <img src="assets/images/BackCardVariants.png" alt="" />
+                      </span>
+                    </div>
+                    <!-- after fold press blank cards will show -->
+                    <div class="back" *ngIf="player4_active_fold">
+                      <span class="bcsvr1">
+                        <img src="assets/images/trans-card2.png" alt="" />
+                      </span>
+                      <span class="bcsvr2">
+                        <img src="assets/images/trans-card2.png" alt="" />
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                <span
+                  id="bls-four-inter"
+                  class="up bls-inner"
+                  *ngIf="player4_active_highlight && !player4_active_fold"
+                >
+                  <span class="me-2 up_icon">
+                    <i class="fa-solid fa-angle-up"> </i>
+                  </span>
+                  $400
+                </span>
+                <span
+                  id="bls-three-inter"
+                  class="fold bls-inner"
+                  *ngIf="player4_active_fold"
+                >
+                  <span class="me-2 fold_icon">
+                    <i class="fa-solid fa-xmark"> </i>
+                  </span>
+                  Fold
+                </span>
+              </div>
+            </li>
+            <li class="player5" data-aos="fade-down" data-aos-duration="2000">
+              <div
+                class="show_seat_availability"
+                *ngIf="player5_show_seat_availability"
+              >
+                <a
+                  href="javascript:void(0)"
+                  class="open-seat-point"
+                  (click)="update_seat_status('player5', 'show_card_amount')"
+                >
+                  SEAT OPEN
+                </a>
+              </div>
+              <div
+                class="bls show_card_amount"
+                *ngIf="player5_show_card_amount"
+              >
+                <div
+                  class="card-point"
+                  [ngClass]="{ 'highligt-option': player5_active_highlight }"
+                >
+                  <div class="timer" *ngIf="player5_active_highlight">
+                    {{ time_left }}
+                  </div>
+                  <span>$2500 </span>
+                  <div class="hnd-card" *ngIf="player5_serve_card">
+                    <div class="back" *ngIf="!player5_active_fold">
+                      <span class="bcsvr1">
+                        <img src="assets/images/BackCardVariants.png" alt="" />
+                      </span>
+                      <span class="bcsvr2">
+                        <img src="assets/images/BackCardVariants.png" alt="" />
+                      </span>
+                    </div>
+                    <!-- after fold press blank cards will show -->
+                    <div class="back" *ngIf="player5_active_fold">
+                      <span class="bcsvr1">
+                        <img src="assets/images/trans-card2.png" alt="" />
+                      </span>
+                      <span class="bcsvr2">
+                        <img src="assets/images/trans-card2.png" alt="" />
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                <span
+                  id="bls-five-inter"
+                  class="green bls-inner"
+                  *ngIf="
+                    player5_active_highlight &&
+                    !player5_active_fold &&
+                    !other_user_connection_error
+                  "
+                >
+                  <span class="me-2 warning_icon">C </span>
+                  $500
+                </span>
+                <span
+                  id="bls-one-inter"
+                  class="wifi-low bls-inner"
+                  *ngIf="other_user_connection_error"
+                >
+                  <span class="me-2 wifi_icon">
+                    <img src="assets/images/ios-wifi.svg" alt="" />
+                  </span>
+                  Connecting..
+                </span>
+                <span
+                  id="bls-three-inter"
+                  class="fold bls-inner"
+                  *ngIf="player5_active_fold && !other_user_connection_error"
+                >
+                  <span class="me-2 fold_icon">
+                    <i class="fa-solid fa-xmark"> </i>
+                  </span>
+                  Fold
+                </span>
+              </div>
+            </li>
+            <li class="player6">
+              <div class="bls" data-aos="fade-down" data-aos-duration="2400">
+                <div
+                  class="show_seat_availability"
+                  *ngIf="player6_show_seat_availability"
+                >
+                  <a
+                    href="javascript:void(0)"
+                    class="open-seat-point"
+                    (click)="update_seat_status('player6', 'show_card_amount')"
+                    >SEAT OPEN
+                  </a>
+                </div>
+                <div
+                  class="bls show_card_amount"
+                  *ngIf="player6_show_card_amount"
+                >
+                  <div
+                    class="card-point"
+                    [ngClass]="{ 'highligt-option': player6_active_highlight }"
+                  >
+                    <div class="timer" *ngIf="player6_active_highlight">
+                      {{ time_left }}
+                    </div>
+                    <span>$2600 </span>
+                    <div class="hnd-card" *ngIf="player6_serve_card">
+                      <div class="back" *ngIf="!player6_active_fold">
+                        <span class="bcsvr1">
+                          <img
+                            src="assets/images/BackCardVariants.png"
+                            alt=""
+                          />
+                        </span>
+                        <span class="bcsvr2">
+                          <img
+                            src="assets/images/BackCardVariants.png"
+                            alt=""
+                          />
+                        </span>
+                      </div>
+                      <!-- after fold press blank cards will show -->
+                      <div class="back" *ngIf="player6_active_fold">
+                        <span class="bcsvr1">
+                          <img src="assets/images/trans-card2.png" alt="" />
+                        </span>
+                        <span class="bcsvr2">
+                          <img src="assets/images/trans-card2.png" alt="" />
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                  <span
+                    id="bls-six-inter"
+                    class="up bls-inner"
+                    *ngIf="player6_active_highlight && !player6_active_fold"
+                  >
+                    <span class="me-2 up_icon">
+                      <i class="fa-solid fa-angle-up"> </i>
+                    </span>
+                    $600
+                  </span>
+                  <span
+                    id="bls-three-inter"
+                    class="fold bls-inner"
+                    *ngIf="player6_active_fold"
+                  >
+                    <span class="me-2 fold_icon">
+                      <i class="fa-solid fa-xmark"> </i>
+                    </span>
+                    Fold
+                  </span>
+                </div>
+              </div>
+            </li>
+            <li
+              class="player7"
+              data-aos="fade-down-left"
+              data-aos-duration="2800"
+            >
+              <div
+                class="show_seat_availability"
+                *ngIf="player7_show_seat_availability"
+              >
+                <a
+                  href="javascript:void(0)"
+                  class="open-seat-point"
+                  (click)="update_seat_status('player7', 'show_card_amount')"
+                >
+                  SEAT OPEN
+                </a>
+              </div>
+              <div
+                class="bls show_card_amount"
+                *ngIf="player7_show_card_amount"
+              >
+                <div
+                  class="card-point"
+                  [ngClass]="{ 'highligt-option': player7_active_highlight }"
+                >
+                  <div class="timer" *ngIf="player7_active_highlight">
+                    {{ time_left }}
+                  </div>
+                  <span>$2700 </span>
+                  <div class="hnd-card" *ngIf="player7_serve_card">
+                    <div class="back" *ngIf="!player7_active_fold">
+                      <span class="bcsvr1">
+                        <img src="assets/images/BackCardVariants.png" alt="" />
+                      </span>
+                      <span class="bcsvr2">
+                        <img src="assets/images/BackCardVariants.png" alt="" />
+                      </span>
+                    </div>
+                    <!-- after fold press blank cards will show -->
+                    <div class="back" *ngIf="player7_active_fold">
+                      <span class="bcsvr1">
+                        <img src="assets/images/trans-card2.png" alt="" />
+                      </span>
+                      <span class="bcsvr2">
+                        <img src="assets/images/trans-card2.png" alt="" />
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                <span
+                  id="bls-seven-inter"
+                  class="green bls-inner"
+                  *ngIf="player7_active_highlight && !player7_active_fold"
+                >
+                  <span class="me-2 warning_icon">C </span>
+                  $700
+                </span>
+                <span
+                  id="bls-three-inter"
+                  class="fold bls-inner"
+                  *ngIf="player7_active_fold"
+                >
+                  <span class="me-2 fold_icon">
+                    <i class="fa-solid fa-xmark"> </i>
+                  </span>
+                  Fold
+                </span>
+              </div>
+            </li>
+            <!-- <li class="player1" data-aos="fade-right" data-aos-duration="600">
+                            <div class="bls">
+                                <div id="bls-one" class="card-point">
+                                    <span class="me-2 dselect">D </span>$2200
+                                    <div class="hnd-card">
+                                        <div class="back">
+                                            <span class="bcsvr1"> <img src="assets/images/BackCardVariants.png"
+                                                    alt="" /> </span>
+                                            <span class="bcsvr2"> <img src="assets/images/BackCardVariants.png"
+                                                    alt="" /> </span>
+                                         </div>
+                                        <div class="front d-none">
+                                            <span class="bcsvr1"> <img src="assets/images/mob_playcard_eight.png"
+                                                    alt="" /> </span>
+                                            <span class="bcsvr2"> <img src="assets/images/mob_playcard_eleven.png"
+                                                    alt="" /> </span>
+                                         </div>
+                                     </div>
+                                 </div>
+                                <span id="bls-one-inter" class="check bls-inner">
+                                    <span class="chhkk me-2"> <i class="fa-solid fa-check"> </i>  </span>CHECK </span>
+                             </div> -->
+            <!--  </li> -->
+
+            <!-- <li class="player2" data-aos="fade-right" data-aos-duration="1000">
+                            <div class="bls">
+                                <div id="bls-two" class="card-point">
+                                    <span class="me-2 dselect">D </span>$2200
+                                    <div class="hnd-card">
+                                        <div class="back">
+                                            <span class="bcsvr1"> <img src="assets/images/BackCardVariants.png"
+                                                    alt="" /> </span>
+                                            <span class="bcsvr2"> <img src="assets/images/BackCardVariants.png"
+                                                    alt="" /> </span>
+                                         </div>
+                                        <div class="front d-none">
+                                            <span class="bcsvr1"> <img src="assets/images/mob_playcard_eight.png"
+                                                    alt="" /> </span>
+                                            <span class="bcsvr2"> <img src="assets/images/mob_playcard_eleven.png"
+                                                    alt="" /> </span>
+                                         </div>
+                                     </div>
+                                 </div>
+                                <span id="bls-two-inter" class="winner bls-inner">
+                                    WINNER
+                                 </span>
+                             </div>
+                         </li> -->
+            <!-- <li class="player3" data-aos="fade-down-right" data-aos-duration="1400">
+                            <div class="bls">
+                                <div id="bls-three" class="card-point">
+                                    <span class="warning-text me-2">SB </span> $2200
+                                    <div class="hnd-card">
+                                        <div class="back">
+                                            <span class="bcsvr1"> <img src="assets/images/trans-card2.png"
+                                                    alt="" /> </span>
+                                            <span class="bcsvr2"> <img src="assets/images/trans-card.png"
+                                                    alt="" /> </span>
+                                         </div>
+                                        <div class="front d-none">
+                                            <span class="bcsvr1"> <img src="assets/images/mob_playcard_eight.png"
+                                                    alt="" /> </span>
+                                            <span class="bcsvr2"> <img src="assets/images/mob_playcard_eleven.png"
+                                                    alt="" /> </span>
+                                         </div>
+                                     </div>
+                                 </div>
+                                <span id="bls-three-inter" class="fold bls-inner">
+                                    <span class="me-2 fold_icon"> <i class="fa-solid fa-xmark"> </i> </span>
+                                    Fold
+                                 </span>
+                             </div>
+                         </li>
+                        <li class="player4" data-aos="fade-down" data-aos-duration="1600">
+                            <div class="bls">
+                                <div id="bls-four" class="card-point">
+                                    <span class="warning-text me-2">BB </span> $2200
+                                    <div class="hnd-card">
+                                        <div class="back">
+                                            <span class="bcsvr1"> <img src="assets/images/BackCardVariants.png"
+                                                    alt="" /> </span>
+                                            <span class="bcsvr2"> <img src="assets/images/BackCardVariants.png"
+                                                    alt="" /> </span>
+                                         </div>
+                                        <div class="front d-none">
+                                            <span class="bcsvr1"> <img src="assets/images/mob_playcard_eight.png"
+                                                    alt="" /> </span>
+                                            <span class="bcsvr2"> <img src="assets/images/mob_playcard_eleven.png"
+                                                    alt="" /> </span>
+                                         </div>
+                                     </div>
+                                 </div>
+                                <span id="bls-four-inter" class="green bls-inner"> <span
+                                        class="me-2 warning_icon">C </span> $200
+                                 </span>
+                             </div>
+                         </li>
+                        <li class="player5" data-aos="fade-down" data-aos-duration="2000">
+                            <div class="bls">
+                                <div id="bls-five" class="card-point">
+                                    $2200
+                                    <div class="hnd-card">
+                                        <div class="back">
+                                            <span class="bcsvr1"> <img src="assets/images/BackCardVariants.png"
+                                                    alt="" /> </span>
+                                            <span class="bcsvr2"> <img src="assets/images/BackCardVariants.png"
+                                                    alt="" /> </span>
+                                         </div>
+                                        <div class="front d-none">
+                                            <span class="bcsvr1"> <img src="assets/images/mob_playcard_eight.png"
+                                                    alt="" /> </span>
+                                            <span class="bcsvr2"> <img src="assets/images/mob_playcard_eleven.png"
+                                                    alt="" /> </span>
+                                         </div>
+                                     </div>
+                                 </div>
+                                <span id="bls-five-inter" class="green bls-inner"> <span
+                                        class="me-2 sucess_icon">R </span> $200
+                                 </span>
+                             </div>
+                         </li>
+                        <li class="player6">
+                            <div class="bls" data-aos="fade-down" data-aos-duration="2400">
+                                <div class="card-point">
+                                    <div class="timer">60 </div>
+                                    <div class="progressBar">
+                                        <div class="bar"> </div>
+                                     </div>
+                                    $2200
+                                    <div class="hnd-card">
+                                        <div class="back">
+                                            <span class="bcsvr1"> <img src="assets/images/BackCardVariants.png"
+                                                    alt="" /> </span>
+                                            <span class="bcsvr2"> <img src="assets/images/BackCardVariants.png"
+                                                    alt="" /> </span>
+                                         </div>
+                                        <div class="front d-none">
+                                            <span class="bcsvr1"> <img src="assets/images/mob_playcard_eight.png"
+                                                    alt="" /> </span>
+                                            <span class="bcsvr2"> <img src="assets/images/mob_playcard_eleven.png"
+                                                    alt="" /> </span>
+                                         </div>
+                                     </div>
+                                 </div>
+                             </div>
+                         </li>
+                        <li class="player7" data-aos="fade-down-left" data-aos-duration="2800">
+                            <div class="bls">
+                                <div class="card-point">$2200 </div>
+                             </div>
+                         </li>
+                        <li class="player8" data-aos="fade-left" data-aos-duration="3200">
+                            <div class="bls">
+                                <div class="card-point">$2200 </div>
+                             </div>
+                         </li> -->
+          </ul>
+        </div>
+        <div class="wining-flashing" *ngIf="winner_status">
+          <div class="hero-hand">
+            <span>
+              <img src="assets/images/winner-card-one.png" alt="" />
+            </span>
+            <span>
+              <img src="assets/images/winner-card-two.png" alt="" />
+            </span>
+            <span>
+              <img src="assets/images/winner-card-three.png" alt="" />
+            </span>
+            <span>
+              <img src="assets/images/winner-card-four.png" alt="" />
+            </span>
+            <span>
+              <img src="assets/images/winner-card-five.png" alt="" />
+            </span>
+          </div>
+          <div class="wintext">TWO PAIR</div>
+        </div>
+        <span class="connection-massage" *ngIf="self_connection_error">
+          <img src="assets/images/spin-icon.svg" alt="" class="me-2" />
+          Connecting...
+        </span>
+        <div
+          class="tablestatus"
+          *ngIf="
+            (player1_active_highlight && !player1_active_fold) ||
+            (player2_active_highlight && !player2_active_fold) ||
+            (player3_active_highlight && !player3_active_fold) ||
+            (player4_active_highlight && !player4_active_fold) ||
+            (player5_active_highlight && !player5_active_fold) ||
+            (player6_active_highlight && !player6_active_fold) ||
+            (player7_active_highlight && !player7_active_fold) ||
+            winner_status
+          "
+        >
+          <!-- <img src="assets/images/game-flow-status.png" alt=""> -->
+          <div class="dtatus-board">
+            <div class="tp-seq" [ngClass]="{ highlig: winner_status }">
+              <div class="card-opt">
+                <div class="cd fadeInUp" style="animation-delay: 1s">
+                  <img src="{{ first_card_image }}" alt="" />
+                </div>
+                <div class="cd fadeInUp" style="animation-delay: 2s">
+                  <img src="{{ second_card_image }}" alt="" />
+                </div>
+                <span class="bbg warning-text">BB </span>
+              </div>
+              <div class="card-rank-range">
+                <span class="d-flex justify-content-between">
+                  <h6>TWO PAIR</h6>
+                  <h6>?</h6>
+                </span>
+                <div class="progress">
+                  <div
+                    class="progress-bar"
+                    style="width: 50%"
+                    role="progressbar"
+                    aria-valuenow="50"
+                    aria-valuemin="0"
+                    aria-valuemax="100"
+                  ></div>
+                </div>
+              </div>
+            </div>
+            <div class="card-container" *ngIf="!winner_status">
+              <img src="assets/images/term-cards.png" alt="" />
+            </div>
+
+            <div class="card-container winning-squads" *ngIf="winner_status">
+              <span>
+                <img
+                  class="img-fluid"
+                  src="assets/images/FrontCard-m-one.png"
+                  alt=""
+                />
+              </span>
+              <span>
+                <img
+                  class="img-fluid"
+                  src="assets/images/FrontCard-m-two.png"
+                  alt=""
+                />
+              </span>
+              <span>
+                <img
+                  class="img-fluid"
+                  src="assets/images/FrontCard-m-three.png"
+                  alt=""
+                />
+              </span>
+              <span>
+                <img
+                  class="img-fluid"
+                  src="assets/images/FrontCard-m-four.png"
+                  alt=""
+                />
+              </span>
+              <span>
+                <img
+                  class="img-fluid"
+                  src="assets/images/FrontCardVariantfive.png"
+                  alt=""
+                />
+              </span>
+            </div>
+            <div class="sttusbar">
+              <ul>
+                <li>POT<span>$0 </span></li>
+                <li>BLINDS<span>$5/$10 </span></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="board-wapp">
+          <ul>
+            <li><span>Min </span></li>
+            <li><span>1/2 </span></li>
+            <li><span>Pot </span></li>
+            <li><span>Max </span></li>
+          </ul>
+          <form class="range">
+            <div class="form-group range__value">
+              <span> </span>
+            </div>
+            <!--/form-group-->
+            <div class="form-group range__slider ms-1">
+              <input type="range" step="500" />
+            </div>
+            <!--/form-group-->
+          </form>
+        </div>
+        <div class="pk-boardfooter">
+          <div class="hand-action-area visible-button">
+            <ul>
+              <li>
+                <a
+                  href="javascript:void(0)"
+                  (click)="fold_cards()"
+                  id="foldClick"
+                >
+                  fold
+                </a>
+              </li>
+              <li>
+                <a>Call 11222 </a>
+              </li>
+              <li>
+                <a>Call Any </a>
+              </li>
+            </ul>
+            <ul>
+              <li>
+                <a href="javascript:void(0)" (click)="serve_cards()">
+                  Serve Cards
+                </a>
+              </li>
+            </ul>
+          </div>
+          <div class="widow-option">
+            <img src="assets/images/Group_815.svg" alt="" />
+            <ul>
+              <li>
+                <a href="#"> <i class="fa-regular fa-message"> </i> </a>
+              </li>
+              <li>
+                <a href="#"> <i class="fa-solid fa-headphones"> </i> </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <!-- <div class="open-seat-point">SEAT OPEN </div>
+                <div class="own-time">
+                    <div class="card-point">
+                        <div class="timer">60 </div>
+                        <div class="progressBar">
+                            <div class="bar"> </div>
+                         </div>
+                     </div>
+                    <div class="heart">TIP </div>
+                 </div>
+                <div class="widow-option">
+                    <img src="assets/images/Group_815.svg" alt="" />
+                    <ul>
+                        <li>
+                            <a href="#"> <i class="fa-regular fa-message"> </i> </a>
+                         </li>
+                        <li>
+                            <a href="#"> <i class="fa-solid fa-headphones"> </i> </a>
+                         </li>
+                     </ul>
+                 </div> -->
+      </div>
+    </div>
+  </div>
+  <!-- Footer-->
+  <!------welcome modal------>
+  <div
+    class="modal fade customize-modal landing-modal small-custom-modal modal-fullscreen"
+    id="table_view_onload_modal"
+    tabindex="-1"
+    aria-labelledby="exampleModalLabel"
+    aria-hidden="true"
+    [ngClass]="{ show_welcome_modal: show_welcome_modal }"
+  >
+    <div class="modal-dialog modal-md modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button
+            type="button"
+            class="dismis-btn"
+            (click)="activate_user_features()"
+          >
+            X
+          </button>
+        </div>
+        <div class="modal-body text-center">
+          <p class="field_text">Welcome to AllPoker table</p>
+          <button
+            type="submit"
+            class="comn-btn"
+            (click)="activate_user_features()"
+          >
+            OK
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>

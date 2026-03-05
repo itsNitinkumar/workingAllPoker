@@ -1,0 +1,425 @@
+<div class="table-seat-mainouter">
+  <div class="table-seat-main cc-folded winning-table">
+    <div class="gameflow-bg" style="overflow: hidden">
+      <!-- <img src="assets/images/table_view.jpg" /> -->
+      <iframe [src]="backgroundUrl" frameborder="0" allowfullscreen></iframe>
+    </div>
+
+    <div class="table-seat-inner" style="background: rgba(255, 255, 255, 0)">
+      <div class="table-seat-header">
+        <div class="top_left cc-tips">
+          <ul class="t_menu">
+            <li><a href="#" class="active">Table View</a></li>
+            <li>
+              <a href="#">Cards Zoom</a>
+            </li>
+            <li><a href="#">Player zoom</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="user-window-container">
+        <button
+          class="toggle"
+          [ngClass]="showWebcam ? '' : 'visible'"
+          (click)="toggleWebcam()"
+        >
+          <img src="assets/images/webcam-cam-web-svgrepo-com.png" />
+        </button>
+        <div class="user-window" [ngClass]="showWebcam ? '' : 'hide'">
+          <video
+            id="table_view_cam"
+            autoplay
+            style="width: 100%; height: 100%; position: relative"
+          ></video>
+        </div>
+      </div>
+
+      <div class="beting-list">
+        <ul>
+          <!-- Demo -->
+          <li
+            *ngFor="let e of [].constructor(9); let i = index"
+            [ngClass]="getUserDetails(i + 1) ? 'player' + (i + 1) : 'd-none'"
+          >
+            <video
+              id="table_view_cam{{ i + 1 }}"
+              autoplay
+              style="
+                width: 200px;
+                height: 90px;
+                position: relative;
+                background-color: #000;
+              "
+            ></video>
+
+            <div class="bls">
+              <div *ngIf="getUserDetails(i + 1)" class="card-point">
+                <!-- Count Down -->
+                <div *ngIf="showType(i + 1, 'turn', false)" class="progressBar">
+                  <div class="bar" [style.width]="progressBarWidth + '%'"></div>
+                </div>
+
+                <div *ngIf="showType(i + 1, 'turn', false)" class="timer">
+                  {{ countDownVal }}
+                </div>
+
+                <span
+                  *ngIf="showType(i + 1, 'smallBlind', 'turn')"
+                  class="warning-text me-2"
+                >
+                  SB
+                </span>
+                <span
+                  *ngIf="showType(i + 1, 'bigBlind', 'turn')"
+                  class="warning-text me-2"
+                >
+                  BB
+                </span>
+
+                <span style="position: relative">
+                  ${{ getUserDetails(i + 1)?.callValue }}
+                </span>
+
+                <div style="position: absolute; right: -30px">
+                  <!-- On Continue -->
+                  <!-- (!winnerDeclared && !getUserDetails(i + 1)?.fold) ||
+                      myindex != i -->
+                  <div
+                    *ngIf="!showHandCards(i) && !getUserDetails(i + 1)?.fold"
+                    class="back"
+                  >
+                    <span
+                      *ngFor="
+                        let card of getUserDetails(i + 1)?.myCards;
+                        let i = index
+                      "
+                      class="bcsvr1 bcsvr{{ i + 1 }}"
+                    >
+                      <img src="assets/images/BackCardVariants.png" />
+                    </span>
+                  </div>
+
+                  <!-- On Show -->
+                  <div *ngIf="showHandCards(i)" class="front">
+                    <span
+                      *ngFor="
+                        let card of getUserDetails(i + 1)?.myCards;
+                        let i = index
+                      "
+                      class="bcsvr1 bcsvr{{ i + 1 }}"
+                    >
+                      <img
+                        width="43px"
+                        src="assets/cards/{{ card.code }}.svg"
+                      />
+                    </span>
+                  </div>
+
+                  <!-- On Fold -->
+                  <div
+                    *ngIf="!showHandCards(i) && getUserDetails(i + 1)?.fold"
+                    class="back"
+                  >
+                    <span class="bcsvr1">
+                      <img src="assets/images/trans-card2.png" alt="" />
+                    </span>
+                    <span class="bcsvr2">
+                      <img src="assets/images/trans-card2.png" alt="" />
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- On Raise -->
+              <span
+                *ngIf="
+                  getUserDetails(i + 1)?.raiseValue &&
+                  getUserDetails(i + 1)?.raiseValue != 0
+                "
+                id="bls-one-inter"
+                class="up bls-inner"
+              >
+                <span class="me-2 up_icon">
+                  <i class="fa-solid fa-angle-up"> </i>
+                </span>
+                ${{ getUserDetails(i + 1)?.raiseValue }}
+              </span>
+
+              <!-- On Fold -->
+              <span
+                *ngIf="getUserDetails(i + 1)?.fold"
+                id="bls-three-inter"
+                class="fold bls-inner"
+              >
+                <span class="me-2 fold_icon">
+                  <i class="fa-solid fa-xmark"> </i>
+                </span>
+                Fold
+              </span>
+
+              <!-- On Disconnected -->
+              <span
+                *ngIf="getUserDetails(i + 1)?.disconnected"
+                id="bls-three-inter"
+                class="fold bls-inner"
+              >
+                Disconnected
+              </span>
+
+              <!-- On Winner -->
+              <span
+                *ngIf="getUserDetails(i + 1)?.winner"
+                class="winner bls-inner"
+                style="display: inline"
+              >
+                WINNER
+              </span>
+            </div>
+          </li>
+        </ul>
+      </div>
+
+      <div class="tablestatus">
+        <div class="dtatus-board">
+          <div *ngIf="myCards.length" class="tp-seq">
+            <div class="card-opt">
+              <div
+                *ngFor="let card of myCards; let i = index"
+                class="cd fadeInUp"
+              >
+                <img class="img-fluid" src="assets/cards/{{ card.code }}.svg" />
+              </div>
+
+              <!-- <span class="bbg warning-text">BB</span> -->
+            </div>
+
+            <div class="card-rank-range">
+              <span class="d-flex justify-content-between">
+                <h6>{{ getSelfStatus() }}</h6>
+                <h6>?</h6>
+              </span>
+
+              <div class="progress">
+                <div
+                  *ngIf="!myTurn || !gameStarted"
+                  class="progress-bar"
+                  role="progressbar"
+                  [style.width]="'100%'"
+                ></div>
+                <div
+                  *ngIf="myTurn && gameStarted"
+                  class="progress-bar"
+                  role="progressbar"
+                  [style.width]="progressBarWidth + '%'"
+                ></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card-container winning-squads">
+            <span *ngFor="let card of serveCards">
+              <img class="img-fluid" src="assets/cards/{{ card.code }}.svg" />
+            </span>
+          </div>
+
+          <div class="sttusbar">
+            <ul>
+              <li>POT<span>${{ potValue }}</span></li>
+              <li>BLINDS<span>$5/$10</span></li>
+            </ul>
+            <ul>
+              <li>AMOUNT <span> ${{ betAmount }} </span></li>
+              <li *ngIf="!gameStarted">
+                <a (click)="quitGame()" style="color: #ff8385"> QUIT GAME</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="pk-boardfooter">
+        <div class="widow-option d-block">
+          <ul style="color: #fff">
+            <li>
+              <a (click)="changeCameraView('zoomOut')">
+                <i class="fa-solid fa-minus"></i>
+              </a>
+            </li>
+            <li>
+              <a (click)="changeCameraView('zoomIn')">
+                <i class="fa-solid fa-plus"></i>
+              </a>
+            </li>
+            <li>
+              <a (click)="changeCameraView('panLeft')">
+                <i class="fa-solid fa-arrow-left"></i>
+              </a>
+            </li>
+            <li>
+              <a (click)="changeCameraView('panRight')">
+                <i class="fa-solid fa-arrow-right"></i>
+              </a>
+            </li>
+            <li>
+              <a (click)="changeCameraView('tiltUp')">
+                <i class="fa-solid fa-arrow-up"></i>
+              </a>
+            </li>
+            <li>
+              <a (click)="changeCameraView('tiltDown')">
+                <i class="fa-solid fa-arrow-down"></i>
+              </a>
+            </li>
+          </ul>
+        </div>
+
+        <div *ngIf="myTurn" class="hand-action-area visible-button d-block">
+          <!-- <span class="point-ball">52</span> -->
+          <ul>
+            <li>
+              <a *ngIf="pokerStatus != 'blind'" (click)="fold()">Fold</a>
+            </li>
+
+            <li>
+              <!-- Blind -->
+              <a
+                *ngIf="pokerStatus == 'blind' && userJoined.length > 1"
+                (click)="blind()"
+              >
+                Start
+              </a>
+
+              <!-- Bet -->
+              <a
+                *ngIf="pokerStatus == 'bet'"
+                (click)="raisePop(raiseModal, 'bet')"
+              >
+                Bet
+              </a>
+
+              <!-- Call -->
+              <a
+                *ngIf="pokerStatus == 'call' && beginingAmount > callValue"
+                (click)="call(callValue)"
+              >
+                Call (${{ callValue }})
+              </a>
+
+              <!-- All In -->
+              <a
+                *ngIf="beginingAmount <= callValue && betAmount != 0"
+                (click)="allIn()"
+              >
+                All In (${{ beginingAmount }})
+              </a>
+
+              <!-- Check -->
+              <a *ngIf="pokerStatus == 'check'" (click)="check()">Check</a>
+            </li>
+
+            <li>
+              <a
+                *ngIf="
+                  pokerStatus != 'blind' &&
+                  pokerStatus != 'bet' &&
+                  beginingAmount > callValue
+                "
+                (click)="raisePop(raiseModal, 'raise')"
+              >
+                <span *ngIf="pokerStatus == 'check'">Bet</span>
+                <span *ngIf="pokerStatus != 'check'">Raise</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div
+      *ngIf="winnerDeclared"
+      class="wining-flashing mt-0"
+      style="height: 220px; top: 50%"
+    >
+      <div>
+        <div *ngIf="gameData.winningDetails">
+          <div *ngIf="gameData.winningDetails.cards" class="hero-hand">
+            <span
+              *ngFor="let card of gameData.winningDetails.cards; let i = index"
+            >
+              <img src="assets/cards/{{ card.value }}{{ card.suit }}.svg" />
+            </span>
+            <!-- <span><img src="assets/images/winner-card-one.png" /></span>
+          <span><img src="assets/images/winner-card-two.png" /></span>
+          <span><img src="assets/images/winner-card-three.png" /></span>
+          <span><img src="assets/images/winner-card-four.png" /></span>
+          <span><img src="assets/images/winner-card-five.png" /></span> -->
+          </div>
+
+          <div class="wintext" style="color: #fff">
+            {{ gameData.winningDetails.descr }}
+          </div>
+        </div>
+
+        <div *ngIf="!gameData.winningDetails">
+          <div class="wintext p-3"></div>
+        </div>
+
+        <div *ngIf="selfWinner" class="wintext mt-1">You Have Won</div>
+        <div *ngIf="!selfWinner" class="wintext mt-1">
+          Player No. {{ winnerSeatNo }} Have Won
+        </div>
+      </div>
+
+      <!-- <div>
+        <div *ngIf="selfWinner" class="wintext">You Have Won</div>
+        <div *ngIf="!selfWinner" class="wintext">
+          Player No {{ winnerSeatNo }} Have Won
+        </div>
+      </div> -->
+    </div>
+  </div>
+</div>
+
+<!-- <div *ngIf="cameraUrl" style="width: 0; height: 0; overflow: hidden">
+  <iframe [src]="cameraUrl" allow="camera"></iframe>
+</div> -->
+
+<!-- Raise -->
+<ng-template #raiseModal let-modal let-closeModal="close">
+  <div class="popup-welcome cam-setting">
+    <div class="welcome-wrapper" style="max-width: none">
+      <div class="modal-body">
+        <h3 *ngIf="raiseType == 'raise'" class="mb-4">Enter Raise Amount</h3>
+        <h3 *ngIf="raiseType == 'bet'" class="mb-4">Enter Bet Amount</h3>
+        <!-- <p>Enter Buy-In Amount</p> -->
+        <span class="amount mb-4">${{ raiseValue }}</span>
+
+        <input
+          [(ngModel)]="raiseValue"
+          type="range"
+          min="{{ callValue + 5 }}"
+          max="{{ beginingAmount }}"
+          step="5"
+          class="form-range"
+          style="
+            max-width: 300px;
+            background: #69cb84;
+            padding: 15px;
+            border-radius: 15px;
+          "
+        />
+
+        <div class="mt-4">
+          <button
+            (click)="raiseModalSubmit(closeModal)"
+            class="comn-btn w-100"
+            style="max-width: 160px; border: none"
+          >
+            Submit
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>

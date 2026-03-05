@@ -1,0 +1,23 @@
+<div class="container py-4">
+  <div *ngIf="videoInputDeviceList" class="row">
+    <div
+      *ngFor="let device of videoInputDeviceList; let i = index"
+      class="col-md-4"
+    >
+      <div class="my-2">
+        <video
+          id="table_view_cam_{{ i }}"
+          autoplay
+          muted
+          [srcObject]="device.stream"
+          style="
+            width: 100%;
+            min-height: 200px;
+            position: relative;
+            background-color: #000;
+          "
+        ></video>
+      </div>
+    </div>
+  </div>
+</div>

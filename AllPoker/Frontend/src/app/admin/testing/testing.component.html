@@ -1,0 +1,84 @@
+<div class="container">
+  <select [(ngModel)]="deviceId" (change)="onDeviceChange()">
+    <option value="default">Default</option>
+    <option
+      *ngFor="let device of videoInputDevices"
+      value="{{ device.deviceId }}"
+    >
+      {{ device.label }}
+    </option>
+  </select>
+
+  <div>
+    <video
+      id="lobby_user_vid"
+      autoplay
+      muted
+      style="width: 300px; height: 200px; position: relative"
+      class="m-4"
+    ></video>
+  </div>
+
+  <div class="ranges">
+    <input type="range" id="panRange" data-name="pan" disabled />
+    <input type="range" id="tiltRange" data-name="tilt" disabled />
+    <input type="range" id="zoomRange" data-name="zoom" disabled />
+  </div>
+
+  <button
+    (click)="onRangeChange('zoom', 'increase')"
+    class="btn btn-primary btn-block m-4"
+  >
+    Zoom +
+  </button>
+
+  <button
+    (click)="onRangeChange('zoom', 'decrease')"
+    class="btn btn-primary btn-block m-4"
+  >
+    Zoom -
+  </button>
+
+  <button
+    (click)="onRangeChange('pan', 'decrease')"
+    class="btn btn-primary btn-block m-4"
+  >
+    Pan Left
+  </button>
+
+  <button
+    (click)="onRangeChange('pan', 'increase')"
+    class="btn btn-primary btn-block m-4"
+  >
+    Pan Right
+  </button>
+
+  <button
+    (click)="onRangeChange('tilt', 'increase')"
+    class="btn btn-primary btn-block m-4"
+  >
+    Tilt Up
+  </button>
+
+  <button
+    (click)="onRangeChange('tilt', 'decrease')"
+    class="btn btn-primary btn-block m-4"
+  >
+    Tilt Down
+  </button>
+
+  <!-- <div class="row">
+    <div class="col-md-6">
+      <button class="btn btn-primary btn-block m-4">Connect Media</button>
+
+      <br />
+
+      <iframe
+        src="https://80.209.238.145:5443/LiveApp/play.html?id=HQRa0fVpuvsUaDUt1693377867373"
+        frameborder="0"
+        allowfullscreen
+        style="width: 100%; min-height: 20vw"
+      ></iframe>
+    </div>
+  </div> -->
+</div>

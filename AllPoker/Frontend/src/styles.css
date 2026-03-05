@@ -1,0 +1,73 @@
+/* You can add global styles to this file, and also import other style files */
+
+/********** Range Input Styles **********/
+/*Range Reset*/
+input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+  cursor: pointer;
+}
+
+/* Removes default focus */
+input[type="range"]:focus {
+  outline: none;
+}
+
+/***** Chrome, Safari, Opera and Edge Chromium styles *****/
+/* slider track */
+input[type="range"]::-webkit-slider-runnable-track {
+  background-color: #fff;
+  border-radius: 10px;
+  height: 6px;
+}
+
+/* slider thumb */
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none; /* Override default look */
+  appearance: none;
+  margin-top: -9px; /* Centers thumb on the track */
+
+  /*custom styles*/
+  background-color: #e1e9fa;
+  height: 24px;
+  width: 24px;
+}
+
+/* input[type="range"]:focus::-webkit-slider-thumb {
+  border: 1px solid #e1e9fa;
+  outline: 1px solid #e1e9fa;
+  outline-offset: 0.125rem;
+} */
+
+/******** Firefox styles ********/
+/* slider track */
+input[type="range"]::-moz-range-track {
+  background-color: #fff;
+  border-radius: 10px;
+  height: 6px;
+}
+
+/* slider thumb */
+input[type="range"]::-moz-range-thumb {
+  border: none; /*Removes extra border that FF applies*/
+  border-radius: 0; /*Removes default border-radius that FF applies*/
+
+  /*custom styles*/
+  background-color: #e1e9fa;
+  height: 24px;
+  width: 24px;
+  border-radius: 30px;
+}
+
+/* input[type="range"]:focus::-moz-range-thumb {
+    border: 1px solid #053a5f;
+    outline: 3px solid #053a5f;
+    outline-offset: 0.125rem;
+  } */
+
+@media (min-width: 1601px) {
+  .loby-main-inner .text-box h5 {
+    font-size: 18px;
+  }
+}

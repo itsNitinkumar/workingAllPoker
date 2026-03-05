@@ -1,0 +1,1451 @@
+<!-- (A) THIS WILL SHOW ON THE WRONG ORIENTATION -->
+<div id="turn">Please rotate your device!</div>
+
+<!-- (B) CONTENTS AS USUAL -->
+<div class="buy-wrap" id="container">
+  <div class="header-2">
+    <div class="container-fluid">
+      <div
+        class="header-main d-flex align-items-center justify-content-between"
+      >
+        <div class="left-list">
+          <ul class="d-flex align-items-center justify-content-center">
+            <li *ngIf="!gameStarted">
+              <a (click)="quitGame()" href="javascript:void(0)"> Lobby </a>
+            </li>
+            <li *ngIf="!gameStarted && !sittingOut">
+              <a (click)="sitOutTurn(true)" class="deposit-nav-btn">
+                Sit Out
+              </a>
+            </li>
+            <li *ngIf="!gameStarted && sittingOut">
+              <a (click)="sitOutTurn(false)" class="deposit-nav-btn">Join In</a>
+            </li>
+            <!-- <li> <a class="deposit-nav-btn">Buy Coins</a> </li> -->
+          </ul>
+        </div>
+
+        <div class="right-list">
+          <ol class="d-flex align-items-center justify-content-center">
+            <li>
+              <a
+                (click)="toggleChat('emoji')"
+                class="smily"
+                [ngClass]="showChat && chatType == 'emoji' ? 'icon-bg' : ''"
+              >
+                <img src="assets/images/smily.png" class="img-fluid" />
+              </a>
+            </li>
+
+            <li>
+              <a class="mute-sound">
+                <img src="assets/images/sound-mute.svg" class="img-fluid" />
+              </a>
+            </li>
+
+            <li>
+              <a
+                (click)="toggleChat('message')"
+                class="message"
+                [ngClass]="showChat && chatType == 'message' ? 'icon-bg' : ''"
+              >
+                <img src="assets/images/message.svg" class="img-fluid" />
+              </a>
+            </li>
+
+            <!-- Toggle Cam -->
+            <!-- (click)="showCam = !showCam" -->
+            <li>
+              <a
+                (click)="toggleWebcam()"
+                class="video-icon"
+                [ngClass]="showCam ? 'icon-bg' : ''"
+              >
+                <img src="assets/images/camera.svg " class="img-fluid" />
+              </a>
+            </li>
+
+            <li>
+              <a class="support">
+                <img src="assets/images/support.svg" class="img-fluid" />
+              </a>
+            </li>
+          </ol>
+
+          <div *ngIf="showChat" class="emoji-main-inner add-after d-block">
+            <div class="emoji-main d-block">
+              <ul class="nav nav-tabs" id="myTab">
+                <li class="nav-item">
+                  <button
+                    (click)="chatType = 'message'; chatScrollBottom()"
+                    type="button"
+                    class="nav-link"
+                    [ngClass]="chatType == 'message' ? 'active' : ''"
+                  >
+                    Chat
+                  </button>
+                </li>
+
+                <li class="nav-item">
+                  <button
+                    (click)="chatType = 'emoji'"
+                    class="nav-link"
+                    type="button"
+                    [ngClass]="chatType == 'emoji' ? 'active' : ''"
+                  >
+                    Emojis
+                  </button>
+                </li>
+
+                <li class="nav-item" role="presentation">
+                  <button
+                    (click)="chatType = 'support'"
+                    class="nav-link"
+                    type="button"
+                    [ngClass]="chatType == 'support' ? 'active' : ''"
+                  >
+                    Support
+                  </button>
+                </li>
+
+                <li class="nav-item" role="presentation">
+                  <button
+                    (click)="chatType = 'info'"
+                    class="nav-link"
+                    type="button"
+                    [ngClass]="chatType == 'info' ? 'active' : ''"
+                  >
+                    Info
+                  </button>
+                </li>
+              </ul>
+
+              <div class="tab-content" id="myTabContent">
+                <div
+                  class="tab-pane fade"
+                  [ngClass]="chatType == 'message' ? 'active show' : ''"
+                >
+                  <div class="chat-main">
+                    <ul id="chatList">
+                      <li
+                        *ngFor="let msg of chatMessages"
+                        [ngClass]="
+                          msg.from_player_no == playerNo ? 'dealer-msg' : ''
+                        "
+                      >
+                        <strong *ngIf="msg.from_player_no == playerNo">
+                          You:
+                        </strong>
+                        <strong *ngIf="msg.from_player_no != playerNo">
+                          PLAYER {{ msg.from_player_no }}:
+                        </strong>
+
+                        <span *ngIf="msg.chat_type != 'emoji'">
+                          {{ msg.message }}
+                        </span>
+
+                        <span *ngIf="msg.chat_type == 'emoji'">
+                          <img
+                            src="{{ emojiUrl }}{{ msg.game_emoji?.thumb }}"
+                            style="max-width: 48px; max-height: 36px"
+                          />
+                        </span>
+                      </li>
+                    </ul>
+
+                    <div class="chat-input">
+                      <input
+                        [(ngModel)]="chatMessage"
+                        type="text"
+                        placeholder="Message..."
+                      />
+                      <a (click)="sendChatMessage()">
+                        <img src="assets/images/snd.svg" class="img-fluid" />
+                      </a>
+                    </div>
+                  </div>
+                </div>
+
+                <div
+                  class="tab-pane fade"
+                  [ngClass]="chatType == 'emoji' ? 'active show' : ''"
+                >
+                  <ul class="d-flex align-items-center justify-content-center">
+                    <li *ngFor="let item of emojiList">
+                      <a (click)="sendEmoji(item)">
+                        <img
+                          ngSrc="{{ emojiUrl }}{{
+                            item.thumb ? item.thumb : item.file_name
+                          }}"
+                          class="img-fluid"
+                          width="100"
+                          height="75"
+                        />
+                      </a>
+                    </li>
+                  </ul>
+                </div>
+
+                <div
+                  class="tab-pane fade"
+                  [ngClass]="chatType == 'support' ? 'active show' : ''"
+                >
+                  <div class="support-main">
+                    <a href="javascript:void(0)">Floorman</a>
+                    <a href="javascript:void(0)">Chat</a>
+                  </div>
+                </div>
+
+                <div
+                  class="tab-pane fade"
+                  [ngClass]="chatType == 'info' ? 'active show' : ''"
+                >
+                  <div class="info-main">
+                    <ul>
+                      <li>
+                        <p>Table: Table Name Here</p>
+                      </li>
+                      <li>
+                        <p>Limit: NL $20-$40</p>
+                      </li>
+                      <li>
+                        <p>Average Pot: $250</p>
+                      </li>
+                      <li>
+                        <p>Type: VR</p>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <a href="#." class="buy-cross buy-cross4">
+              <img src="assets/images/cross.svg" />
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- GAME TABLE -->
+  <section class="buy-hero seat55-hero demo sec-level winning-table">
+    <!-- Background -->
+    <div *ngIf="backgroundUrl" class="gameflow-bg" style="overflow: hidden">
+      <iframe [src]="backgroundUrl" frameborder="0" allowfullscreen> </iframe>
+    </div>
+
+    <div class="video-container" id="videoContainer">
+      <!-- Placeholder for video elements -->
+      <div
+        *ngFor="let e of [].constructor(9); let i = index"
+        [ngClass]="
+          getUserDetails(i + 1) && !getUserDetails(i + 1)?.showCam
+            ? ''
+            : 'd-none'
+        "
+      >
+        <video
+          id="video_character{{ i + 1 }}_seat1"
+          class="generatedVideo overlay character{{ i + 1 }}-seat1"
+          src="assets/video/character{{ i + 1 }}-seat1.webm"
+          autoplay="false"
+          muted="true"
+          autostart="0"
+        ></video>
+      </div>
+    </div>
+
+    <div class="container1">
+      <!-- Players -->
+      <div
+        *ngFor="let e of [].constructor(9); let i = index"
+        [ngClass]="getUserDetails(i + 1) ? getUserClass(i + 1) : 'd-none'"
+        class="loby-main"
+      >
+        <a class="loby-main-inner">
+          <div class="image-holder react-video-main">
+            <img
+              src="assets/images/a{{ i + 1 }}.png"
+              class="img-fluid d-none"
+              [ngClass]="getUserDetails(i + 1)?.showCam ? 'd-none' : 'd-block'"
+            />
+            <video
+              id="table_view_cam{{ i + 1 }}"
+              autoplay
+              class="react-video opacity-100"
+              [ngClass]="getUserDetails(i + 1)?.showCam ? 'd-block' : 'd-none'"
+              style="background: #000"
+            ></video>
+          </div>
+
+          <!-- On Turn -->
+          <div
+            *ngIf="showType(i + 1, 'turn', false)"
+            class="text-box align-items-center progress-text-box"
+            [ngClass]="i + 1 == playerNo ? 'me' : ''"
+          >
+            <h4 class="d-loby pink-d-loby">{{ countDownVal }}</h4>
+            <div class="progress pink-progress">
+              <div
+                class="progress-bar"
+                role="progressbar"
+                [style.width]="progressBarWidth + '%'"
+              ></div>
+              <h5>${{ getUserDetails(i + 1)?.callValue }}</h5>
+            </div>
+          </div>
+
+          <!-- Not On Turn -->
+          <div
+            *ngIf="!showType(i + 1, 'turn', false)"
+            class="text-box align-items-center"
+            [ngClass]="[
+              i + 1 == playerNo ? 'me' : '',
+              getUserDetails(i + 1)?.turnStatus == 'call' ||
+              getUserDetails(i + 1)?.turnStatus == 'straddle'
+                ? 'call-text-box justify-content-start'
+                : '',
+              getUserDetails(i + 1)?.turnStatus == 'smallBlind' ||
+              getUserDetails(i + 1)?.turnStatus == 'bigBlind' ||
+              getUserDetails(i + 1)?.dealer
+                ? 'justify-content-start'
+                : ''
+            ]"
+          >
+            <!-- Dealer -->
+            <h4
+              *ngIf="
+                getUserDetails(i + 1)?.dealer &&
+                !getUserDetails(i + 1)?.sittingOut &&
+                (!getUserDetails(i + 1)?.turnStatus ||
+                  getUserDetails(i + 1)?.turnStatus == 'smallBlind' ||
+                  getUserDetails(i + 1)?.turnStatus == 'bigBlind')
+              "
+              class="d-loby"
+            >
+              D
+            </h4>
+
+            <!-- Check -->
+            <h5
+              *ngIf="getUserDetails(i + 1)?.turnStatus == 'check'"
+              class="call-main call-main-font"
+            >
+              <span class="call check-main-tick">
+                <img src="assets/images/check.svg" />
+              </span>
+              Check
+            </h5>
+
+            <!-- Call -->
+            <h5 *ngIf="getUserDetails(i + 1)?.turnStatus == 'call'">
+              <span>C</span> ${{ getUserDetails(i + 1)?.callValue }}
+            </h5>
+
+            <!-- Call -->
+            <h5 *ngIf="getUserDetails(i + 1)?.turnStatus == 'straddle'">
+              <span>S</span> ${{ getUserDetails(i + 1)?.callValue }}
+            </h5>
+
+            <!-- Bet -->
+            <h5
+              *ngIf="getUserDetails(i + 1)?.turnStatus == 'bet'"
+              class="call-main"
+            >
+              <span class="call">B</span> ${{
+                getUserDetails(i + 1)?.callValue
+              }}
+            </h5>
+
+            <!-- Raise -->
+            <h5
+              *ngIf="getUserDetails(i + 1)?.turnStatus == 'raise'"
+              class="call-main yellow-call-main"
+            >
+              <span class="call yellow-call">
+                <img src="assets/images/arw-icon.svg" />
+              </span>
+              ${{ getUserDetails(i + 1)?.callValue }}
+            </h5>
+
+            <!-- Fold -->
+            <h5
+              *ngIf="
+                getUserDetails(i + 1)?.turnStatus == 'fold' &&
+                !getUserDetails(i + 1)?.sittingOut
+              "
+              class="call-main foldtext"
+            >
+              <span class="call foldicon">X</span> Fold
+            </h5>
+
+            <!-- Winner -->
+            <h5
+              *ngIf="getUserDetails(i + 1)?.turnStatus == 'winner'"
+              class="call-main"
+              style="padding-left: 15px"
+            >
+              WINNER
+            </h5>
+
+            <!-- Small Blind -->
+            <h4 *ngIf="getUserDetails(i + 1)?.turnStatus == 'smallBlind'">
+              SB
+            </h4>
+
+            <!-- Big Blind -->
+            <h4 *ngIf="getUserDetails(i + 1)?.turnStatus == 'bigBlind'">BB</h4>
+
+            <!-- Small/Big Blind -->
+            <h5
+              *ngIf="
+                getUserDetails(i + 1)?.turnStatus == 'smallBlind' ||
+                getUserDetails(i + 1)?.turnStatus == 'bigBlind'
+              "
+              class="text-center"
+            >
+              ${{ getUserDetails(i + 1)?.callValue }}
+            </h5>
+
+            <!-- Normal -->
+            <h5
+              *ngIf="
+                !getUserDetails(i + 1)?.turnStatus &&
+                !getUserDetails(i + 1)?.sittingOut
+              "
+              class="text-center"
+            >
+              ${{ getUserDetails(i + 1)?.callValue }}
+            </h5>
+
+            <!-- Sitting Out -->
+            <h5 *ngIf="getUserDetails(i + 1)?.sittingOut" class="text-center">
+              Sitting Out
+            </h5>
+          </div>
+
+          <!-- Not User -->
+          <div
+            *ngIf="
+              !showHandCards(i) &&
+              !getUserDetails(i + 1)?.fold &&
+              !getUserDetails(i + 1)?.sittingOut
+            "
+            class="cardback"
+          >
+            <span
+              *ngFor="let card of getUserDetails(i + 1)?.myCards; let i = index"
+              class="bcsvr1 bcsvr{{ i + 1 }}"
+            >
+              <img src="assets/images/BackCardVariants.png" />
+            </span>
+          </div>
+
+          <div *ngIf="showHandCards(i)" class="mycardback">
+            <span class="bcsvr1">
+              <ul class="d-flex align-items-center">
+                <li
+                  *ngFor="
+                    let card of getUserDetails(i + 1)?.myCards;
+                    let i = index
+                  "
+                >
+                  <img
+                    src="assets/cards/{{ card.code }}.svg"
+                    class="fold-img"
+                  />
+                </li>
+              </ul>
+            </span>
+          </div>
+        </a>
+
+        <div class="react-emoji-main">
+          <h3>Player {{ i + 1 }}</h3>
+          <p>{{ getUserDetails(i + 1)?.email }}</p>
+          <p>
+            <strong>Amount:</strong>
+            ${{ getUserDetails(i + 1)?.betAmount }}
+          </p>
+        </div>
+
+        <div *ngIf="selfEmoji(i + 1)" class="image-holder my-react-img d-block">
+          <img src="{{ selfEmoji(i + 1) }}" class="react-gif" />
+        </div>
+      </div>
+
+      <!-- Time Out Popup -->
+      <div
+        *ngIf="timedOut && timedOutCount >= 0"
+        class="camera-setting-main time-main-2 d-block"
+      >
+        <div class="main-bg">
+          <div class="text-box">
+            <h4>Time Out</h4>
+          </div>
+          <div class="price-list">
+            <div class="time-inner">
+              <h2>{{ timedOutCount }}</h2>
+              <p>Until You Sit Out</p>
+              <div class="para">
+                <p>
+                  You have been timed out, please choose an option before the
+                  timer expires.
+                </p>
+              </div>
+            </div>
+            <div class="buy-btn-main">
+              <div
+                class="d-flex align-items-center justify-content-between buy-bottom"
+              >
+                <a
+                  (click)="timedOutTurn(true)"
+                  class="buy-watch-btn leave-table"
+                >
+                  Leave Table
+                </a>
+                <a (click)="timedOutTurn(false)" class="buy-play-btn">
+                  Keep Playing
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <a href="#" class="buy-cross time-cross">
+          <img src="images/cross.svg" alt="" />
+        </a>
+      </div>
+
+      <!-- Buy Game Popup -->
+      <div *ngIf="buyPopup" class="camera-setting-main enter-buy-main d-block">
+        <div *ngIf="profileDetails" class="main-bg">
+          <div class="text-box">
+            <h4>Buy Game Coins</h4>
+          </div>
+          <div class="price-list">
+            <ul class="d-flex align-items-center justify-content-center">
+              <li>100</li>
+              <li class="price-lst2">
+                <span id="min-price5"> ${{ buyAmount }} </span>
+              </li>
+              <li>${{ profileDetails?.cash_balance }}</li>
+            </ul>
+
+            <div class="d-flex align-items-center price-main">
+              <span> Min </span>
+              <div id="price-range" class="ui-widget" style="width: 100%">
+                <input
+                  [(ngModel)]="buyAmount"
+                  type="range"
+                  min="100"
+                  max="{{ profileDetails.cash_balance }}"
+                  step="5"
+                  class="form-range"
+                />
+              </div>
+              <span> Max </span>
+            </div>
+
+            <div class="buy-btn-main">
+              <p>
+                Available Social Cash:
+                <span> ${{ profileDetails.cash_balance }} </span>
+              </p>
+              <div
+                class="d-flex align-items-center justify-content-between buy-bottom"
+              >
+                <a (click)="quitGame()" class="buy-watch-btn"> Cancel </a>
+                <a (click)="addGameCoins()" class="buy-play-btn"> Buy Coins </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Served Cards -->
+    <div *ngIf="serveCards.length || cardMessage" class="cards-main">
+      <div
+        class="cards-main-inner"
+        style="
+          bottom: auto;
+          right: auto;
+          left: 50%;
+          top: 30px;
+          transition: inherit;
+          transform: translateX(-50%);
+        "
+      >
+        <div class="cards-main-inner2">
+          <ul
+            *ngIf="serveCards.length"
+            class="mb-3"
+            style="justify-content: center"
+          >
+            <li *ngFor="let card of serveCards">
+              <a class="cards-list">
+                <img src="assets/cards/{{ card.code }}.svg" class="img-fluid" />
+              </a>
+            </li>
+          </ul>
+
+          <p
+            *ngIf="cardMessage"
+            class="text-center"
+            style="font-size: 14px; color: #fff"
+          >
+            {{ cardMessage }}
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- CHIPS SLIDER -->
+    <div
+      *ngFor="let e of [].constructor(9); let i = index"
+      class="pot-main mpot-1"
+      [ngClass]="[
+        this.chipsSlider[i + 1]?.showChips ? '' : 'd-none',
+        this.chipsSlider[i + 1]?.slideChips ? '' : getUserPotClass(i + 1)
+      ]"
+    >
+      <img src="assets/images/chip-stack.png" class="chip-stack-img" />
+    </div>
+
+    <!-- POT LIST -->
+    <!-- [ngClass]="potDeclared && pot.playerNo ? 'player-' + pot.playerNo : ''" -->
+
+    <div
+      *ngFor="let pot of potList; let i = index"
+      class="pot-main mpot-{{ i + 1 }}"
+      [ngClass]="{
+        'player-1': potDeclared && pot.playerNo === 1,
+        'player-2': potDeclared && pot.playerNo === 2,
+        'player-3': potDeclared && pot.playerNo === 3,
+        'player-4': potDeclared && pot.playerNo === 4,
+        'player-5': potDeclared && pot.playerNo === 5,
+        'player-6': potDeclared && pot.playerNo === 6,
+        'player-7': potDeclared && pot.playerNo === 7,
+        'player-8': potDeclared && pot.playerNo === 8,
+        'player-9': potDeclared && pot.playerNo === 9,
+        'd-none': pot.userList < 2 && i != 0
+      }"
+    >
+      <h5 class="pot">
+        Pot: <span>${{ pot.value }}</span>
+      </h5>
+      <img src="assets/images/pot.png" />
+    </div>
+
+    <div *ngIf="potValue && !potList.length" class="pot-main">
+      <h5 class="pot">
+        Pot: <span>${{ potValue }}</span>
+      </h5>
+      <img src="assets/images/pot.png" />
+    </div>
+
+    <div class="fold-main" style="top: auto; bottom: 20px">
+      <!-- <ul class="d-flex align-items-center justify-content-center">
+        <li>Min</li>
+        <li>1/2</li>
+        <li>Pot</li>
+        <li>Max</li>
+      </ul> -->
+
+      <div
+        *ngIf="
+          (pokerStatus == 'call' || pokerStatus == 'check') &&
+          beginingAmount > callValue &&
+          myTurn
+        "
+        class="d-flex align-items-center price-main price-main2"
+      >
+        <div>
+          <span id="min-price2">${{ raiseValue }}</span>
+        </div>
+        <div class="ui-widget" style="width: 100%">
+          <input
+            [(ngModel)]="raiseValue"
+            type="range"
+            min="{{ callValue + 5 }}"
+            max="{{ maxAmount }}"
+            step="5"
+            class="form-range"
+          />
+        </div>
+      </div>
+
+      <div
+        *ngIf="
+          (pokerStatus == 'call' || pokerStatus == 'check') &&
+          beginingAmount > callValue &&
+          myTurn
+        "
+        class="price-range-inner"
+      >
+        <div class="pricerange">
+          <span id="min-price3">${{ raiseValue }}</span>
+        </div>
+        <div class="price-main price-main3">
+          <input
+            [(ngModel)]="raiseValue"
+            type="range"
+            min="{{ callValue + 5 }}"
+            max="{{ maxAmount }}"
+            step="5"
+            class="form-range"
+          />
+        </div>
+      </div>
+
+      <div class="fold-btn-main">
+        <ol
+          *ngIf="myTurn"
+          class="d-flex align-items-center"
+          style="justify-content: center"
+        >
+          <li>
+            <a
+              *ngIf="
+                pokerStatus != 'blind' &&
+                pokerStatus != 'straddle' &&
+                !allInStatus
+              "
+              (click)="fold()"
+              class="fold-btn"
+            >
+              Fold
+            </a>
+          </li>
+          <li>
+            <!-- Blind -->
+            <a
+              *ngIf="pokerStatus == 'blind' && userJoined.length > 1"
+              (click)="blind()"
+              class="call-btn"
+              style="background: rgba(51, 46, 51, 0.7)"
+            >
+              Start
+            </a>
+
+            <!-- Call -->
+            <a
+              *ngIf="pokerStatus == 'call' && beginingAmount > callValue"
+              (click)="call(callValue)"
+              class="call-btn"
+              style="background: rgba(51, 46, 51, 0.7)"
+            >
+              Call (${{ callValue }})
+            </a>
+
+            <!-- All In -->
+            <a
+              *ngIf="beginingAmount <= callValue && betAmount != 0"
+              (click)="allIn()"
+              class="call-btn"
+              style="background: rgba(51, 46, 51, 0.7)"
+            >
+              All In (${{ beginingAmount }})
+            </a>
+
+            <!-- Check -->
+            <a
+              *ngIf="pokerStatus == 'check'"
+              (click)="check()"
+              class="call-btn"
+              style="background: rgba(51, 46, 51, 0.7)"
+            >
+              Check
+            </a>
+
+            <!-- Straddle -->
+            <a
+              *ngIf="pokerStatus == 'straddle'"
+              (click)="straddle()"
+              class="call-btn"
+              style="background: rgba(51, 46, 51, 0.7)"
+            >
+              Straddle
+            </a>
+          </li>
+          <li>
+            <!-- <a
+              *ngIf="
+                pokerStatus != 'blind' &&
+                pokerStatus != 'bet' &&
+                beginingAmount > callValue
+              "
+              (click)="raisePop(raiseModal, 'raise')"
+              class="raise-btn"
+            >
+              <span *ngIf="pokerStatus == 'check'">Bet</span>
+              <span *ngIf="pokerStatus != 'check'">Raise</span>
+            </a> -->
+            <a
+              *ngIf="
+                pokerStatus != 'blind' &&
+                pokerStatus != 'bet' &&
+                beginingAmount > callValue &&
+                pokerStatus != 'straddle'
+              "
+              (click)="raiseSubmit()"
+              class="raise-btn"
+            >
+              <span *ngIf="pokerStatus == 'check'">Bet</span>
+              <span *ngIf="pokerStatus != 'check'">Raise</span>
+            </a>
+          </li>
+        </ol>
+
+        <ol
+          *ngIf="!gameStarted && sittingOut"
+          class="d-flex align-items-center"
+          style="justify-content: center"
+        >
+          <li>
+            <a (click)="sitOutTurn(false)" class="call-btn"> Join In </a>
+          </li>
+        </ol>
+
+        <div *ngIf="gameStarted" class="progress-bottom">
+          <h4 class="progress-text">{{ getSelfStatus() }}</h4>
+          <h4 class="pot">
+            POT <span>${{ potValue }}</span>
+          </h4>
+          <div
+            class="d-flex align-items-start flex-column w-100 progress-main-span"
+          >
+            <span class="progress-span">${{ potValue }}</span>
+            <div class="progress">
+              <div
+                *ngIf="!myTurn || !gameStarted"
+                class="progress-bar"
+                role="progressbar"
+                [style.width]="'100%'"
+              ></div>
+              <div
+                *ngIf="myTurn && gameStarted"
+                class="progress-bar"
+                role="progressbar"
+                [style.width]="progressBarWidth + '%'"
+              ></div>
+            </div>
+          </div>
+          <a (click)="showHandRank = !showHandRank" class="quesion">?</a>
+          <a (click)="showHandRank = !showHandRank" class="quesion2">?</a>
+        </div>
+      </div>
+    </div>
+
+    <div
+      *ngIf="winnerDeclared"
+      class="wining-flashing mt-0"
+      style="height: 220px; top: 50%"
+    >
+      <div>
+        <div *ngIf="gameData.winningDetails">
+          <div *ngIf="gameData.winningDetails.cards" class="hero-hand">
+            <span
+              *ngFor="let card of gameData.winningDetails.cards; let i = index"
+            >
+              <img src="assets/cards/{{ card.value }}{{ card.suit }}.svg" />
+            </span>
+          </div>
+
+          <div class="wintext" style="color: #fff">
+            {{ gameData.winningDetails.descr }}
+          </div>
+        </div>
+
+        <div *ngIf="!gameData.winningDetails">
+          <div class="wintext p-3"></div>
+        </div>
+
+        <div *ngIf="selfWinner" class="wintext mt-1">
+          You Have Won {{ potList[0]?.value ? "$" + potList[0]?.value : "" }}
+        </div>
+        <div *ngIf="!selfWinner" class="wintext mt-1" style="color: #fff">
+          Player No. {{ winnerSeatNo }} Have Won
+          {{ potList[0]?.value ? "$" + potList[0]?.value : "" }}
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- Hand Value -->
+<div *ngIf="showHandRank" class="hand-main-inner">
+  <div
+    class="hand-rank hand-rank-desktop d-lg-block"
+    style="overflow: auto; height: 90%; bottom: 5%"
+  >
+    <h2>Hand Rank</h2>
+    <ul>
+      <li class="d-flex align-items-center justify-content-between lst-main">
+        <div class="d-flex align-items-center">
+          <span class="d-inline-block">1</span>
+          <h3>Royal Flush</h3>
+        </div>
+        <div>
+          <ol class="d-flex align-items-center">
+            <li>
+              <img src="assets/images/small-card.svg" class="img-fluid" />
+            </li>
+            <li>
+              <img src="assets/images/small-card2.svg" class="img-fluid" />
+            </li>
+            <li>
+              <img src="assets/images/small-card3.svg" class="img-fluid" />
+            </li>
+            <li>
+              <img src="assets/images/small-card4.svg" class="img-fluid" />
+            </li>
+            <li>
+              <img src="assets/images/small-card5.svg" class="img-fluid" />
+            </li>
+          </ol>
+        </div>
+      </li>
+      <li class="d-flex align-items-center justify-content-between lst-main">
+        <div class="d-flex align-items-center">
+          <span class="d-inline-block">2</span>
+          <h3>Stright Flush</h3>
+        </div>
+        <div>
+          <ol class="d-flex align-items-center">
+            <li>
+              <img
+                src="assets/images/small-card6.svg"
+                class="img-fluid mt-small"
+              />
+            </li>
+            <li>
+              <img src="assets/images/small-card7.svg" class="img-fluid" />
+            </li>
+            <li>
+              <img src="assets/images/small-card8.svg" class="img-fluid" />
+            </li>
+            <li>
+              <img src="assets/images/small-card9.svg" class="img-fluid" />
+            </li>
+            <li>
+              <img src="assets/images/small-card10.svg" class="img-fluid" />
+            </li>
+          </ol>
+        </div>
+      </li>
+      <li class="d-flex align-items-center justify-content-between lst-main">
+        <div class="d-flex align-items-center">
+          <span class="d-inline-block">3</span>
+          <h3>four of a kind</h3>
+        </div>
+        <div>
+          <ol class="d-flex align-items-center">
+            <li>
+              <img src="assets/images/small-card11.svg" class="img-fluid" />
+            </li>
+            <li>
+              <img src="assets/images/small-card12.svg" class="img-fluid" />
+            </li>
+            <li>
+              <img src="assets/images/small-card13.svg" class="img-fluid" />
+            </li>
+            <li>
+              <img src="assets/images/small-card14.svg" class="img-fluid" />
+            </li>
+            <li>
+              <img src="assets/images/small-card15.svg" class="img-fluid" />
+            </li>
+          </ol>
+        </div>
+      </li>
+      <li class="d-flex align-items-center justify-content-between lst-main">
+        <div class="d-flex align-items-center">
+          <span class="d-inline-block">4</span>
+          <h3>full house</h3>
+        </div>
+        <div>
+          <ol class="d-flex align-items-center">
+            <li>
+              <img src="assets/images/small-card.svg" class="img-fluid" />
+            </li>
+            <li>
+              <img src="assets/images/small-card2.svg" class="img-fluid" />
+            </li>
+            <li>
+              <img src="assets/images/small-card3.svg" class="img-fluid" />
+            </li>
+            <li>
+              <img src="assets/images/small-card4.svg" class="img-fluid" />
+            </li>
+            <li>
+              <img src="assets/images/small-card5.svg" class="img-fluid" />
+            </li>
+          </ol>
+        </div>
+      </li>
+      <li class="d-flex align-items-center justify-content-between lst-main">
+        <div class="d-flex align-items-center">
+          <span class="d-inline-block">5</span>
+          <h3>flush</h3>
+        </div>
+        <div>
+          <ol class="d-flex align-items-center">
+            <li>
+              <img src="assets/images/small-card.svg" class="img-fluid" />
+            </li>
+            <li>
+              <img src="assets/images/small-card2.svg" class="img-fluid" />
+            </li>
+            <li>
+              <img src="assets/images/small-card3.svg" class="img-fluid" />
+            </li>
+            <li>
+              <img src="assets/images/small-card4.svg" class="img-fluid" />
+            </li>
+            <li>
+              <img src="assets/images/small-card5.svg" class="img-fluid" />
+            </li>
+          </ol>
+        </div>
+      </li>
+      <li class="d-flex align-items-center justify-content-between lst-main">
+        <div class="d-flex align-items-center">
+          <span class="d-inline-block">6</span>
+          <h3>straight</h3>
+        </div>
+        <div>
+          <ol class="d-flex align-items-center">
+            <li>
+              <img src="assets/images/small-card.svg" class="img-fluid" />
+            </li>
+            <li>
+              <img src="assets/images/small-card2.svg" class="img-fluid" />
+            </li>
+            <li>
+              <img src="assets/images/small-card3.svg" class="img-fluid" />
+            </li>
+            <li>
+              <img src="assets/images/small-card4.svg" class="img-fluid" />
+            </li>
+            <li>
+              <img src="assets/images/small-card5.svg" class="img-fluid" />
+            </li>
+          </ol>
+        </div>
+      </li>
+      <li class="d-flex align-items-center justify-content-between lst-main">
+        <div class="d-flex align-items-center">
+          <span class="d-inline-block">7</span>
+          <h3>three of a kind</h3>
+        </div>
+        <div>
+          <ol class="d-flex align-items-center">
+            <li>
+              <img src="assets/images/small-card.svg" class="img-fluid" />
+            </li>
+            <li>
+              <img src="assets/images/small-card2.svg" class="img-fluid" />
+            </li>
+            <li>
+              <img src="assets/images/small-card3.svg" class="img-fluid" />
+            </li>
+            <li>
+              <img src="assets/images/small-card4.svg" class="img-fluid" />
+            </li>
+            <li>
+              <img src="assets/images/small-card5.svg" class="img-fluid" />
+            </li>
+          </ol>
+        </div>
+      </li>
+      <li class="d-flex align-items-center justify-content-between lst-main">
+        <div class="d-flex align-items-center">
+          <span class="d-inline-block">8</span>
+          <h3>two pair</h3>
+        </div>
+        <div>
+          <ol class="d-flex align-items-center">
+            <li>
+              <img src="assets/images/small-card.svg" class="img-fluid" />
+            </li>
+            <li>
+              <img src="assets/images/small-card2.svg" class="img-fluid" />
+            </li>
+            <li>
+              <img src="assets/images/small-card3.svg" class="img-fluid" />
+            </li>
+            <li>
+              <img src="assets/images/small-card4.svg" class="img-fluid" />
+            </li>
+            <li>
+              <img src="assets/images/small-card5.svg" class="img-fluid" />
+            </li>
+          </ol>
+        </div>
+      </li>
+      <li class="d-flex align-items-center justify-content-between lst-main">
+        <div class="d-flex align-items-center">
+          <span class="d-inline-block">9</span>
+          <h3>one pair</h3>
+        </div>
+        <div>
+          <ol class="d-flex align-items-center">
+            <li>
+              <img src="assets/images/small-card.svg" class="img-fluid" />
+            </li>
+            <li>
+              <img src="assets/images/small-card2.svg" class="img-fluid" />
+            </li>
+            <li>
+              <img src="assets/images/small-card3.svg" class="img-fluid" />
+            </li>
+            <li>
+              <img src="assets/images/small-card4.svg" class="img-fluid" />
+            </li>
+            <li>
+              <img src="assets/images/small-card5.svg" class="img-fluid" />
+            </li>
+          </ol>
+        </div>
+      </li>
+      <li class="d-flex align-items-center justify-content-between lst-main">
+        <div class="d-flex align-items-center">
+          <span class="d-inline-block">10</span>
+          <h3>hight card</h3>
+        </div>
+        <div>
+          <ol class="d-flex align-items-center">
+            <li>
+              <img src="assets/images/small-card.svg" class="img-fluid" />
+            </li>
+            <li>
+              <img src="assets/images/small-card2.svg" class="img-fluid" />
+            </li>
+            <li>
+              <img src="assets/images/small-card3.svg" class="img-fluid" />
+            </li>
+            <li>
+              <img src="assets/images/small-card4.svg" class="img-fluid" />
+            </li>
+            <li>
+              <img src="assets/images/small-card5.svg" class="img-fluid" />
+            </li>
+          </ol>
+        </div>
+      </li>
+    </ul>
+    <a
+      (click)="showHandRank = false"
+      href="javascript:void(0)"
+      class="buy-cross"
+    >
+      <img src="assets/images/cross.svg" class="img-fluid" />
+    </a>
+  </div>
+
+  <div
+    class="hand-rank hand-rank-mbl d-block d-lg-none"
+    style="overflow: auto; top: 50%; left: 50%"
+  >
+    <h2>Hand Ranks</h2>
+    <div class="d-flex align-items-center mbl-rank-main">
+      <ul class="mbl-ul">
+        <li class="d-flex align-items-center justify-content-between lst-main">
+          <div class="d-flex align-items-center">
+            <span class="d-inline-block">1</span>
+            <h3>Royal Flush</h3>
+          </div>
+          <div>
+            <ol class="d-flex align-items-center">
+              <li>
+                <img src="assets/images/small-card.svg" class="img-fluid" />
+              </li>
+              <li>
+                <img src="assets/images/small-card2.svg" class="img-fluid" />
+              </li>
+              <li>
+                <img src="assets/images/small-card3.svg" class="img-fluid" />
+              </li>
+              <li>
+                <img src="assets/images/small-card4.svg" class="img-fluid" />
+              </li>
+              <li>
+                <img src="assets/images/small-card5.svg" class="img-fluid" />
+              </li>
+            </ol>
+          </div>
+        </li>
+        <li class="d-flex align-items-center justify-content-between lst-main">
+          <div class="d-flex align-items-center">
+            <span class="d-inline-block">2</span>
+            <h3>Stright Flush</h3>
+          </div>
+          <div>
+            <ol class="d-flex align-items-center">
+              <li>
+                <img
+                  src="assets/images/small-card6.svg"
+                  class="img-fluid mt-small"
+                />
+              </li>
+              <li>
+                <img src="assets/images/small-card7.svg" class="img-fluid" />
+              </li>
+              <li>
+                <img src="assets/images/small-card8.svg" class="img-fluid" />
+              </li>
+              <li>
+                <img src="assets/images/small-card9.svg" class="img-fluid" />
+              </li>
+              <li>
+                <img src="assets/images/small-card10.svg" class="img-fluid" />
+              </li>
+            </ol>
+          </div>
+        </li>
+        <li class="d-flex align-items-center justify-content-between lst-main">
+          <div class="d-flex align-items-center">
+            <span class="d-inline-block">3</span>
+            <h3>four of a kind</h3>
+          </div>
+          <div>
+            <ol class="d-flex align-items-center">
+              <li>
+                <img src="assets/images/small-card11.svg" class="img-fluid" />
+              </li>
+              <li>
+                <img src="assets/images/small-card12.svg" class="img-fluid" />
+              </li>
+              <li>
+                <img src="assets/images/small-card13.svg" class="img-fluid" />
+              </li>
+              <li>
+                <img src="assets/images/small-card14.svg" class="img-fluid" />
+              </li>
+              <li>
+                <img src="assets/images/small-card15.svg" class="img-fluid" />
+              </li>
+            </ol>
+          </div>
+        </li>
+        <li class="d-flex align-items-center justify-content-between lst-main">
+          <div class="d-flex align-items-center">
+            <span class="d-inline-block">4</span>
+            <h3>full house</h3>
+          </div>
+          <div>
+            <ol class="d-flex align-items-center">
+              <li>
+                <img src="assets/images/small-card.svg" class="img-fluid" />
+              </li>
+              <li>
+                <img src="assets/images/small-card2.svg" class="img-fluid" />
+              </li>
+              <li>
+                <img src="assets/images/small-card3.svg" class="img-fluid" />
+              </li>
+              <li>
+                <img src="assets/images/small-card4.svg" class="img-fluid" />
+              </li>
+              <li>
+                <img src="assets/images/small-card5.svg" class="img-fluid" />
+              </li>
+            </ol>
+          </div>
+        </li>
+        <li class="d-flex align-items-center justify-content-between lst-main">
+          <div class="d-flex align-items-center">
+            <span class="d-inline-block">5</span>
+            <h3>flush</h3>
+          </div>
+          <div>
+            <ol class="d-flex align-items-center">
+              <li>
+                <img src="assets/images/small-card.svg" class="img-fluid" />
+              </li>
+              <li>
+                <img src="assets/images/small-card2.svg" class="img-fluid" />
+              </li>
+              <li>
+                <img src="assets/images/small-card3.svg" class="img-fluid" />
+              </li>
+              <li>
+                <img src="assets/images/small-card4.svg" class="img-fluid" />
+              </li>
+              <li>
+                <img src="assets/images/small-card5.svg" class="img-fluid" />
+              </li>
+            </ol>
+          </div>
+        </li>
+      </ul>
+      <ul>
+        <li class="d-flex align-items-center justify-content-between lst-main">
+          <div class="d-flex align-items-center">
+            <span class="d-inline-block">6</span>
+            <h3>straight</h3>
+          </div>
+          <div>
+            <ol class="d-flex align-items-center">
+              <li>
+                <img src="assets/images/small-card.svg" class="img-fluid" />
+              </li>
+              <li>
+                <img src="assets/images/small-card2.svg" class="img-fluid" />
+              </li>
+              <li>
+                <img src="assets/images/small-card3.svg" class="img-fluid" />
+              </li>
+              <li>
+                <img src="assets/images/small-card4.svg" class="img-fluid" />
+              </li>
+              <li>
+                <img src="assets/images/small-card5.svg" class="img-fluid" />
+              </li>
+            </ol>
+          </div>
+        </li>
+        <li class="d-flex align-items-center justify-content-between lst-main">
+          <div class="d-flex align-items-center">
+            <span class="d-inline-block">7</span>
+            <h3>three of a kind</h3>
+          </div>
+          <div>
+            <ol class="d-flex align-items-center">
+              <li>
+                <img src="assets/images/small-card.svg" class="img-fluid" />
+              </li>
+              <li>
+                <img src="assets/images/small-card2.svg" class="img-fluid" />
+              </li>
+              <li>
+                <img src="assets/images/small-card3.svg" class="img-fluid" />
+              </li>
+              <li>
+                <img src="assets/images/small-card4.svg" class="img-fluid" />
+              </li>
+              <li>
+                <img src="assets/images/small-card5.svg" class="img-fluid" />
+              </li>
+            </ol>
+          </div>
+        </li>
+        <li class="d-flex align-items-center justify-content-between lst-main">
+          <div class="d-flex align-items-center">
+            <span class="d-inline-block">8</span>
+            <h3>two pair</h3>
+          </div>
+          <div>
+            <ol class="d-flex align-items-center">
+              <li>
+                <img src="assets/images/small-card.svg" class="img-fluid" />
+              </li>
+              <li>
+                <img src="assets/images/small-card2.svg" class="img-fluid" />
+              </li>
+              <li>
+                <img src="assets/images/small-card3.svg" class="img-fluid" />
+              </li>
+              <li>
+                <img src="assets/images/small-card4.svg" class="img-fluid" />
+              </li>
+              <li>
+                <img src="assets/images/small-card5.svg" class="img-fluid" />
+              </li>
+            </ol>
+          </div>
+        </li>
+        <li class="d-flex align-items-center justify-content-between lst-main">
+          <div class="d-flex align-items-center">
+            <span class="d-inline-block">9</span>
+            <h3>one pair</h3>
+          </div>
+          <div>
+            <ol class="d-flex align-items-center">
+              <li>
+                <img src="assets/images/small-card.svg" class="img-fluid" />
+              </li>
+              <li>
+                <img src="assets/images/small-card2.svg" class="img-fluid" />
+              </li>
+              <li>
+                <img src="assets/images/small-card3.svg" class="img-fluid" />
+              </li>
+              <li>
+                <img src="assets/images/small-card4.svg" class="img-fluid" />
+              </li>
+              <li>
+                <img src="assets/images/small-card5.svg" class="img-fluid" />
+              </li>
+            </ol>
+          </div>
+        </li>
+        <li class="d-flex align-items-center justify-content-between lst-main">
+          <div class="d-flex align-items-center">
+            <span class="d-inline-block">10</span>
+            <h3>hight card</h3>
+          </div>
+          <div>
+            <ol class="d-flex align-items-center">
+              <li>
+                <img src="assets/images/small-card.svg" class="img-fluid" />
+              </li>
+              <li>
+                <img src="assets/images/small-card2.svg" class="img-fluid" />
+              </li>
+              <li>
+                <img src="assets/images/small-card3.svg" class="img-fluid" />
+              </li>
+              <li>
+                <img src="assets/images/small-card4.svg" class="img-fluid" />
+              </li>
+              <li>
+                <img src="assets/images/small-card5.svg" class="img-fluid" />
+              </li>
+            </ol>
+          </div>
+        </li>
+      </ul>
+    </div>
+    <a
+      (click)="showHandRank = false"
+      href="javascript:void(0)"
+      class="buy-cross buy-cross7"
+    >
+      <img src="assets/images/cross.svg" />
+    </a>
+  </div>
+</div>
+
+<!-- <div class="camera-setting-main time-main-2 d-block">
+  <div class="main-bg">
+    <div class="text-box">
+      <h4>Time Out</h4>
+    </div>
+    <div class="price-list">
+      <div class="time-inner">
+        <h2>54</h2>
+        <p>Until You Sit Out</p>
+        <div class="para">
+          <p>
+            You’ve been timed out, please choose an option before the timer
+            expires.
+          </p>
+        </div>
+      </div>
+      <div class="buy-btn-main">
+        <div
+          class="d-flex align-items-center justify-content-between buy-bottom"
+        >
+          <a href="#" class="buy-watch-btn leave-table">Leave Table</a>
+          <a href="#" class="buy-play-btn">Keep Playing</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <a href="#" class="buy-cross time-cross"
+    > <img src="images/cross.svg" alt=""
+  /> </a>
+</div> -->

@@ -1,0 +1,216 @@
+<!-- (A) THIS WILL SHOW ON THE WRONG ORIENTATION -->
+<div id="turn">Please rotate your device!</div>
+
+<!-- (B) CONTENTS AS USUAL -->
+<div class="buy-wrap" id="container">
+  <div class="header-2">
+    <div class="container-fluid">
+      <div
+        class="header-main d-flex align-items-center justify-content-between"
+      >
+        <!-- <div class="left-list">
+          <ul class="d-flex align-items-center justify-content-center">
+            <li><a href="https://allcardroom.com/lobby-poker ">Lobby</a></li>
+            <li><a href="#" class="deposit-nav-btn">Buy Coins</a></li>
+          </ul>
+        </div> -->
+        <div class="right-list hidelist">
+          <ol class="d-flex align-items-center justify-content-center">
+            <li>
+              <a class="smily">
+                <img src="assets/images/smily.png" alt="" class="img-fluid" />
+              </a>
+            </li>
+            <li>
+              <a class="mute-sound">
+                <img
+                  src="assets/images/sound-mute.svg"
+                  alt=""
+                  class="img-fluid"
+                />
+              </a>
+            </li>
+            <li>
+              <a class="message">
+                <img src="assets/images/message.svg" alt="" class="img-fluid" />
+              </a>
+            </li>
+            <li>
+              <a class="video-icon">
+                <img src="assets/images/camera.svg " alt="" class="img-fluid" />
+              </a>
+            </li>
+            <li>
+              <a class="support">
+                <img src="assets/images/support.svg" alt="" class="img-fluid" />
+              </a>
+            </li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <section class="buy-hero seat55-hero demo sec-level">
+    <div class="gameflow-bg" style="overflow: hidden">
+      <iframe [src]="backgroundUrl" frameborder="0" allowfullscreen></iframe>
+    </div>
+
+    <!-- The video -->
+    <!-- <video
+      width="151"
+      height="250"
+      autoplay=""
+      muted=""
+      class="gamevideo"
+      id="myvideo"
+    >
+      <source src="assets/video/deal1.mp4" type="video/mp4" />
+      Your browser does not support the video tag.
+    </video> -->
+
+    <div class="container1">
+      <!-- Seat 1 -->
+      <div class="loby-main box-6">
+        <div class="image-holder">
+          <img src="assets/images/a7.png" alt="" class="img-fluid hidelist" />
+        </div>
+        <a (click)="modalOpen(1, content)" class="loby-main-inner">
+          <div class="text-box align-items-center myseatopen myarea">
+            <h5 *ngIf="checkSeatOpen(1)">SEAT OPEN</h5>
+            <h5 *ngIf="!checkSeatOpen(1)">SEAT BOOKED</h5>
+          </div>
+        </a>
+      </div>
+
+      <!-- Seat 2 -->
+      <div class="loby-main box-7">
+        <div class="image-holder">
+          <img src="assets/images/a7.png" alt="" class="img-fluid hidelist" />
+        </div>
+        <a (click)="modalOpen(2, content)" class="loby-main-inner">
+          <div class="text-box align-items-center myseatopen myarea">
+            <h5 *ngIf="checkSeatOpen(2)">SEAT OPEN</h5>
+            <h5 *ngIf="!checkSeatOpen(2)">SEAT BOOKED</h5>
+          </div>
+        </a>
+      </div>
+
+      <!-- Seat 3 -->
+      <div class="loby-main box-8">
+        <div class="image-holder">
+          <img src="assets/images/a7.png" alt="" class="img-fluid hidelist" />
+        </div>
+        <a (click)="modalOpen(3, content)" class="loby-main-inner">
+          <div class="text-box align-items-center myseatopen myarea">
+            <h5 *ngIf="checkSeatOpen(3)">SEAT OPEN</h5>
+            <h5 *ngIf="!checkSeatOpen(3)">SEAT BOOKED</h5>
+          </div>
+        </a>
+      </div>
+
+      <!-- Seat 7 -->
+      <div class="loby-main box-2">
+        <div class="image-holder">
+          <img src="assets/images/a7.png" alt="" class="img-fluid hidelist" />
+        </div>
+        <a (click)="modalOpen(7, content)" class="loby-main-inner">
+          <div class="text-box align-items-center myseatopen myarea">
+            <h5 *ngIf="checkSeatOpen(7)">SEAT OPEN</h5>
+            <h5 *ngIf="!checkSeatOpen(7)">SEAT BOOKED</h5>
+          </div>
+        </a>
+      </div>
+
+      <!-- Seat 8 -->
+      <div class="loby-main box-3">
+        <div class="image-holder">
+          <img src="assets/images/a7.png" alt="" class="img-fluid hidelist" />
+        </div>
+        <a (click)="modalOpen(8, content)" class="loby-main-inner">
+          <div class="text-box align-items-center myseatopen myarea">
+            <h5 *ngIf="checkSeatOpen(8)">SEAT OPEN</h5>
+            <h5 *ngIf="!checkSeatOpen(8)">SEAT BOOKED</h5>
+          </div>
+        </a>
+      </div>
+
+      <!-- Seat 9 -->
+      <div class="loby-main box-4">
+        <div class="image-holder">
+          <img src="assets/images/a7.png" alt="" class="img-fluid hidelist" />
+        </div>
+        <a (click)="modalOpen(9, content)" class="loby-main-inner">
+          <div class="text-box align-items-center myseatopen myarea">
+            <h5 *ngIf="checkSeatOpen(9)">SEAT OPEN</h5>
+            <h5 *ngIf="!checkSeatOpen(9)">SEAT BOOKED</h5>
+          </div>
+        </a>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!--  -->
+<ng-template #content let-modal let-closeModal="close">
+  <div
+    class="camera-setting-main buy-hero camera-setting-main2 d-block my-5"
+    style="position: static; transform: none; height: auto;"
+  >
+    <div class="main-bg">
+      <div class="text-box text-box1">
+        <h4>Camera Settings</h4>
+      </div>
+      <div class="image-holder">
+        <img src="assets/images/camera-main.png" alt="" class="img-fluid" />
+      </div>
+      <div class="text-box">
+        <h4>Enter Buy-In Amount</h4>
+      </div>
+      <div class="price-list">
+        <ul class="d-flex align-items-center justify-content-center">
+          <li>$500</li>
+          <li class="price-lst2">
+            <span id="min-price">${{ betAmount }}</span>
+          </li>
+          <li>${{ profileDetails.cash_balance }}</li>
+        </ul>
+
+        <div class="d-flex align-items-center price-main">
+          <span>Min</span>
+          <div id="price-range" class="ui-widget" style="width: 100%">
+            <input
+              [(ngModel)]="betAmount"
+              type="range"
+              min="500"
+              max="{{ profileDetails.cash_balance }}"
+              step="5"
+              class="form-range"
+            />
+          </div>
+          <span>Max</span>
+        </div>
+
+        <div class="buy-btn-main">
+          <p>
+            Available Social Cash:
+            <span>${{ profileDetails.cash_balance }}</span>
+          </p>
+          <div
+            *ngIf="availSeat"
+            class="d-flex align-items-center justify-content-between buy-bottom"
+          >
+            <a class="buy-watch-btn"> Watch </a>
+            <a (click)="addUserToGame(closeModal)" class="buy-play-btn">
+              Play Now
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <a (click)="modal.close()" class="buy-cross buy-cross3">
+      <img src="assets/images/cross.svg" alt="" />
+    </a>
+  </div>
+</ng-template>

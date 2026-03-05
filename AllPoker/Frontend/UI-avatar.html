@@ -1,0 +1,3681 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Avatar Overlays + Chip System (responsive intact)</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/responsive.css">
+
+  <!-- Web fonts and Web Icons -->
+  <link rel="stylesheet" href="fonts/opensans/stylesheet.css">
+  <link rel="stylesheet" href="fonts/glacial/stylesheet.css">
+  <link rel="stylesheet" href="fonts/linearicons/stylesheet.css">
+  <link rel="stylesheet" href="fonts/ionicons.min.css">
+
+  <script src="js/custom.js"></script>
+
+
+
+  <style>
+    /* ================================================================
+       BASE PAGE / LAYOUT — (UNCHANGED FROM YOUR FILE)
+       ================================================================ */
+    body, html {
+      height: 100%;
+      margin: 0 !important;
+      padding: 0 !important;
+      overflow: hidden !important; /* Hide scrollbars */
+      background-color: #000 !important;
+    }
+
+    .room { z-index: 1; position: absolute; }
+
+    .tabletop {
+      width: 100%;
+      margin-left: 0%;
+      margin-top: -3%;
+    }
+
+    /* Per-seat anchors: mirror your .text-box anchors for clean alignment */
+    [id^="overlay_video_character1_"] .live-pip { border-radius: 17px; position: fixed; width: 10%; height: 30%; left: 63.35%; bottom: 57%; object-fit: cover; }
+    [id^="overlay_video_character2_"] .live-pip { border-radius: 17px; position: fixed; width: 10%; height: 30%; left: 63.35%; bottom: 57%; object-fit: cover; }
+    [id^="overlay_video_character3_"] .live-pip { border-radius: 17px; position: fixed; width: 10%; height: 30%; left: 63.35%; bottom: 57%; object-fit: cover; }
+    [id^="overlay_video_character4_"] .live-pip { border-radius: 17px; position: fixed; width: 10%; height: 30%; left: 63.35%; bottom: 57%; object-fit: cover; }
+    [id^="overlay_video_character5_"] .live-pip { border-radius: 17px; position: fixed; width: 10%; height: 30%; left: 63.35%; bottom: 57%; object-fit: cover; }
+    [id^="overlay_video_character6_"] .live-pip { border-radius: 17px; position: fixed; width: 10%; height: 30%; left: 63.35%; bottom: 57%; object-fit: cover; }
+    [id^="overlay_video_character7_"] .live-pip { border-radius: 17px; position: fixed; width: 10%; height: 30%; left: 63.35%; bottom: 57%; object-fit: cover; }
+    [id^="overlay_video_character8_"] .live-pip { border-radius: 17px; position: fixed; width: 10%; height: 30%; left: 63.35%; bottom: 57%; object-fit: cover; }
+    [id^="overlay_video_character9_"] .live-pip { border-radius: 17px; position: fixed; width: 10%; height: 30%; left: 63.35%; bottom: 57%; object-fit: cover; }
+
+    /* Optional: quick size variants you can toggle from JS if desired */
+    .live-pip.sm { width: 90px; }
+    .live-pip.lg { width: 160px; }
+
+    :root{
+      --focus-blur: 0px;      /* adjust focus: 0..30+px */
+      --focus-dim: 0;
+      --focus-brightness: 100%;
+      --focus-contrast: 100%;
+      --focus-saturate: 100%;
+
+      /* ===== Zoom Area + BG video prep ===== */
+      --zoom-area-width: 20vw;
+      --zoom-area-height: 15vh;
+      --zoom-area-outline: 2px dashed rgba(255,255,255,.0);
+      --zoom-max: 3.0;
+      --zoom-in-speed: 1.4;
+      --zoom-out-speed: 2.0;
+
+      /* position vars for #zoomArea */
+      --zoom-left: 50%;
+      --zoom-top: 76%;
+
+      /* ===== BG video crossfade-to-black knobs ===== */
+      --bgfade-duration: 10ms;
+      --bgfade-ease: cubic-bezier(.22,.61,.36,1);
+      --bgfade-color: transparent;
+      --bgfade-opacity: .5;
+
+      /* ===== Characters + overlay fade (simple knobs) ===== */
+      --chars-fade-delay: 0s;
+      --chars-fade-duration: .24s;
+
+      /* ===== Pot positioning (AUTO by default now) ===== */
+      --pot-mode: manual;       /* manual | auto */
+      /* Manual knobs (used only if --pot-mode:manual) */
+      --pot-left: 30%;
+      --pot-top: 68%;
+      --pot-width: 100px;
+
+      /* Auto-follow offsets (relative to zoomArea RIGHT edge, Y centered) */
+      --pot-offset-x: 0px;
+      --pot-offset-y: 0px;
+
+      /* Default stack offsets (overridable per seat if ever needed) */
+      --stack-shift-x: 0px;
+      --stack-shift-y: 22px;
+      --stack-scale: .95;
+
+      /* ===== Chip flight + collect tuning ===== */
+      --chip-flight-duration: 1s;   /* move time into pot */
+      --chip-fade-duration: .00s;   /* chip opacity ease */
+      --collect-stagger: .06s;      /* delay between each player's chip flight on collect */
+
+      /* ==========================================================
+         [TOP KNOBS] ALL-IN ANIMATION (DISTANCE/SPEED/DELAY)
+         These power the 'dip' + 'push' when All-In is selected.
+         ========================================================== */
+      /* Distances (⇣ positive Y = down | positive X = right) */
+      --allin-bump-px: 35px;      /* instant dip DOWN when All-In selected */
+      --allin-push-px: 0px;      /* slow glide FORWARD after the dip */
+
+      /* Timing / easing */
+      --allin-push-duration: .55s;
+      --allin-push-delay: .02s;
+      --allin-ease: cubic-bezier(.22,.61,.36,1);
+
+      /* Bump (the quick dip) */
+      --allin-bump-duration: 3s;        /* speed of the dip; 0s = instant */
+      --allin-bump-delay: 2s;           /* wait before the dip starts */
+
+      /* Push (the slow glide forward) */
+      --allin-push-duration: 600ms;     /* speed of the forward glide */
+      --allin-push-delay: 120ms;        /* wait after the bump before gliding */
+
+      --stack-hit-dx: 0px;  /* +right / -left tweak */
+      --stack-hit-dy: 80px;  /* +down  / -up   tweak */
+
+      /* ==========================================================
+         [TOP KNOBS] STACK → POT MOVE (on "Betting")
+         Controls how fast/when the full stack slides into pot.
+         ========================================================== */
+      --stack-to-pot-duration: .65s;
+      --stack-to-pot-delay: 0s;
+    }
+
+    /* ⬇️ ALL-IN ANIMATION-these must NOT be inside :root */
+      .stack-character2-seat1{
+        --allin-bump-px: 0px;
+        --allin-push-px: -120px;
+        --allin-push-y:  0px;      /* no downward drift */
+        --allin-bump-duration: 0;
+        --allin-bump-delay: 2s;
+        --allin-push-duration: 3.25s;
+      }
+      .stack-character3-seat1{
+        --allin-bump-px: 0;
+        --allin-push-px: -100px;
+        --allin-push-y:  0px;
+        --allin-bump-duration: 0;
+        --allin-bump-delay: 1.5s;
+        --allin-push-duration: 3s;
+      }
+      .stack-character7-seat1{
+        --allin-bump-px: 0px;      /* no dip */
+        --allin-push-px: 80px;    /* right */
+        --allin-push-y:  0px;      /* ⬅ prevent the “down” */
+        --allin-bump-duration: 0;
+        --allin-bump-delay: 2s;
+        --allin-push-duration: 3s;
+      }
+
+      .stack-character8-seat1{
+        --allin-bump-px: 0;
+        --allin-push-px: 80px;   /* right */
+        --allin-push-y:  0;   /* up */
+        --allin-bump-duration: 0s;
+        --allin-bump-delay: 2s;
+        --allin-push-duration: 3s;
+      }
+ 
+
+
+    /* === Pot hit-point (landing spot) === */
+    :root{
+      /* Tune these to move where chips land */
+      --pot-hit-x: 70%;   /* 0% left edge … 100% right edge */
+      --pot-hit-y: 0%;    /* 0% TOP of pot … 100% bottom of pot (smaller = higher) */
+      --pot-hit-size: 1px; /* invisible target box size */
+    }
+
+    #potTarget{
+      position:absolute;
+      width: var(--pot-hit-size);
+      height: var(--pot-hit-size);
+      left: calc(var(--pot-hit-x) - var(--pot-hit-size)/2);
+      top:  calc(var(--pot-hit-y) - var(--pot-hit-size)/2);
+      pointer-events:none;
+      /* uncomment for debugging:
+      outline: 1px dashed rgba(0,255,255,.6);
+      */
+    }
+
+    /* stack holds bg + room + overlay */
+    .bg-stack{ position:fixed; inset:0; z-index:0; overflow:hidden; }
+
+    /* background video (base) */
+    #backgroundVideo{
+      position:absolute; inset:0;
+      width:100%; height:100%;
+      object-fit:cover;
+      z-index:0;
+      transform-origin: 50% 50%;
+      will-change: transform;
+    }
+
+    /* room image is also behind the blur */
+    .room{
+      position:fixed;
+      z-index:0;                  /* IMPORTANT: below the overlay */
+      margin-top: -45%;
+      margin-left: -25%;
+      width: 153%;
+    }
+
+    /* focus overlay (visual tint only; backdrop-filter disabled below for perf) */
+    .focus-overlay{
+      position:absolute; inset:0;
+      z-index:1;
+      pointer-events:none;
+      background: rgba(0,0,0,calc(var(--focus-dim) + 0.001));
+      transition: background-color .3s ease;
+    }
+
+    /* things that should stay CRISP */
+    .tabletop{ position:absolute; z-index:2; }
+    .video-container{ position:absolute; inset:0; z-index:4; }
+
+    /* quick presets */
+    .focus-off   { --focus-blur:0px;  --focus-dim:0; }
+    .focus-soft  { --focus-blur:6px;  --focus-dim:.05; }
+    .focus-strong{ --focus-blur:16px; --focus-dim:.12; }
+    .focus-max   { --focus-blur:28px; --focus-dim:.18; }
+
+    @supports not ((backdrop-filter: blur(1px))) {
+      #backgroundVideo, .room { filter: blur(var(--focus-blur)); }
+      .focus-overlay{ background: rgba(0,0,0,var(--focus-dim)); }
+    }
+
+    /* Per-time-of-day hooks */
+    .bg-morning  #backgroundVideo { object-fit: cover; top: -63%; overflow: visible; }
+    .bg-day      #backgroundVideo { object-fit: cover; top: -64%; overflow: visible; }
+    .bg-evening  #backgroundVideo { object-fit: cover; top: -63%; overflow: visible; }
+    .bg-night    #backgroundVideo { object-fit: cover; top: -51%; overflow: visible; }
+
+    /* ===== Window / blur layer tint, dim & shadow knobs ===== */
+    .bg-morning  .focus-overlay{
+      --focus-blur: 0px; --focus-dim: 0.4; --shadow-strength: 0.20; --shadow-angle: 100deg;
+      box-shadow:
+        inset 0 0 80px rgba(30, 30, 40, var(--shadow-strength)),
+        inset 0px 60px 100px rgba(0, 0, 50, calc(var(--shadow-strength) * 0.7));
+      background:
+        linear-gradient(var(--shadow-angle), rgba(0, 0, 50, calc(var(--shadow-strength) * 0.6)) 0%, rgba(0, 0, 0, .4) 50%),
+        rgba(0, 0, 0, calc(var(--focus-dim) + 0.001));
+    }
+
+    .bg-day .focus-overlay{
+      --focus-blur: 0px; --focus-dim: 0.4; --shadow-strength: 0.15; --shadow-angle: 100deg;
+      box-shadow:
+        inset 0 0 80px rgba(0, 11, 40, var(--shadow-strength)),
+        inset 0px 60px 100px rgba(0, 0, 50, calc(var(--shadow-strength) * 0.7));
+      background:
+        linear-gradient(var(--shadow-angle), rgba(0, 0, 50, calc(var(--shadow-strength) * 0.6)) 0%, rgba(0, 0, 0, .4) 50%),
+        rgba(0, 0, 0, calc(var(--focus-dim) + 0.15));
+    }
+
+    .bg-evening .focus-overlay{
+      --focus-blur: 0px; --focus-dim: 0.4; --shadow-strength: 0.45; --shadow-angle: 100deg;
+      box-shadow:
+        inset 0 0 80px rgba(30, 30, 40, var(--shadow-strength)),
+        inset 0px 60px 100px rgba(0, 0, 50, calc(var(--shadow-strength) * 0.7));
+      background:
+        linear-gradient(var(--shadow-angle), rgba(0, 0, 50, calc(var(--shadow-strength) * 0.6)) 0%, rgba(0, 0, 0, .4) 50%),
+        rgba(0, 0, 0, calc(var(--focus-dim) + 0.001));
+    }
+
+    .bg-night .focus-overlay{
+      --focus-blur: 0px; --focus-dim: 0.4; --shadow-strength: 0.45; --shadow-angle: 100deg;
+      box-shadow:
+        inset 0 0 80px rgba(30, 30, 40, var(--shadow-strength)),
+        inset 0px 60px 100px rgba(0, 0, 50, calc(var(--shadow-strength) * 0.7));
+      background:
+        linear-gradient(var(--shadow-angle), rgba(0, 0, 50, calc(var(--shadow-strength) * 0.6)) 0%, rgba(0, 0, 0, .4) 50%),
+        rgba(0, 0, 0, calc(var(--focus-dim) + 0.001));
+    }
+
+    /* Fullscreen background video — single source of truth */
+    #backgroundVideo {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: 0;
+      transform-origin: 50% 50%;
+      will-change: transform;
+    }
+
+    /* put near your other table styles */
+    .tabletop, .table {
+      transform-origin: 50% 50%;
+      will-change: transform;
+    }
+
+    .video-container {
+      position: absolute;
+      top: 47px; left: 0;
+      width: 100%; height: 100%;
+      z-index: 2; /* Above the background */
+      overflow: hidden;
+      isolation: isolate; /* stability hint */
+    }
+
+    video { position: absolute; }
+
+    /* Keep layout jumps crisp; only fade if you want */
+    .video-container video {
+      transition: none !important;
+      will-change: transform;
+    }
+
+    .chairs-layer{ position:absolute; inset:0; z-index:3; pointer-events:none; }
+
+
+    #controls {
+      position: fixed;
+      bottom: 10px;
+      left: 10px;
+      z-index: 10;
+      color: aliceblue;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 10px;
+      align-items: center;
+      font: 14px/1.2 system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+    }
+
+    select, input, label, button { color: initial; }
+    #controls select, #controls input, #controls button {
+      color:#eee; background:#111; border:1px solid #444; border-radius:8px; padding:6px 8px;
+    }
+    #controls button { cursor:pointer; }
+
+    label {
+      color: aliceblue;
+      display: inline-flex;
+      gap: 6px;
+      align-items: center;
+    }
+
+    .glass {
+      position: fixed;
+      z-index: 0;
+      margin-top: -47%;
+      margin-left: -25%;
+      width: 153%;
+      opacity: 100%;
+    }
+
+    /* --------- Overlay badge styles --------- */
+    .overlay-box {
+      position: absolute;     /* positioned in JS to match video rect */
+      z-index: 9;             /* above the videos */
+      pointer-events: none;   /* never block clicks */
+    }
+    .overlay-box .text-box {
+      position: absolute;
+      padding: 6px 10px;
+      border-radius: 11px;
+      background: rgba(0,0,0,0.7);
+      color: #fff;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+      line-height: 1;
+      border: 1px solid rgba(255,255,255,0.15);
+      backdrop-filter: blur(3px);
+      min-width: 90px;
+      z-index: 1;
+    }
+    .overlay-box .call-main {
+      margin: 0;
+      font-size: 16px;
+      font-weight: 700;
+      display: flex; gap: 6px; align-items: center;
+    }
+    .overlay-box .call {
+      width: 20px; height: 20px; border-radius: 10px;
+      display: inline-flex; align-items: center; justify-content: center;
+      background:#2ecc71; color:#0b1b12; font-size:13px; font-weight:800;
+    }
+
+    /* click+hold rectangle; position via CSS vars */
+    #zoomArea{
+      position: fixed;
+      left: var(--zoom-left);
+      top: var(--zoom-top);
+      width: var(--zoom-area-width);
+      height: var(--zoom-area-height);
+      transform: translate(-50%, -50%);
+      outline: var(--zoom-area-outline);
+      border-radius: 16px;
+      z-index: 6;
+      background: transparent;
+      cursor: zoom-in;
+      pointer-events: auto;
+    }
+
+    .bg-fader{
+      position:absolute; inset:0;
+      background: var(--bgfade-color);
+      opacity: 0;
+      pointer-events: none;
+      z-index: 1; /* above the bg video, below the overlay */
+      transition: opacity var(--bgfade-duration) var(--bgfade-ease);
+    }
+    .bg-fader.is-on{ opacity: var(--bgfade-opacity); }
+
+    /* === Character & overlay fade controls === */
+    #videoContainer video { opacity: 1; }
+    #videoContainer .overlay-box { opacity: 1; }
+    #videoContainer .overlay-box {
+      transition: opacity var(--chars-fade-duration, .24s) ease var(--chars-fade-delay, 0s);
+    }
+    #videoContainer.no-fade video,
+    #videoContainer.no-fade .overlay-box {
+      transition: none !important;
+    }
+    #videoContainer.chars-hidden video,
+    #videoContainer.chars-hidden .overlay-box {
+      opacity: 0;
+    }
+
+    /* Fade the pot in sync with character fades */
+    #pot {
+      opacity: 1;
+      transition: opacity var(--chars-fade-duration, .24s) ease var(--chars-fade-delay, 0s);
+    }
+
+    /* When characters are hidden, hide the pot too */
+    #videoContainer.chars-hidden ~ #pot {
+      opacity: 0;
+    }
+
+    /* When we're doing an instant hide, make the pot hide instantly as well */
+    #videoContainer.no-fade ~ #pot {
+      transition: none !important;
+    }
+
+
+    /* === Zoom-area per-size tweaks  === */
+    @media (min-width:666px) and (max-width:668px) and (min-height:374px) and (max-height:376px) { :root { --zoom-top: 47%; --zoom-left: 50%; } }
+    @media (min-width:719px) and (max-width:721px) and (min-height:539px) and (max-height:541px) { :root { --zoom-top: 35%; --zoom-left: 50%; } }
+    @media (max-width:771px) and (min-height:300px) and (max-height:455px) { :root { --zoom-top: 57%; --zoom-left: 50%; } }
+    @media (min-width:843px) and (max-width:845px) and (max-height:391px) { :root { --zoom-top: 62%; --zoom-left: 50%; } }
+    @media (min-width:881px) and (max-width:883px) and (max-height:345px) { :root { --zoom-top: 75%; --zoom-left: 50%; } }
+    @media (min-width:895px) and (max-width:897px) and (max-height:415px) { :root { --zoom-top: 63%; --zoom-left: 50%; } }
+    @media (min-width:913px) and (max-width:915px) and (min-height:411px) and (max-height:413px) { :root { --zoom-top: 70%; --zoom-left: 50%; } }
+    @media (min-width:914px) and (max-width:916px) and (min-height:411px) and (max-height:413px) { :root { --zoom-top: 65%; --zoom-left: 50%; } }
+    @media (min-width:931px) and (max-width:933px) and (max-height:431px) { :root { --zoom-top: 64%; --zoom-left: 50%; } }
+    @media (min-width:1023px) and (max-width:1025px) and (min-height:599px) and (max-height:601px) { :root { --zoom-top: 51%; --zoom-left: 50%; } }
+    @media (min-width:1023px) and (max-width:1025px) and (max-height:769px) { :root { --zoom-top: 40%; --zoom-left: 50%; } }
+    @media (min-width:1179px) and (max-width:1181px) and (max-height:821px) { :root { --zoom-top: 45%; --zoom-left: 50%; } }
+    @media (min-width:1279px) and (max-width:1281px) and (max-height:801px) { :root { --zoom-top: 51%; --zoom-left: 50%; } }
+    @media (min-width:1279px) and (max-width:1281px) and (max-height:854px) { :root { --zoom-top: 71%; --zoom-left: 50%; } }
+    @media (min-width:1367px) and (max-width:1369px) and (max-height:913px) { :root { --zoom-top: 48%; --zoom-left: 50%; } }
+    @media (min-width:1365px) and (max-width:1367px) and (max-height:1023px) and (max-height:1025px) { :root { --zoom-top: 42%; --zoom-left: 50%; } }
+    @media (min-width:1420px) and (max-width:1919px) { :root { --zoom-top: 70%; --zoom-left: 50%; } }
+    @media (min-width:1920px) { :root { --zoom-top: 70%; --zoom-left: 50%; } }
+
+    /* Overlay text anchoring per character */
+    [id^="overlay_video_character1_"] .text-box { bottom: 31%; left: 24%; right: auto; top: auto; }
+    [id^="overlay_video_character2_"] .text-box { bottom: 43%; right: 55%; left: auto; top: auto; }
+    [id^="overlay_video_character3_"] .text-box { top: 50%; right: 34%; left: auto; bottom: auto; }
+    [id^="overlay_video_character4_"] .text-box { top: 8px; left: 8px; right: auto; bottom: auto; }
+    [id^="overlay_video_character5_"] .text-box { top: 50%; left: 53%; right: auto; bottom: auto; transform: translate(-50%, -50%); }
+    [id^="overlay_video_character6_"] .text-box { bottom: 8px; left: 50%; right: auto; top: auto; transform: translateX(-50%); }
+    [id^="overlay_video_character7_"] .text-box { top: 55%; right: 20%; left: auto; bottom: auto; transform: translateY(-50%); }
+    [id^="overlay_video_character8_"] .text-box { top: 60%; left: 49%; right: auto; bottom: auto; transform: translateY(-50%); }
+    [id^="overlay_video_character9_"] .text-box { bottom: 35%; left: 50%; right: auto; top: auto; transform: translateX(-50%); }
+
+    /* Base positions  */
+      .video-container video.character1-seat1 { width: 17%; height:auto; left: 60%; top: -5%; right:auto; bottom:auto; }
+      .video-container video.character2-seat1 { width: 20%; height:auto; left: 76%; top: -5%;  right:auto; bottom:auto; }
+      .video-container video.character3-seat1 { width: 25%; height:auto; left: 83%; top: 8%; right:auto; bottom:auto; }
+      .video-container video.character7-seat1 { width: 22%; height:auto; left: -13%; top: 5%; right:auto; bottom:auto; }
+      .video-container video.character8-seat1 { width: 17%; height:auto; left: 4%;  top: -55px; right:auto; bottom:auto; }
+      .video-container video.character9-seat1 { width: 15%; height:auto; left: 23%; top: -5%;  right:auto; bottom:auto; }
+    
+    /* Mobile bands  */
+    @media (min-width:500px) and (max-width:376px) {
+      .video-container video.character1-seat1 { width: 17%; height:auto; left: 58%; top: -7%; right:auto; bottom:auto; }
+      .video-container video.character2-seat1 { width: 19%; height:auto; left: 76%; top: -4%;  right:auto; bottom:auto; }
+      .video-container video.character3-seat1 { height: 105%; width:auto; left: 83%; top: 8%; right:auto; bottom:auto; }
+      .video-container video.character7-seat1 { height: 105%; width:auto; left: -13%; top: 5%; right:auto; bottom:auto; }
+      .video-container video.character8-seat1 { height: 91%; width:auto; left: 2%;  top: -55px; right:auto; bottom:auto; }
+      .video-container video.character9-seat1 { height: 72%; width:auto; left: 23%; top: -8%;  right:auto; bottom:auto; }
+      .chip-stack { max-width: 40% !important; }
+    }
+    @media (min-width:601px) and (max-width:700px) {
+      .video-container video.character1-seat1 { width: 17%; height:auto; left: 58%; top: -10%; right:auto; bottom:auto; }
+      .video-container video.character2-seat1 { width: 19%; height:auto; left: 76%; top: -2%;  right:auto; bottom:auto; }
+      .video-container video.character3-seat1 { height: 90%; width:auto; left: 80%; top: 0%; right:auto; bottom:auto; }
+      .video-container video.character7-seat1 { height: 85%; width:auto; left: -12%; top: 1%; right:auto; bottom:auto; }
+      .video-container video.character8-seat1 { height: 70%; width:auto; left: 2%;  top: -46px; right:auto; bottom:auto; }
+      .video-container video.character9-seat1 { height: 55%; width:auto; left: 23%; top: -8%;  right:auto; bottom:auto; }
+      .chip-stack { width: 50px !important;}
+      [id^="overlay_video_character1_"] .text-box { bottom: 35%; left: -10% !important; right: auto; top: auto; }
+      [id^="overlay_video_character2_"] .text-box { bottom: 37%; right: 51%; left: auto; top: auto; }
+      [id^="overlay_video_character7_"] .text-box { top: 55%; right: -1%; left: auto; bottom: auto; transform: translateY(-50%); }
+      [id^="overlay_video_character8_"] .text-box { bottom: 25%; right: -16%; left: auto; top: auto; }
+      [id^="overlay_video_character9_"] .text-box { bottom: 38%; left: 65%; right: auto; top: auto; transform: translateX(-50%); }
+      #overlay_video_character2_seat1 .empty-seat { transform: translate(-10%, -2%) !important; }
+      #overlay_video_character3_seat1 .empty-seat { transform: scale(0.5) translate(15%, 13%) !important; }
+      #overlay_video_character7_seat1 .empty-seat { transform: scale(0.5) translate(18%, 15%) !important; }
+      #overlay_video_character8_seat1 .empty-seat { transform: translate(3%, 9%) !important; }
+      #overlay_video_character9_seat1 .empty-seat { transform: translate(14%, -3%) !important; }
+      .pot-container{top: 50% !important; left: 25% !important; } 
+    }
+    @media (min-width:701px) and (max-width:799px) {
+      .video-container video.character1-seat1 { width: 17%; height:auto; left: 58%; top: -10%; right:auto; bottom:auto; }
+      .video-container video.character2-seat1 { width: 19%; height:auto; left: 75%; top: -2%;  right:auto; bottom:auto; }
+      .video-container video.character3-seat1 { height: 90%; width:auto; left: 80%; top: 6%; right:auto; bottom:auto; }
+      .video-container video.character7-seat1 { height: 85%; width:auto; left: -9%; top: 7%; right:auto; bottom:auto; }
+      .video-container video.character8-seat1 { height: 70%; width:auto; left: 5%;  top: -25px; right:auto; bottom:auto; }
+      .video-container video.character9-seat1 { height: auto; width:17%; left: 23%; top: -8%;  right:auto; bottom:auto; }
+      .chip-stack { width: 40px !important;}
+      [id^="overlay_video_character1_"] .text-box { bottom: 35%; left: -10% !important; right: auto; top: auto; }
+      [id^="overlay_video_character2_"] .text-box { bottom: 37%; right: 57%; left: auto; top: auto; }
+      [id^="overlay_video_character7_"] .text-box { top: 55%; right: -1%; left: auto; bottom: auto; transform: translateY(-50%); }
+      [id^="overlay_video_character8_"] .text-box { bottom: 25%; right: -16%; left: auto; top: auto; }
+      [id^="overlay_video_character9_"] .text-box { bottom: 38%; left: 65%; right: auto; top: auto; transform: translateX(-50%); }
+      #overlay_video_character2_seat1 .empty-seat { transform: translate(-10%, -2%) !important; }
+      #overlay_video_character3_seat1 .empty-seat { transform: scale(0.5) translate(35%, 25%) !important; }
+      #overlay_video_character7_seat1 .empty-seat { transform: scale(0.5) translate(0%, 25%) !important; }
+      #overlay_video_character8_seat1 .empty-seat { transform: translate(3%, 9%) !important; }
+      #overlay_video_character9_seat1 .empty-seat { transform: translate(14%, -3%) !important; }
+      .pot-container{top: 58% !important; left: 28% !important; } 
+    }
+    @media (min-width:800px) and (max-width:916px) {
+      .video-container video.character1-seat1 { width: 17%; height:auto; left: 58%; top: -7%; right:auto; bottom:auto; }
+      .video-container video.character2-seat1 { width: 19%; height:auto; left: 76%; top: 3%;  right:auto; bottom:auto; }
+      .video-container video.character3-seat1 { height: 105%; width:auto; left: 80%; top: 2%; right:auto; bottom:auto; }
+      .video-container video.character7-seat1 { height: 105%; width:auto; left: -10%; top: 5%; right:auto; bottom:auto; }
+      .video-container video.character8-seat1 { height: 91%; width:auto; left: 2%;  top: -55px; right:auto; bottom:auto; }
+      .video-container video.character9-seat1 { height: 72%; width:auto; left: 23%; top: -8%;  right:auto; bottom:auto; }
+      #overlay_video_character3_seat1 .empty-seat { transform: scale(0.5) translate(20%, 17%) !important; }
+      #overlay_video_character7_seat1 .empty-seat { transform: scale(0.5) translate(0%, 11%) !important; }
+      #overlay_video_character8_seat1 .empty-seat { transform: translate(1%, 4%) !important; }
+      #overlay_video_character9_seat1 .empty-seat { transform: translate(0%, -2%) !important; }
+      [id^="overlay_video_character2_"] .text-box { bottom: 43%; right: 47%; left: auto; top: auto; }
+      [id^="overlay_video_character7_"] .text-box { top: 52%; right: 15%; left: auto; bottom: auto; transform: translateY(-50%); }
+      .chip-stack { max-width: 50px !important; }
+      .pot-container { top: 62% !important; }
+    }
+    @media (min-width:917px) and (max-width:975px) {
+      .video-container video.character1-seat1 { width: 17%; height:auto; left: 58%; top: -7%; right:auto; bottom:auto; }
+      .video-container video.character2-seat1 { width: 19%; height:auto; left: 76%; top: 4%;  right:auto; bottom:auto; }
+      .video-container video.character3-seat1 { height: 105%; width:auto; left: 81%; top: 1%; right:auto; bottom:auto; }
+      .video-container video.character7-seat1 { height: 105%; width:auto; left: -11%; top: 3%; right:auto; bottom:auto; }
+      .video-container video.character8-seat1 { height: 91%; width:auto; left: 2%;  top: -55px; right:auto; bottom:auto; }
+      .video-container video.character9-seat1 { height: 72%; width:auto; left: 23%; top: -8%;  right:auto; bottom:auto; }
+      #overlay_video_character3_seat1 .empty-seat { transform: scale(0.5) translate(17%, 13%) !important; }
+      .chip-stack { max-width: 55px !important; }
+      .pot-container { top: 62% !important; }
+
+    }
+    @media (min-width:976px) and (max-width:1100px) {
+      .video-container video.character1-seat1 { width: 17%; height:auto; left: 60%; top: -5%; right:auto; bottom:auto; }
+      .video-container video.character2-seat1 { width: 20%; height:auto; left: 75%; top: 3%;  right:auto; bottom:auto; }
+      .video-container video.character3-seat1 { width: 27%; height:auto; left: 79%; top: 6%; right:auto; bottom:auto; }
+      .video-container video.character7-seat1 { width: 27%; height:auto; left: -13%; top: 5%; right:auto; bottom:auto; }
+      .video-container video.character8-seat1 { width: 22%; height:auto; left: 4%;  top: -55px; right:auto; bottom:auto; }
+      .video-container video.character9-seat1 { width: 18%; height:auto; left: 23%; top: -6%;  right:auto; bottom:auto; }
+      [id^="overlay_video_character1_"] .text-box { bottom: 32%; left: 24%; right: auto; top: auto; }
+      [id^="overlay_video_character3_"] .text-box { top: 52%; right: 33%; left: auto; bottom: auto; }
+      [id^="overlay_video_character8_"] .text-box { top: 62%; left: 43%; right: auto; bottom: auto;  }
+      #overlay_video_character7_seat1 .empty-seat { transform: scale(0.5) translate(17%, 15%) !important; }
+      .pot-container { top: 40% !important; }
+    }
+    @media (min-width:1101px) and (max-width:1200px) {
+      .video-container video.character1-seat1 { width: 17%; height:auto; left: 60%; top: -5%; right:auto; bottom:auto; }
+      .video-container video.character2-seat1 { width: 20%; height:auto; left: 75%; top: 3%;  right:auto; bottom:auto; }
+      .video-container video.character3-seat1 { width: 27%; height:auto; left: 79%; top: 6%; right:auto; bottom:auto; }
+      .video-container video.character7-seat1 { width: 27%; height:auto; left: -13%; top: 5%; right:auto; bottom:auto; }
+      .video-container video.character8-seat1 { width: 22%; height:auto; left: 4%;  top: -55px; right:auto; bottom:auto; }
+      .video-container video.character9-seat1 { width: 18%; height:auto; left: 23%; top: -6%;  right:auto; bottom:auto; }
+      [id^="overlay_video_character1_"] .text-box { bottom: 32%; left: 24%; right: auto; top: auto; }
+      [id^="overlay_video_character3_"] .text-box { top: 52%; right: 33%; left: auto; bottom: auto; }
+      [id^="overlay_video_character8_"] .text-box { top: 62%; left: 43%; right: auto; bottom: auto;  }
+      #overlay_video_character7_seat1 .empty-seat { transform: scale(0.5) translate(17%, 15%) !important; }
+      .pot-container { top: 45% !important; }
+    }
+    @media (min-width:1201px) and (max-width:1300px) {
+      .video-container video.character1-seat1 { width: 17%; height:auto; left: 60%; top: -5%; right:auto; bottom:auto; }
+      .video-container video.character2-seat1 { width: 20%; height:auto; left: 75%; top: 3%;  right:auto; bottom:auto; }
+      .video-container video.character3-seat1 { width: 27%; height:auto; left: 79%; top: 6%; right:auto; bottom:auto; }
+      .video-container video.character7-seat1 { width: 27%; height:auto; left: -13%; top: 5%; right:auto; bottom:auto; }
+      .video-container video.character8-seat1 { width: 22%; height:auto; left: 4%;  top: -55px; right:auto; bottom:auto; }
+      .video-container video.character9-seat1 { width: 18%; height:auto; left: 23%; top: -6%;  right:auto; bottom:auto; }
+      [id^="overlay_video_character1_"] .text-box { bottom: 32%; left: 24%; right: auto; top: auto; }
+      [id^="overlay_video_character3_"] .text-box { top: 52%; right: 33%; left: auto; bottom: auto; }
+      [id^="overlay_video_character8_"] .text-box { top: 62%; left: 43%; right: auto; bottom: auto;  }
+      #overlay_video_character7_seat1 .empty-seat { transform: scale(0.5) translate(17%, 15%) !important; }
+
+    }
+    @media (min-width:1301px) and (max-width:1400px) {
+      .video-container video.character1-seat1 { width: 17%; height:auto; left: 60%; top: -3%; right:auto; bottom:auto; }
+      .video-container video.character2-seat1 { width: 20%; height:auto; left: 75%; top: 3%;  right:auto; bottom:auto; }
+      .video-container video.character3-seat1 { width: 27%; height:auto; left: 79%; top: 6%; right:auto; bottom:auto; }
+      .video-container video.character7-seat1 { width: 27%; height:auto; left: -13%; top: 5%; right:auto; bottom:auto; }
+      .video-container video.character8-seat1 { width: 22%; height:auto; left: 4%;  top: -55px; right:auto; bottom:auto; }
+      .video-container video.character9-seat1 { width: 18%; height:auto; left: 23%; top: -3%;  right:auto; bottom:auto; }
+      [id^="overlay_video_character1_"] .text-box { bottom: 32%; left: 24%; right: auto; top: auto; }
+      [id^="overlay_video_character3_"] .text-box { top: 52%; right: 33%; left: auto; bottom: auto; }
+      [id^="overlay_video_character8_"] .text-box { top: 62%; left: 43%; right: auto; bottom: auto;  }
+      #overlay_video_character7_seat1 .empty-seat { transform: scale(0.5) translate(17%, 15%) !important; }
+            .pot-container { top: 40% !important; }
+    }
+
+    /* --- OTHER SCALING BANDS --- */
+    @media (min-width:1420px) {
+      .video-container video.character1-seat1 { width: 17%; height:auto; left: 60%; top: -3%; right:auto; bottom:auto; }
+      .video-container video.character2-seat1 { height: 75%; width:auto; left: 75%; top: 5%;  right:auto; bottom:auto; }
+      .video-container video.character3-seat1 { height: 115%; width:auto; left: 76%; top: 3%; right:auto; bottom:auto; }
+      .video-container video.character7-seat1 { height: 105%; width:auto; left: -9%; top: 5%; right:auto; bottom:auto; }
+      .video-container video.character8-seat1 { height: 85%; width:auto; left: 4%;  top: -55px; right:auto; bottom:auto; }
+      .video-container video.character9-seat1 { height: 70%; width:auto; left: 23%; top: -3%;  right:auto; bottom:auto; }
+      [id^="overlay_video_character2_"] .text-box { top: 52%; right: 55%; left: auto; bottom: auto; }
+      [id^="overlay_video_character3_"] .text-box { top: 50%; right: 33%; left: auto; bottom: auto; }
+      [id^="overlay_video_character8_"] .text-box { top: 63%; left: 52%; right: auto; bottom: auto; }
+      [id^="overlay_video_character3_"] .chip-stack { bottom: 35% !important; right: 68% !important; transform: translateX(50%) !important; }
+      #overlay_video_character7_seat1 .empty-seat { transform: scale(0.5) translate(-12%, 15%) !important; }
+      #overlay_video_character9_seat1 .empty-seat { transform: translate(0%, 0%) !important; }
+      [id^="overlay_video_character7_"] .text-box { top: 55%; right: 25%; left: auto; bottom: auto; transform: translateY(-50%); }
+      [id^="overlay_video_character7_"] .chip-stack { bottom: 30%; right: -30%; transform: translate(50%, -50%); }
+    }
+
+    @media (min-width:1920px) {
+      .video-container video.character1-seat1 { width: 17%; height:auto; left: 60%; top: -3%; right:auto; bottom:auto; }
+      .video-container video.character2-seat1 { height: 75%; width:auto; left: 76%; top: 1%;  right:auto; bottom:auto; }
+      .video-container video.character3-seat1 { height: 105%; width:auto; left: 83%; top: 8%; right:auto; bottom:auto; }
+      .video-container video.character7-seat1 { height: 105%; width:auto; left: -13%; top: 5%; right:auto; bottom:auto; }
+      .video-container video.character8-seat1 { height: 85%; width:auto; left: 3%;  top: -55px; right:auto; bottom:auto; }
+      .video-container video.character9-seat1 { height: 70%; width:auto; left: 23%; top: -5%;  right:auto; bottom:auto; }
+      [id^="overlay_video_character8_"] .text-box { top: 60%; left: 59%; right: auto; bottom: auto; }
+      [id^="overlay_video_character3_"] .text-box { top: 50%; right: 45%; left: auto; bottom: auto; }
+      .chip-stack { width: 100px !important; }
+    }
+
+    @media (min-width:2500px) {
+      .video-container video.character1-seat1 { width: 17%; height:auto; left: 60%; top: -3%; right:auto; bottom:auto; }
+      .video-container video.character2-seat1 { height: 75%; width:auto; left: 76%; top: -4%;  right:auto; bottom:auto; }
+      .video-container video.character3-seat1 { height: 105%; width:auto; left: 83%; top: 8%; right:auto; bottom:auto; }
+      .video-container video.character7-seat1 { height: 105%; width:auto; left: -13%; top: 5%; right:auto; bottom:auto; }
+      .video-container video.character8-seat1 { height: 91%; width:auto; left: 2%;  top: -55px; right:auto; bottom:auto; }
+      .video-container video.character9-seat1 { height: 70%; width:auto; left: 23%; top: -5%;  right:auto; bottom:auto; }
+    }
+
+    /* FIX: allow videos to fade opacity (keep transforms instant) — keep LAST */
+    #videoContainer video{
+      transition: opacity var(--chars-fade-duration, .24s) ease var(--chars-fade-delay, 0s) !important;
+    }
+
+    /* ================================================================
+       CHIP SYSTEM CSS (UNCHANGED + NEW ALL-IN RULES)
+       ================================================================ */
+
+    /* Pot container — manual or auto */
+    .pot-container{
+      position: fixed;
+      z-index:5;
+      pointer-events:none;
+      width: var(--pot-width);
+      height:auto;
+      left: var(--pot-left);
+      top: var(--pot-top);
+      transform-origin:bottom left;
+      will-change: transform, opacity, left, top;
+    }
+    .pot-img{ width:100%; height:auto; display:block; }
+
+    /* Layered pot visuals */
+    #potLayers{
+      position:absolute; inset:0;
+      pointer-events:none;
+    }
+    .pot-layer{
+      position:absolute;
+      left:0; right:0; bottom:0;
+      width:100%; height:auto; opacity:0;
+      transform: translateY(10px) scale(.98) rotate(var(--rot, 0deg));
+      will-change: opacity, transform;
+    }
+    .pot-layer.is-on{
+      opacity:1;
+      transform: translateY(0) scale(1) rotate(var(--rot, 0deg));
+    }
+
+    /* Flying chips (placard → pot) */
+    .chip-fly{
+      position:absolute;
+      z-index:7;
+      width:72px; height:auto;
+      opacity:0;
+      transform: translate3d(0,0,0) scale(.9);
+      will-change: transform, opacity;
+      transition:
+        opacity var(--chip-fade-duration, .24s) cubic-bezier(.22,.61,.36,1),
+        transform var(--chip-flight-duration, .65s) cubic-bezier(.22,.61,.36,1);
+      filter: drop-shadow(0 2px 8px rgba(0,0,0,.7));
+      pointer-events:none;
+    }
+    .chip-fly.is-live{ opacity:1; }
+    .chip-fly.is-arrived{ opacity:0; transform: translate3d(var(--tx,0), var(--ty,0), 0) scale(1); }
+
+    /* Bet placard — in front of video */
+    .bet-placard{
+      position:absolute;
+      z-index:8;
+      width:110px; height:auto; opacity:0;
+      filter: drop-shadow(0 4px 14px rgba(0,0,0,.65));
+      pointer-events:none;
+    }
+    .bet-placard.is-on{ opacity:1; }
+    .bet-placard-img{ width:100%; height:auto; display:block; }
+
+    /* Player chip stacks — behind and below video */
+   /* one place to control size */
+:root { --stack-scale: 1; } /* update this when table zooms */
+
+.chip-stack {
+  position: absolute;
+  z-index: 3;
+  width: 80px;        /* fixed base width */
+  height: auto;
+  transform: scale(var(--stack-scale));
+  transform-origin: bottom center;
+  filter: drop-shadow(0 3px 10px rgba(0,0,0,.5));
+  transition: transform .2s ease;
+}
+
+
+
+        /* All-In bump and push states override the base transition */
+    .chip-stack.is-allin-bump{
+      transition: transform var(--allin-bump-duration, 120ms)
+                            var(--allin-ease, cubic-bezier(.22,.61,.36,1))
+                            var(--allin-bump-delay, 0ms) !important;
+    }
+
+    .chip-stack.is-allin-push{
+      transition: transform var(--allin-push-duration, 800ms)
+                            var(--allin-ease, cubic-bezier(.22,.61,.36,1))
+                            var(--allin-push-delay, 0ms) !important;
+    }
+
+
+    /* Place stacks & placards via overlay anchors  */
+    .overlay-box .chip-stack,
+    .overlay-box .bet-placard{
+      position:absolute;
+      pointer-events:none;
+    }
+
+    /* Put empty-seat overlays behind character videos and hide any UI inside them */
+    .overlay-box[data-empty="1"]{
+      z-index: 1;              /* video-container is z-index:2, so videos sit on top */
+    }
+
+    .overlay-box[data-empty="1"] .text-box,
+    .overlay-box[data-empty="1"] .chip-stack,
+    .overlay-box[data-empty="1"] .bet-placard,
+    .overlay-box[data-empty="1"] .live-pip{
+      display: none !important; /* don’t show badges/placards/pip on empty seats */
+    }
+
+    /* (Optional) slightly dim the empty-seat art if you want it to recede */
+    .overlay-box[data-empty="1"] .empty-seat{
+      opacity: 1;
+    }
+
+    /* Put EMPTY seats behind the videos */
+    .overlay-box[data-empty="1"] { z-index: 1 !important; }  /* videos are z=2 */
+
+    /* Move specific empty chairs (Seat 1 examples) */
+    #overlay_video_character1_seat1 .empty-seat { transform: translate(0%, 2%); }
+    #overlay_video_character2_seat1 .empty-seat { transform: translate(-8%, -11%); }
+    #overlay_video_character3_seat1 .empty-seat { transform: scale(0.5) translate(45%, 13%); }
+    #overlay_video_character7_seat1 .empty-seat { transform: scale(0.5) translate(0%, 15%); }
+    #overlay_video_character8_seat1 .empty-seat { transform: translate(1%, 1%); }
+    #overlay_video_character9_seat1 .empty-seat { transform: translate(0%, 3%); }
+
+    /* Optional: nudge ALL empty chairs globally, then fine-tune per seat above */
+    .overlay-box[data-empty="1"] .empty-seat { transform: translate(0,0); }
+
+
+    /* --- CHIP STACK ANCHORS (match text-box positions) --- */
+    [id^="overlay_video_character1_"] .chip-stack { bottom: 16%; left: 50%; transform: translateX(-50%); }
+    [id^="overlay_video_character2_"] .chip-stack { bottom: 24%; right: 75%; transform: translateX(50%); }
+    [id^="overlay_video_character3_"] .chip-stack { bottom: 35%; right: 70%; transform: translateX(50%); }
+    [id^="overlay_video_character4_"] .chip-stack { top: 8px; left: 8px; transform: translate(0,0); }
+    [id^="overlay_video_character5_"] .chip-stack { top: 50%; left: 50%; transform: translate(-50%, -50%); }
+    [id^="overlay_video_character6_"] .chip-stack { bottom: 8px; left: 50%; transform: translateX(-50%); }
+    [id^="overlay_video_character7_"] .chip-stack { bottom: 30%; right: 5%; transform: translate(50%,-50%); }
+    [id^="overlay_video_character8_"] .chip-stack { top: 74%; left: 55%; transform: translate(-0%,-50%); }
+    [id^="overlay_video_character9_"] .chip-stack { bottom: 20%; left: 50%; transform: translateX(-50%); }
+
+    /* --- BET PLACARD ANCHORS  --- */
+    [id^="overlay_video_character1_"] .bet-placard { bottom: 8%; left: 50%; width: 35%; transform: translateX(-50%); }
+    [id^="overlay_video_character2_"] .bet-placard { bottom: 27%; right: 105%; width: 30%; transform: translateX(50%); }
+    [id^="overlay_video_character3_"] .bet-placard { top: 55%; right: 110%; width: 20%; transform: translateX(50%); }
+    [id^="overlay_video_character4_"] .bet-placard { top: 8px; left: 8px; width: 30%; transform: translate(0,0); }
+    [id^="overlay_video_character5_"] .bet-placard { top: 50%; left: 50%; width: 30%; transform: translate(-50%, -50%); }
+    [id^="overlay_video_character6_"] .bet-placard { bottom: 8px; left: 50%; width: 30%; transform: translateX(-50%); }
+    [id^="overlay_video_character7_"] .bet-placard { top: 59%; right: -10%; width: 22%; transform: translate(50%,-50%); }
+    [id^="overlay_video_character8_"] .bet-placard { top: 75%; left: 82%; width: 26%; transform: translate(-0%,-50%); }
+    [id^="overlay_video_character9_"] .bet-placard { bottom: 14%; left: 40%; width: 33%; transform: translateX(-50%); }
+
+    /* Bet Placard Appearance Timing */
+    :root{
+      --placard-fade-duration: .35s;
+      --placard-stagger: .08s;
+    }
+    [id^="overlay_video_character"] .bet-placard{
+      opacity: 0;
+      will-change: opacity;
+      transition: opacity var(--placard-fade-duration) ease var(--placard-delay, 0s);
+      pointer-events: none;
+    }
+    [id^="overlay_video_character"] .bet-placard.is-on{ opacity: 1; }
+    [id^="overlay_video_character1_"] .bet-placard { --placard-delay: calc(var(--placard-stagger) * 27); }
+    [id^="overlay_video_character2_"] .bet-placard { --placard-delay: calc(var(--placard-stagger) * 27); }
+    [id^="overlay_video_character3_"] .bet-placard { --placard-delay: calc(var(--placard-stagger) * 27); }
+    [id^="overlay_video_character4_"] .bet-placard { --placard-delay: calc(var(--placard-stagger) * 27); }
+    [id^="overlay_video_character5_"] .bet-placard { --placard-delay: calc(var(--placard-stagger) * 27); }
+    [id^="overlay_video_character6_"] .bet-placard { --placard-delay: calc(var(--placard-stagger) * 27); }
+    [id^="overlay_video_character7_"] .bet-placard { --placard-delay: calc(var(--placard-stagger) * 27); }
+    [id^="overlay_video_character8_"] .bet-placard { --placard-delay: calc(var(--placard-stagger) * 27); }
+    [id^="overlay_video_character9_"] .bet-placard { --placard-delay: calc(var(--placard-stagger) * 27); }
+    .no-placard-stagger [id^="overlay_video_character"] .bet-placard { --placard-delay: 0s !important; }
+
+    /* ================================================================
+       ALL-IN STACK MOTION USING TRANSFORM-INDIVIDUAL 'translate'
+       (COMPOSES with anchor transforms; doesn’t overwrite them)
+       ================================================================ */
+    .chip-stack.allin-bump{
+      transition: translate var(--allin-bump-duration) var(--allin-ease) var(--allin-bump-delay);
+      translate: 0 var(--allin-bump-px);
+    }
+
+    .chip-stack.allin-push{
+      transition: translate var(--allin-push-duration) var(--allin-ease) var(--allin-push-delay);
+      translate: var(--allin-push-px) var(--allin-bump-px);
+    }
+    /* Flag to identify stacks that have armed an All-In (used by JS) */
+    .chip-stack.is-allin-armed{ /* style optional; marker class only */ }
+
+    /* ================================================================
+       STACK → POT SHOVE (on "Betting" after All-In)
+       JS will set inline: element.style.translate = "<dx>px <dy>px"
+       ================================================================ */
+    .chip-stack.moving-to-pot{
+      transition: translate var(--stack-to-pot-duration) var(--allin-ease) var(--stack-to-pot-delay);
+    }
+
+    /* =========================
+       PERF: GPU / COMPOSITOR HINTS
+       ========================= */
+    .video-container video {
+      backface-visibility: hidden;
+      will-change: transform, opacity;
+    }
+    .focus-overlay{
+      backdrop-filter: none !important;
+      -webkit-backdrop-filter: none !important;
+    }
+
+    /* Put overlays (name badges, placards, etc.) above their own videos */
+    #videoContainer .overlay-box:not([data-empty="1"]) {
+      z-index: 200 !important; /* higher than any video */
+    }
+
+    /* Keep characters 3 & 7 above other characters (but below overlays) */
+    #videoContainer video[id^="video_character3_"],
+    #videoContainer video[id^="video_character7_"]{
+      z-index: 20 !important;   /* above others (z~2), below overlay-box (200) */
+    }
+
+     
+
+    /* SHOW "OPEN" ON EMPTY SEATS WHEN BODY HAS .show-open-seats */
+    body.show-open-seats .overlay-box[data-empty="1"] .text-box{
+      display: block !important;                /* override the global hide */
+      background: rgba(46,204,113,0.2);            /* semi-transparent green */
+      color: #fff;
+      font-weight: 600;
+      backdrop-filter: blur(3px);                /* same blur as current */
+      text-align: center;
+    }
+
+    /* Hide the normal B/$ amount when showing OPEN */
+    body.show-open-seats .overlay-box[data-empty="1"] .text-box .call-main{
+      display: none !important;
+    }
+
+    /* Inject the OPEN label via CSS so no JS HTML swap needed */
+    body.show-open-seats .overlay-box[data-empty="1"] .text-box::before{
+      content: "OPEN";
+      display: block;
+      font-size: 16px;
+      font-weight: 600;                          /* bold */
+      letter-spacing: .3px;
+    }
+
+    /* Bring OPEN state above videos & chairs, and layer text above the chair PNG */
+body.show-open-seats .overlay-box[data-empty="1"]{
+  z-index: 9999 !important;               /* top of the whole stack */
+}
+
+body.show-open-seats .overlay-box[data-empty="1"] .empty-seat{
+  z-index: 0 !important;                  /* chair image lower */
+}
+
+body.show-open-seats .overlay-box[data-empty="1"] .text-box{
+  z-index: 1 !important;                  /* OPEN badge above the chair */
+  display: block !important;              /* ensure visible */
+  background: rgba(46,204,113,0.2);            /* semi-transparent green */
+  color: #fff;
+  font-weight: 600;
+  backdrop-filter: blur(3px);
+}
+
+/* hide B/$ when showing OPEN and inject OPEN label */
+body.show-open-seats .overlay-box[data-empty="1"] .text-box .call-main{
+  display: none !important;
+}
+body.show-open-seats .overlay-box[data-empty="1"] .text-box::before{
+  content: "OPEN";
+  display: block;
+  font-size: 16px;
+  font-weight: 800;
+  letter-spacing: .3px;
+}
+
+/* ——— Hamburger button ——— */
+.menu-btn{
+  position: fixed;
+  top: 12px; left: 12px;
+  width: 36px; height: 26px;
+  display: flex; flex-direction: column; justify-content: space-between;
+  background: transparent; border: none; padding: 0; cursor: pointer;
+  z-index: 10000; /* above everything */
+}
+.menu-btn .bar{
+  width: 100%; height: 3px; border-radius: 2px;
+  background: #fff;
+}
+
+/* ——— Convert existing #controls into a top dropdown ——— */
+/* We don't touch its children; just reposition and animate the panel itself */
+#controls{
+  position: fixed !important;
+  top: 0; left: 0; right: 0;
+  bottom: auto;               /* override old bottom placement */
+  margin: 0;
+  padding: 10px 75px;
+  background: rgba(0,0,0,.72);
+  backdrop-filter: blur(6px);
+  transform: translateY(-100%);                 /* hidden */
+  transition: transform .25s cubic-bezier(.22,.61,.36,1);
+  z-index: 9999;                                /* just beneath the button */
+}
+
+/* When open, slide down */
+body.menu-open #controls{ transform: translateY(0); }
+
+/* Optional: while open, push page clicks through the panel’s gaps nicely */
+#controls *{ pointer-events: auto; }
+
+/* Smooth fade-in/out for menu button */
+#menuButton {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .4s ease;
+}
+
+/* Each “button” takes 1/4 of the bar, no visible borders */
+.lobby-btn{
+  flex: 1 1 0;
+  border: 0;
+  background: transparent;
+  color: #afbcd2;
+  font: 700 14px/1 system-ui, -apple-system, Segoe UI, Roboto, Arial;
+  cursor: pointer;
+  transition: background-color .18s ease, color .18s ease;
+  padding: 0 16px;
+}
+.lobby-btn:hover{ background: rgba(255,255,255,.03); color: #afbcd2;}
+.lobby-btn.is-active{  
+    color: #afbcd2;
+    background: url('images/but-bg.png');
+    background-size: contain;
+    background-repeat: repeat;
+    background-position: center;}
+.lobby-btn:focus-visible{
+  outline: 2px solid rgba(255,255,255,.35);
+  outline-offset: -2px;
+}
+
+
+
+/* Show/Hide helper for media targets */
+.table-media.is-hidden{ display: none !important; }
+
+/* Wrap + Title */
+.lobby-section {
+  position: fixed;
+  left: 50%;
+  bottom: 25px; /* same offset as your bar */
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 9500;
+}
+
+/* Title above bar */
+.lobby-title {
+  color: #afbcd2;
+  font: 700 20px/1.2 system-ui, -apple-system, Segoe UI, Roboto, Arial;
+  text-align: center;
+  margin-bottom: 8px;
+  letter-spacing: 1px;
+  opacity: 0.9;
+}
+
+/* Adjusted menu (no position since parent handles it) */
+.lobby-menu {
+  position: initial;
+  transform: none;
+  bottom: auto;
+  width: min(820px, 92vw);
+  height: 48px;
+  display: flex;
+  gap: 0;
+  background: rgba(0, 0, 0, .5);
+  border: 0.75px solid rgba(98, 98, 98, 0.15);
+  backdrop-filter: blur(50px);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 15px 40px rgba(0,0,0,.5);
+}
+
+/* ===== EXACT LANDING HEADER, SAFELY SCOPED ===== */
+.landing-header.header-top {
+  position: fixed; top: 0; left: 0; right: 0; width: 100%; height: auto; z-index: 10;
+  display: -webkit-box; display: flex; align-items: center; justify-content: space-between;
+  padding: 0 56px;
+  transition: transform .3s ease, opacity .2s ease;
+  will-change: transform, opacity;
+}
+
+/* Logo */
+.landing-header .logo-wrapper { position: relative; float: left; margin-left: 0; margin-top: 12px; }
+.landing-header .logo-wrapper .logo {
+  font-family: "Glacial Indifference","Roboto","Helvetica",sans-serif;
+  text-transform: uppercase; font-size: 24px; color: #fff;
+}
+.landing-header .logo-wrapper .logo img { max-height: 40px; width: auto; margin-right: 8px; }
+
+/* Primary nav */
+.landing-header .site-nav { float: right; margin-right: 20px; }
+.landing-header .site-nav li {
+  float: left; display: block;
+  font-family: "Glacial Indifference","Roboto","Helvetica",sans-serif;
+  margin-left: 8px; position: relative;
+}
+.landing-header .site-nav li a {
+  margin-top: 8px; display: block; padding: 8px; color: #afbcd2; text-decoration: none;
+}
+.landing-header .site-nav li a:after{
+  content:""; position:absolute; width:0; height:0;
+  background: rgba(255,255,255,0.3); left:50%; bottom:-4px; margin-left:0;
+  border-radius:8px; transition:.3s;
+}
+.landing-header .site-nav li.separator{ color:#fff; }
+.landing-header .site-nav li:hover a:after,
+.landing-header .site-nav li.active a:after{
+  width:8px; height:8px; bottom:-8px; margin-left:-4px;
+}
+.landing-header .site-nav li.active a:after{ background:#afbcd2; }
+
+/* Hamburger */
+.landing-header .menu-icon{
+  display:none; float:right; position:fixed; top:8px; right:8px; padding:8px 16px; transition:.3s;
+}
+.landing-header .menu-icon .bars{ content:""; display:block; width:32px; height:32px; float:right; }
+.landing-header .menu-icon .bars .bar1,
+.landing-header .menu-icon .bars .bar2,
+.landing-header .menu-icon .bars .bar3{
+  float:right; display:block; content:""; height:2px; width:32px; background:#fff; margin-bottom:10px; transition:.3s;
+}
+.landing-header .menu-icon .bars .bar2{ width:16px; }
+.landing-header.menu-visible .menu-icon .bars .bar1,
+.landing-header.menu-visible .menu-icon .bars .bar3{ width:16px; }
+.landing-header.menu-visible .menu-icon .bars .bar2{ width:32px; }
+
+/* Mobile behavior (exact layout, scoped) */
+@media (max-width: 991px){
+  .landing-header .site-nav{
+    float:right; margin-top:0; margin-right:-100%;
+    opacity:0; height:0; visibility:hidden; transition:.3s;
+  }
+  .landing-header .site-nav li{ float:none; text-align:right; }
+  .landing-header .site-nav li.separator{ display:none; }
+  .landing-header .site-nav li a{ margin:0; padding:16px 32px; padding-right:8px; }
+  .landing-header .site-nav li a:after{ display:none; }
+
+  .landing-header .menu-icon{ display:block; }
+
+  .landing-header.menu-visible .site-nav{
+    margin-right:16px; opacity:1; visibility:visible; height:auto;
+  }
+}
+
+*, *::before, *::after {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+/* Lock the landing header to the exact height and center contents */
+.landing-header.header-top{
+  height: 56px;              /* exact landing height */
+  min-height: 56px;
+  padding-left: 56px;          /* keep the horizontal padding from landing */
+  padding-right: 56px;
+  align-items: center;         /* vertical centering of children */
+}
+ 
+
+/* Keep the same visual sizes, but let flex do the vertical alignment */
+.landing-header .logo-wrapper .logo img{
+  max-height: 40px;            /* landing value */
+  width: auto;
+}
+
+
+/* Ensure consistent box model (landing uses border-box) */
+.landing-header,
+.landing-header *::before,
+.landing-header *::after{
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+.header-top .site-nav {
+    float: right;
+    margin-right: 20px;
+}
+
+.header-top .site-nav {
+    margin-left: auto;
+    font-size: 1rem;
+}
+
+.header-top .play-btn {
+    font-family: "Glacial Indifference", "Roboto", "Helvetica", sans-serif;
+    font-size: 16px;
+    font-weight: bold;
+    background: #F20F4F;
+    color: #fff;
+    border-radius: 50px;
+    display: inline-table;
+    padding: 12px 50px;
+    line-height: 1;
+    -webkit-transition: 0.3s;
+    transition: 0.3s;
+    margin-top: 15px;
+}
+
+.header-top .logo-wrapper {
+    position: relative;
+    float: left;
+    margin-left: 0px;
+    margin-top: 20px !important;
+}
+
+ 
+.landing-header .play-btn,
+.landing-header .play-btn:hover,
+.landing-header .play-btn:focus {
+  text-decoration: none !important;
+}
+
+/* Hover media card — reusable single element */
+.lobby-hover-card {
+  position: fixed;            /* placed via JS */
+  z-index: 10050;             /* above menus */
+  width: 280px;               /* JS overrides to button width */
+  aspect-ratio: 16/9;         /* safe default; JS honors this for positioning */
+  border-radius: 12px;
+  overflow: hidden;
+  background: #0b0f14;
+  border: 1px solid rgba(255,255,255,0.12);
+  box-shadow: 0 18px 50px rgba(0,0,0,.55);
+  pointer-events: none;       /* never blocks clicks */
+  transform: translateY(8px);
+  opacity: 0;
+  transition: opacity .16s ease, transform .16s ease;
+}
+
+.lobby-hover-card.is-on {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Media inside the card */
+.lobby-hover-card__media {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;
+}
+
+/* Title overlay */
+.lobby-hover-card__title {
+  position: absolute; inset: 0;
+  display: grid; place-items: center;
+  padding: 12px;
+  text-align: center;
+  font: 700 14px/1.2 system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+  color: #e9eef7;
+  text-shadow: 0 1px 2px rgba(0,0,0,.7);
+  background: linear-gradient(to top, rgba(0,0,0,.45), rgba(0,0,0,.05));
+  letter-spacing: .3px;
+}
+
+/* Only one room section is visible at a time */
+.room-section { display: none; }
+.room-section.active { display: block; }
+
+/* Game Mode fade helpers (keeps your header/side panels behavior) */
+.left-nav, .right-list { opacity: 0; pointer-events: none; transition: opacity .25s ease; }
+body.game-mode-active .left-nav,
+body.game-mode-active .right-list { opacity: 1; pointer-events: auto; }
+.header-top { transition: opacity .25s ease; }
+body.game-mode-active .header-top { opacity: 0; pointer-events: none; }
+
+/* =========================================================
+   APPEND-ONLY: Make Rooms 2–4 identical to Room 1 defaults
+   (No changes to Room 1 — this only targets the appended rooms)
+   ========================================================= */
+
+/* --- Section shell & layering identical to base --- */
+#room2Section .bg-stack,
+#room3Section .bg-stack,
+#room4Section .bg-stack{
+  position: fixed;            /* same as base bg-stack usage */
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+}
+
+/* Background video inside each room section (mirror #backgroundVideo) */
+#room2Section .bg-stack > video{
+  position: absolute;
+  inset: 0;
+  width: 50%;
+  height: auto;
+  object-fit: cover;
+  z-index: 0;
+  transform-origin: 50% 50%;
+  will-change: transform;
+  top: -14%;
+  left: 26%;
+  overflow: visible;
+}
+
+#room3Section .bg-stack > video{
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  z-index: 0;
+  transform-origin: 50% 50%;
+  will-change: transform;
+  overflow: visible;
+  left: 0%;
+  top: -40%;
+}
+#room4Section .bg-stack > video{
+position: absolute;
+    inset: 0;
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    z-index: 0;
+    transform-origin: 50% 50%;
+    will-change: transform;
+    left: 14%;
+    top: -18%;
+    overflow: visible;
+}
+
+
+/* Glass layer identical to Room 1 (position & sizing) */
+#room2Section .glass,
+#room3Section .glass,
+#room4Section .glass{
+  position: fixed;
+  z-index: 0;
+  margin-top: -47%;
+  margin-left: -25%;
+  width: 153%;
+  opacity: 100%;
+}
+
+/* Focus overlay identical to base */
+#room2Section .focus-overlay,
+#room3Section .focus-overlay,
+#room4Section .focus-overlay{
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background: rgba(0,0,0,calc(var(--focus-dim) + 0.001));
+  transition: background-color .3s ease;
+}
+
+/* Room still image identical to Room 1 .room */
+#room2Section img.room{
+  position: fixed;
+  z-index: 0;
+  margin-top: -25%;
+  margin-left: 0%;
+  width: 100%;
+}
+
+#room3Section img.room{
+  position: fixed;
+  z-index: 0;
+  margin-top: -15%;
+  margin-left: 0%;
+  width: 100%;
+}
+
+#room4Section img.room{
+  position: fixed;
+  z-index: 0;
+  margin-top: -25%;
+  margin-left: 0%;
+  width: 100%;
+}
+
+/* Table image identical to base .tabletop */
+#room2Section img.tabletop,
+#room3Section img.tabletop,
+#room4Section img.tabletop{
+  position: absolute;
+  z-index: 2;
+  width: 100%;
+  margin-left: 0%;
+  margin-top: -3%;
+  transform-origin: 50% 50%;
+  will-change: transform;
+}
+
+/* Chairs layer identical to #chairsLayer */
+#chairsLayer_2, #chairsLayer_3, #chairsLayer_4{
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+}
+
+/* Video container identical to #videoContainer */
+#videoContainer_2{
+  position: absolute;
+  top: 5%;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2;                /* above background */
+  overflow: hidden;
+  isolation: isolate;
+}
+
+/* Video container identical to #videoContainer */
+#videoContainer_3{
+  position: absolute;
+  top: 47px;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2;                /* above background */
+  overflow: hidden;
+  isolation: isolate;
+}
+
+/* Video container identical to #videoContainer */
+#videoContainer_4{
+  position: absolute;
+  top: 47px;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2;                /* above background */
+  overflow: hidden;
+  isolation: isolate;
+}
+/* Character videos in sections inherit the same video rules */
+#videoContainer_2 video,
+#videoContainer_3 video,
+#videoContainer_4 video{
+  position: absolute;
+  transition: none !important;    /* keep transforms instant like base */
+  backface-visibility: hidden;
+  will-change: transform, opacity;
+}
+
+/* Time-of-day offsets: ROOM 1 ONLY */
+.bg-morning  #backgroundVideo { object-fit: cover; top: -63%; overflow: visible; }
+.bg-day      #backgroundVideo { object-fit: cover; top: -64%; overflow: visible; }
+.bg-evening  #backgroundVideo { object-fit: cover; top: -63%; overflow: visible; }
+.bg-night    #backgroundVideo { object-fit: cover; top: -51%; overflow: visible; }
+
+#room2Section .bg-stack > video,
+#room3Section .bg-stack > video,
+#room4Section .bg-stack > video {
+  display: block;            /* avoids inline baseline quirks */
+  contain: paint;            /* isolates repaints on loop */
+  transform: translate3d(var(--bg-x, 0), var(--bg-y, 0), 0) scale(var(--bg-scale, 1));
+}
+
+
+/* === Fader in sections behaves like base === */
+#bgFader_2, #bgFader_3, #bgFader_4{
+  position: absolute;
+  inset: 0;
+  background: var(--bgfade-color);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 1; /* above bg video, below overlay */
+  transition: opacity var(--bgfade-duration) var(--bgfade-ease);
+}
+#bgFader_2.is-on, #bgFader_3.is-on, #bgFader_4.is-on{
+  opacity: var(--bgfade-opacity);
+}
+
+/* === Per-room section visibility (kept minimal & scoped) === */
+#room2Section, #room3Section, #room4Section{ display: none; }
+#room2Section.active, #room3Section.active, #room4Section.active{ display: block; }
+
+/* (Optional) keep pot containers visual parity if you added per-room pots */
+#pot_2, #pot_3, #pot_4{
+  position: fixed;
+  z-index: 5;
+  pointer-events: none;
+  width: var(--pot-width);
+  height: auto;
+  left: var(--pot-left);
+  top: var(--pot-top);
+  transform-origin: bottom left;
+  will-change: transform, opacity, left, top;
+}
+
+/* ================================
+   Layer order fix for Rooms 2–4
+   (Room 1 untouched)
+   bg video < room still < table < characters/chips < pot/overlays
+   ================================ */
+
+#room2Section, #room3Section, #room4Section {
+  position: relative;           /* ensure local stacking context */
+  isolation: isolate;           /* prevent outside z-index bleed */
+}
+
+/* Background video (stay behind) */
+#backgroundVideo_2, #backgroundVideo_3, #backgroundVideo_4 {
+  position: absolute;
+  z-index: 0;
+}
+
+/* Room still (same plane as bg) */
+#room2Section img.room,
+#room3Section img.room,
+#room4Section img.room {
+  position: absolute;
+  z-index: 0;
+}
+
+/* Table below characters */
+#room2Section img.tabletop,
+#room3Section img.tabletop,
+#room4Section img.tabletop {
+  position: absolute;
+  z-index: 10;
+}
+
+/* Characters / seat videos ABOVE the table */
+#videoContainer_2, #videoContainer_3, #videoContainer_4 {
+  position: absolute;
+  z-index: 20;
+  pointer-events: none;         /* match Room 1 behavior if used */
+}
+#videoContainer_2 video,
+#videoContainer_3 video,
+#videoContainer_4 video {
+  position: absolute;           /* ensure per-seat transforms work */
+  z-index: 21;                  /* inside container, still above table */
+}
+
+/* Chairs layer (if used as highlight frame) above characters */
+#chairsLayer_2, #chairsLayer_3, #chairsLayer_4 {
+  position: absolute;
+  z-index: 25;
+  pointer-events: none;
+}
+
+/* Pot / chip stacks ABOVE characters */
+#pot_2, #pot_3, #pot_4 {
+  position: absolute;           /* or fixed if your Room 1 uses fixed */
+  z-index: 30;
+  pointer-events: none;
+}
+
+/* Optional: keep glass/fader/overlay under table+characters if present */
+#bgFader_2, #bgFader_3, #bgFader_4,
+#room2Section .focus-overlay,
+#room3Section .focus-overlay,
+#room4Section .focus-overlay,
+#room2Section .glass,
+#room3Section .glass,
+#room4Section .glass {
+  position: absolute;
+  z-index: 5;                   /* between bg and table */
+  pointer-events: none;
+}
+
+/* Rooms 2–4: ensure table < videos < chip stacks < overlays */
+#videoContainer_2, #videoContainer_3, #videoContainer_4 { position: absolute; z-index: 20; }
+#videoContainer_2 video, #videoContainer_3 video, #videoContainer_4 video { position: absolute; z-index: 21; }
+#room2Section .tabletop, #room3Section .tabletop, #room4Section .tabletop { position: absolute; z-index: 10; }
+
+/* Make Rooms 2–4 video containers identical to Room 1 sizing */
+#videoContainer_2,
+#videoContainer_3,
+#videoContainer_4 {
+  position: absolute;  /* you already have this */
+  inset: 0;            /* <— fill the section like Room 1 */
+  width: 100%;
+  height: 100%;
+  pointer-events: none;/* you already have this */
+}
+
+/* Second (Game) Header visibility rules */
+
+/* Default: original header visible, game header hidden */
+#gameHeader {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .25s ease;
+  /* It inherits all sizing/position from .landing-header.header-top */
+}
+
+/* When Game Mode is active: show game header, hide original */
+body.game-mode-active #gameHeader {
+  opacity: 1 !important;
+  pointer-events: auto !important;
+  z-index: 9998; /* ensure it’s above content, below any menus you want */
+}
+
+/* Hide the original ONLY when not the gameHeader */
+body.game-mode-active .landing-header.header-top:not(#gameHeader) {
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+/* If your global CSS already fades .header-top in game mode,
+   the specificity above ensures the game header still shows. */
+
+/* Flip site navigation to the left */
+.landing-header .site-nav {
+  margin-left: 0 !important;
+  margin-right: auto !important;
+  justify-content: flex-start !important;
+  text-align: left;
+}
+
+/* If flex or float is used elsewhere, override with this */
+.landing-header .site-nav li {
+  float: none !important;
+  display: inline-block !important;
+}
+
+/* Keep menu spacing clean when on the left */
+.landing-header .site-nav li + li {
+  margin-left: 1rem;
+}
+
+/* ================================
+   GAME HEADER (scoped-only styles)
+   Nav on LEFT, Logo on RIGHT
+   ================================ */
+
+/* Treat the game header as a flex row */
+#gameHeader.header-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* Nav LEFT */
+#gameHeader .site-nav {
+  order: 1;
+  margin-left: 0 !important;
+  margin-right: auto !important;
+  justify-content: flex-start !important;
+  text-align: left;
+}
+
+/* Logo RIGHT */
+#gameHeader .logo-wrapper {
+  order: 2;
+  margin-left: auto !important;
+  margin-right: 0 !important;
+  text-align: right;
+}
+
+/* Optional: keep menu icon to the far right of the logo */
+#gameHeader .menu-icon {
+  order: 3;
+  margin-left: 1rem;
+}
+
+/* Spacing between nav items in the game header only */
+#gameHeader .site-nav li + li {
+  margin-left: 1rem;
+}
+
+/* ================================
+   VISIBILITY TOGGLE (unchanged)
+   Show game header only in Game Mode
+   ================================ */
+#gameHeader {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .25s ease;
+}
+body.game-mode-active #gameHeader {
+  opacity: 1 !important;
+  pointer-events: auto !important;
+  z-index: 9998;
+}
+body.game-mode-active .landing-header.header-top:not(#gameHeader) {
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+/* ================================
+   SAFETY RESET for MAIN HEADER
+   (Neutralize any previous global flips)
+   ================================ */
+.landing-header.header-top:not(#gameHeader) .site-nav {
+  margin-left: auto !important;    /* nav defaults back to right side */
+  margin-right: 0 !important;
+  justify-content: flex-end !important;
+  text-align: right;
+}
+.landing-header.header-top:not(#gameHeader) .logo-wrapper {
+  margin-right: auto !important;   /* logo defaults back to left side */
+  margin-left: 0 !important;
+  text-align: left;
+}
+
+/* Hide Lobby Menu in Game Mode */
+body.game-mode-active .lobby-section {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+/* Overlay image for Room 3 */
+#room3Section .bg-overlay-image {
+  position: absolute;
+  inset: 0;                 /* fills same area as background video */
+  object-fit: cover;        /* keep proportions while covering screen */
+  width: 100%;
+  height: 100%;
+  z-index: 1;               /* sits above video but below glass/focus layers */
+  pointer-events: none;     /* allow interactions through image */
+  opacity: 1;               /* adjust as needed (e.g., .8 for semi-transparency) */
+  top: -27.9%;
+    clip-path: inset(0 37% 0 0); /* top right bottom left */
+
+}
+
+video.character2-seat1 {
+  clip-path: inset(19% 0% 0% 0%);
+}
+
+
+</style>
+</head>
+
+<body>
+
+  <!-- Header -->
+  <header class="header-top landing-header">
+    <div class="logo-wrapper">
+      <h2 class="logo"><img src="img/logo@2x.png" alt="Logo"></h2>
+    </div>
+
+    <a class="menu-icon clearfix" aria-label="Toggle menu" role="button" tabindex="0">
+      <div class="bars">
+        <div class="bar1"></div><div class="bar2"></div><div class="bar3"></div>
+      </div>
+    </a>
+
+    <nav class="site-nav" id="site-nav">
+      <ul class="menu clearfix qmenu">
+        <li class="active" data-menuanchor="lobby"><a href="#lobby">Lobby</a></li> 
+        <li data-menuanchor="account"><a href="#account">Account</a></li>
+        <li data-menuanchor="cashier"><a href="#cashier">Cashier</a></li>
+        <li class="separator"></li>
+      </ul>
+    </nav>
+    
+  </header>
+
+  <header id="gameHeader" class="landing-header header-top game-header" aria-label="Game Header">
+  <div class="logo-wrapper">
+    
+  </div>
+  <ul class="site-nav list-unstyled m-0">
+    <li><a href="#">Lobby</a></li>
+    <li><a href="#">Sit Out</a></li> 
+  </ul>
+
+</header>
+
+
+  <!-- Top-left hamburger -->
+  <button id="menuButton" aria-label="Open controls" title="Open controls" class="menu-btn">
+    <span class="bar"></span>
+    <span class="bar"></span>
+    <span class="bar"></span>
+  </button>
+
+  <!-- ================================================================
+       BACKGROUND STACK (character video + tint + glass + table) 
+       (ROOM 1 MEDIA CONTENT SHOWN BELOW)
+       ================================================================ -->
+  <div class="bg-stack focus-soft">
+    <video
+      id="backgroundVideo"
+      autoplay
+      muted
+      loop
+      playsinline
+      preload="auto"
+      decoding="async"
+      disablepictureinpicture
+    ></video>
+    <img src="video/glass.png" class="glass" alt="">
+    <div class="bg-fader" id="bgFader" aria-hidden="true"></div>
+    <div class="focus-overlay" aria-hidden="true"></div>
+  </div>
+
+  <img src="video/room1.webp" class="room" alt="room">
+
+  <!-- Table overlay media (also the hover-card target for $5-10 NLH) -->
+  <img
+    class="table-media tabletop"
+    src="video/table4.png"
+    alt="Table A"
+    data-media="video/table4.png"
+    data-type="image"
+    data-title="City Room"
+  >
+
+  <!-- ================================================================
+       CHARACTER VIDEO STAGE (videos are injected)
+       ================================================================ -->
+  <div id="chairsLayer" class="chairs-layer" aria-hidden="true"></div>
+  <div class="video-container" id="videoContainer">
+    <!-- Character videos injected here -->
+  </div>
+
+  <!-- ================================================================
+       CONTROL PANEL 
+       ================================================================ -->
+  <div id="controls">
+    <label>Seat View:
+      <select id="characterSelector" onchange="updateCharacterView()">
+        <option value="1">Seat 1</option>
+        <option value="2">Seat 2</option>
+        <option value="3">Seat 3</option>
+        <option value="4">Seat 4</option>
+        <option value="5">Seat 5</option>
+        <option value="6">Seat 6</option>
+        <option value="7">Seat 7</option>
+        <option value="8">Seat 8</option>
+        <option value="9">Seat 9</option>
+      </select>
+    </label>
+
+    <label>Gesture:
+      <select id="gestureSelector">
+        <option value="0.00">Angry (0:00.00-0:03.00)</option>
+        <option value="3.00">Bet (0:03.50-0:08.50)</option>
+        <option value="7.00">Fake Bet Check (0:08.50-0:11.00)</option>
+        <option value="9.50">Disbelief (0:11.50-0:17.00)</option>
+        <option value="14.50">Look At Cards (0:17.00-0:22.00)</option>
+        <option value="18.00">Check (0:22.00-0:26.00)</option>
+        <option value="21.50">Happy (0:26.00-0:30.00)</option>
+        <option value="26.00">All-In (0:30.00-0:34.00)</option>
+        <option value="30.50">Idle (0:30.00-0:34.00)</option>
+      </select>
+    </label>
+
+    <!-- Chip System controls -->
+    <label>Bet:
+      <input id="betAmount" type="number" min="1" step="1" value="150" placeholder="e.g. 325" />
+    </label>
+
+    <label>Blinds:
+      <select id="blindsSelector">
+        <option value="none">None</option>
+        <option value="sb">Small Blind</option>
+        <option value="bb">Big Blind</option>
+      </select>
+    </label>
+
+    <button id="collectBetsBtn" disabled>Collect Bets</button>
+    <button id="resetPotBtn">Reset Pot</button>
+    <button class="buy-btn">Buy-In</button>
+
+    <div id="checkboxContainer" style="display:block; width:100%;"></div>
+
+    <!-- Camera toggle for Character 1 / Seat 1 -->
+    <button id="btnLiveC1" title="Toggle Live for Character 1 (Seat 1)" style="display:inline-flex;align-items:center;gap:8px;">
+      <img src="img/camera.png" alt="Go Live" class="img-fluid" style="height:18px;width:18px;">
+      <span>Go Live (C1)</span>
+    </button>
+
+    <button>Game Mode</button>
+
+  </div>
+
+  <!-- ================================================================
+       INTERACTION OVERLAY AREA (zoom)
+       ================================================================ -->
+  <div id="zoomArea" title="Click + hold to zoom in on cards"></div>
+
+  <!-- ================================================================
+       POT (image + dynamic layers + invisible hit-point)
+       ================================================================ -->
+  <div id="pot" class="pot-container" aria-label="Pot">
+    <img id="potImg" class="pot-img" src="img/chips/p-blinds.png" alt="Pot">
+    <div id="potLayers" aria-hidden="true"></div>
+    <div id="potTarget" aria-hidden="true"></div>
+  </div>
+
+  <!-- ================================================================
+       ROOMS FOR GAMES SYSTEM
+       ================================================================ -->
+  <!-- Room 2 (deferred media: only data-src set) -->
+<div id="room2Section" class="room-section" aria-hidden="true"
+     data-bg="video/bg-beach.mp4"
+     data-room="video/room2.png"
+     data-table="video/table4.png">
+  <div class="bg-stack focus-soft">
+    <video id="backgroundVideo_2" muted loop playsinline preload="none"></video>
+    <img class="glass" alt="" src="video/glass.png">
+    <div class="bg-fader" id="bgFader_2" aria-hidden="true"></div>
+    <div class="focus-overlay" aria-hidden="true"></div>
+  </div>
+  <img class="room" alt="room">
+  <img class="table-media tabletop" alt="Table B">
+  <div id="chairsLayer_2" class="chairs-layer" aria-hidden="true"></div>
+  <div class="video-container" id="videoContainer_2"></div>
+  <div id="zoomArea_2" title="Click + hold to zoom in on cards"></div>
+  <div id="pot_2" class="pot-container" aria-label="Pot">
+    <img id="potImg_2" class="pot-img" src="img/chips/p-blinds.png" alt="Pot">
+    <div id="potLayers_2" aria-hidden="true"></div>
+    <div id="potTarget_2" aria-hidden="true"></div>
+  </div>
+</div>
+
+<!-- Room 3 -->
+<div id="room3Section" class="room-section" aria-hidden="true"
+     data-bg="video/bg-sky.mp4"
+     data-room="video/room3.png"
+     data-table="video/table4.png">
+  <div class="bg-stack focus-soft">
+    <video id="backgroundVideo_3" muted loop playsinline preload="none"></video>
+    <img class="bg-overlay-image" src="video/1167.png" alt="">
+    <img class="glass" alt="" src="video/glass.png">
+    <div class="bg-fader" id="bgFader_3" aria-hidden="true"></div>
+    <div class="focus-overlay" aria-hidden="true"></div>
+  </div>
+  <img class="room" alt="room">
+  <img class="table-media tabletop" alt="Table C">
+  <div id="chairsLayer_3" class="chairs-layer" aria-hidden="true"></div>
+  <div class="video-container" id="videoContainer_3"></div>
+  <div id="zoomArea_3" title="Click + hold to zoom in on cards"></div>
+  <div id="pot_3" class="pot-container" aria-label="Pot">
+    <img id="potImg_3" class="pot-img" src="img/chips/p-blinds.png" alt="Pot">
+    <div id="potLayers_3" aria-hidden="true"></div>
+    <div id="potTarget_3" aria-hidden="true"></div>
+  </div>
+</div>
+
+<!-- Room 4 -->
+<div id="room4Section" class="room-section" aria-hidden="true"
+     data-bg="" 
+     data-room="video/room4.png"
+     data-table="video/table4.png">
+  <div class="bg-stack focus-soft">
+    <video id="backgroundVideo_4" muted loop playsinline preload="none"></video>
+    <img class="glass" alt="" src="video/glass.png">
+    <div class="bg-fader" id="bgFader_4" aria-hidden="true"></div>
+    <div class="focus-overlay" aria-hidden="true"></div>
+  </div>
+  <img class="room" alt="room">
+  <img class="table-media tabletop" alt="Table D">
+  <div id="chairsLayer_4" class="chairs-layer" aria-hidden="true"></div>
+  <div class="video-container" id="videoContainer_4"></div>
+  <div id="zoomArea_4" title="Click + hold to zoom in on cards"></div>
+  <div id="pot_4" class="pot-container" aria-label="Pot">
+    <img id="potImg_4" class="pot-img" src="img/chips/p-blinds.png" alt="Pot">
+    <div id="potLayers_4" aria-hidden="true"></div>
+    <div id="potTarget_4" aria-hidden="true"></div>
+  </div>
+</div>
+
+
+  <!-- ================================================================
+       LOBBY MENU SYSTEM
+       ================================================================ -->
+
+  <!-- Hidden media targets used by hover cards for buttons 2–4.
+       Replace src values with your real assets. Keep them hidden. -->
+  <div style="display:none;" aria-hidden="true">
+    <div id="tableMedia1" data-media="video/l-city.png" data-type="image" data-title="City Room"></div>
+    <div id="tableMedia2" data-media="video/l-ocean.png" data-type="image" data-title="Ocean Room"></div>
+    <div id="tableMedia3" data-media="video/l-sky.png" data-type="image" data-title="Oasis Room"></div>
+    <div id="tableMedia4" data-media="video/l-baller.png" data-type="image" data-title="AllPoker Room"></div>
+  </div>
+
+  <!-- Bottom Lobby Section -->
+  <div class="lobby-section">
+    <h2 class="lobby-title">SELECT A GAME</h2> 
+
+    <div id="lobbyMenu" class="lobby-menu" role="tablist" aria-label="Game lobby menu">
+      <button class="lobby-btn is-active" data-target="#tableMedia1" role="tab" aria-selected="true">$5-10 NLH</button>
+      <button class="lobby-btn" data-target="#tableMedia2" role="tab" aria-selected="false">$10-20 NLH</button>
+      <button class="lobby-btn" data-target="#tableMedia3" role="tab" aria-selected="false">$50-100 NLH</button>
+      <button class="lobby-btn" data-target="#tableMedia4" role="tab" aria-selected="false">$100-200 NLH</button>
+    </div>
+  </div>
+
+  <div class="camera-setting-main enter-buy-main">
+    <div class="main-bg">
+      <div class="text-box">
+        <h4>Enter Buy-In Amount</h4>
+      </div>
+      <div class="price-list">
+        <ul class="d-flex align-items-center justify-content-center">
+          <li>5000</li>
+          <li class="price-lst2"><span id="min-price5">$5000</span></li>
+          <li>55K</li>
+        </ul>
+        <div class="d-flex align-items-center price-main">
+          <span>Min</span>
+          <div id="price-range5"></div>
+          <span>Max</span>
+        </div>
+        <div class="buy-btn-main">
+          <p>Available Funds: <span> $55,000.00</span></p>
+          <div class="d-flex align-items-center justify-content-between buy-bottom">
+            <a href="#" class="buy-watch-btn">Cancel</a>
+            <a href="#" class="buy-play-btn">Buy-In</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <a href="#" class="buy-cross fund-cross"><img src="images/cross.svg" alt=""></a>
+  </div>
+
+
+
+
+
+    <!-- ================================================================
+       USER INTERFACE SYSTEM SCRIPTS
+       ================================================================ -->
+
+  <!-- ================================================================
+       EMPTY SEAT SYSTEM
+       ================================================================ -->
+<script>
+/* === DROP-IN REPLACEMENT: overlay helpers with empty-seat support === */
+</script>
+
+<script>
+/* OPEN on empty-seat overlay (only when OPEN is truly visible) */
+</script>
+
+<script>
+/* Finger cursor only when OVER the visible OPEN text-box */
+</script>
+
+
+  <!-- ================================================================
+       rVFC LOOP TO KEEP OVERLAYS SYNCED
+       ================================================================ -->
+  <script>
+  </script>
+
+  <!-- ================================================================
+       CHARACTERS + CHIP SYSTEM (WITH NEW ALL-IN LOGIC)
+       ================================================================ -->
+  <script>
+  </script>
+
+ <!-- ================================================================
+     DRAG VIDEOS (PATCHED to move empty-seat overlays)
+     ================================================================ -->
+<script>
+(() => {
+  const MAX_RADIUS = 150; // px, circular clamp
+  const videoContainer = document.getElementById('videoContainer');
+
+  let isDragging = false;
+  let anchor = { x: 0, y: 0 };
+  let delta = { x: 0, y: 0 };
+
+  function applyOffsetToAll(dx, dy) {
+    // 1) Move all live videos 
+    const vids = videoContainer.querySelectorAll('video');
+    vids.forEach(v => {
+      v.style.transform = `translate(${dx}px, ${dy}px)`;
+    });
+
+    // 2) Keep overlay boxes for LIVE seats in sync via your existing helper
+    if (window.__overlayHelpers__) {
+      window.__overlayHelpers__.repositionAllOverlays();
+    }
+
+    // 3) NEW: Move EMPTY seats directly (no live <video> to read a rect from)
+    //    Only touch boxes marked as empty so checked seats remain rect-driven.
+    const emptyBoxes = videoContainer.querySelectorAll('.overlay-box[data-empty="1"]');
+    emptyBoxes.forEach(box => {
+      box.style.transform = `translate(${dx}px, ${dy}px)`;
+    });
+
+    // 4) (Optional hygiene) Ensure non-empty overlay boxes are NOT double-moved
+    //    since their position already follows videos via repositionAllOverlays().
+    const nonEmptyBoxes = videoContainer.querySelectorAll('.overlay-box:not([data-empty="1"])');
+    nonEmptyBoxes.forEach(box => {
+      // avoid accumulating transforms on active seats
+      box.style.transform = 'none';
+    });
+  }
+
+  function clamp(dx, dy) {
+    const len = Math.hypot(dx, dy) || 0;
+    if (len <= MAX_RADIUS) return { x: dx, y: dy };
+    const s = MAX_RADIUS / len;
+    return { x: dx * s, y: dy * s };
+  }
+
+  function getVideoUnderPointer(evt) {
+    if (evt.target && evt.target.tagName === 'VIDEO') return evt.target;
+    const el = document.elementFromPoint(evt.clientX, evt.clientY);
+    if (el && el.tagName === 'VIDEO') return el;
+    return null;
+  }
+
+  function onPointerDown(evt) {
+    if (evt.button !== 0) return; // left button only
+    const vid = getVideoUnderPointer(evt);
+    if (!vid) return;
+
+    isDragging = true;
+    anchor.x = evt.clientX;
+    anchor.y = evt.clientY;
+    evt.preventDefault();
+  }
+
+  function onPointerMove(evt) {
+    if (!isDragging) return;
+    const rawDx = evt.clientX - anchor.x;
+    const rawDy = evt.clientY - anchor.y;
+    delta = clamp(rawDx, rawDy);
+    applyOffsetToAll(delta.x, delta.y);
+  }
+
+  function onPointerUp() { isDragging = false; }
+
+  videoContainer.addEventListener('mousedown', onPointerDown);
+  window.addEventListener('mousemove', onPointerMove);
+  window.addEventListener('mouseup', onPointerUp);
+
+  // Touch
+  videoContainer.addEventListener('touchstart', (e) => {
+    if (!e.touches[0]) return;
+    const fake = { button: 0, clientX: e.touches[0].clientX, clientY: e.touches[0].clientY, target: e.target };
+    onPointerDown(fake);
+  }, { passive: false });
+
+  window.addEventListener('touchmove', (e) => {
+    if (!isDragging || !e.touches[0]) return;
+    const fake = { clientX: e.touches[0].clientX, clientY: e.touches[0].clientY };
+    onPointerMove(fake);
+  }, { passive: false });
+
+  window.addEventListener('touchend', onPointerUp);
+})();
+</script>
+
+ 
+  <!-- ================================================================
+     ZOOM TABLE MEDIA (replaces the old "ZOOM BACKGROUND" block)
+     ================================================================ -->
+  <script>
+  (() => {
+    const area = document.getElementById('zoomArea');
+
+    // prefer .table (video or img); fallback to existing .tabletop img
+    function getZoomEl() {
+      return document.querySelector('.table') || document.querySelector('.tabletop');
+    }
+
+    const css = getComputedStyle(document.documentElement);
+    const Z_MAX     = parseFloat(css.getPropertyValue('--zoom-max')) || 3.0;
+    const SPEED_IN  = parseFloat(css.getPropertyValue('--zoom-in-speed')) || 1.4;   // scale/sec
+    const SPEED_OUT = parseFloat(css.getPropertyValue('--zoom-out-speed')) || 2.0; // scale/sec
+
+    let target = getZoomEl();
+    let scale = 1;
+    let holding = false;
+    let holdY = 0;
+    let rafId = 0;
+    let lastTs = 0;
+
+    // if table element appears later (e.g., swapped to a <video class="table">)
+    const observer = new MutationObserver(() => { target = getZoomEl(); });
+    observer.observe(document.body, { childList: true, subtree: true });
+
+    function computeTranslateY(viewportY, currentScale, el) {
+      if (!el) return 0;
+      const r = el.getBoundingClientRect();
+      const centerY = r.top + r.height/2; // pan relative to element’s visual center
+      const dy = viewportY - centerY;
+      return -(currentScale - 1) * dy;
+    }
+
+    function applyTransform() {
+      if (!target) return;
+      const ty = computeTranslateY(holdY, scale, target);
+      target.style.transform = `translate3d(0, ${ty}px, 0) scale(${scale})`;
+    }
+
+    function tick(ts) {
+      if (!lastTs) lastTs = ts;
+      const dt = Math.min(0.05, (ts - lastTs) / 1000);
+      lastTs = ts;
+
+      const speed = holding ? SPEED_IN : SPEED_OUT;
+      const dir = holding ? 1 : -1;
+
+      if (holding && scale < Z_MAX) {
+        scale = Math.min(Z_MAX, scale + speed * dt);
+      } else if (!holding && scale > 1) {
+        scale = Math.max(1, scale + dir * speed * dt);
+      }
+
+      applyTransform();
+
+      if ((holding && scale < Z_MAX) || (!holding && scale > 1)) {
+        rafId = requestAnimationFrame(tick);
+      } else {
+        cancelAnimationFrame(rafId);
+        rafId = 0;
+        if (!holding) area.style.cursor = 'zoom-in';
+      }
+    }
+
+    function startHold(y) {
+      if (!target) target = getZoomEl();
+      if (!target) return;
+      holdY = y;
+      if (scale <= 1) area.style.cursor = 'zoom-out';
+      holding = true;
+      if (!rafId) { lastTs = 0; rafId = requestAnimationFrame(tick); }
+    }
+
+    function updateHold(y) {
+      holdY = y;
+      if (!rafId) { lastTs = 0; rafId = requestAnimationFrame(tick); }
+    }
+
+    function endHold() {
+      holding = false;
+      if (!rafId && scale > 1) { lastTs = 0; rafId = requestAnimationFrame(tick); }
+    }
+
+    // Mouse
+    area.addEventListener('mousedown', (e) => {
+      const r = area.getBoundingClientRect();
+      if (e.clientX < r.left || e.clientX > r.right || e.clientY < r.top || e.clientY > r.bottom) return;
+      startHold(e.clientY);
+    });
+    window.addEventListener('mousemove', (e) => { if (holding) updateHold(e.clientY); }, { passive: true });
+    window.addEventListener('mouseup', endHold);
+
+    // Touch
+    area.addEventListener('touchstart', (e) => {
+      if (!e.touches[0]) return;
+      const t = e.touches[0];
+      startHold(t.clientY);
+      e.preventDefault();
+    }, { passive: false });
+    window.addEventListener('touchmove', (e) => { if (holding && e.touches[0]) updateHold(e.touches[0].clientY); }, { passive: true });
+    window.addEventListener('touchend', endHold);
+    window.addEventListener('touchcancel', endHold);
+
+    // Reset on Esc
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        scale = 1; applyTransform(); endHold();
+      }
+    });
+
+    // Re-apply on resize
+    window.addEventListener('resize', applyTransform, { passive: true });
+  })();
+  </script>
+
+
+  <!-- ================================================================
+       CHARACTERS / OVERLAYS FADE TIMING 
+       ================================================================ -->
+  <script>
+  (() => {
+    const FADE_DELAY    = 0.50;
+    const FADE_DURATION = 0.50;
+
+    const container = document.getElementById('videoContainer');
+    const area      = document.getElementById('zoomArea');
+
+    function setFadeVars(delaySec, durSec){
+      container.style.setProperty('--chars-fade-delay', `${Math.max(0, delaySec)}s`);
+      container.style.setProperty('--chars-fade-duration', `${Math.max(0.01, durSec)}s`);
+    }
+
+    function hideInstant(){
+      container.classList.add('no-fade');
+      container.classList.add('chars-hidden');
+      requestAnimationFrame(() => container.classList.remove('no-fade'));
+    }
+
+    function fadeInWithSettings(){
+      setFadeVars(FADE_DELAY, FADE_DURATION);
+      void container.offsetWidth; /* reflow */
+      container.classList.remove('chars-hidden');
+    }
+
+    area.addEventListener('mousedown', hideInstant);
+    window.addEventListener('mouseup',   fadeInWithSettings);
+    area.addEventListener('touchstart',  hideInstant, { passive:true });
+    window.addEventListener('touchend',  fadeInWithSettings, { passive:true });
+    window.addEventListener('touchcancel', fadeInWithSettings, { passive:true });
+
+    document.addEventListener('dblclick', () => {
+      container.classList.add('no-fade');
+      container.classList.remove('chars-hidden');
+      requestAnimationFrame(() => container.classList.remove('no-fade'));
+    }, { passive:true });
+
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape'){
+        container.classList.add('no-fade');
+        container.classList.remove('chars-hidden');
+        requestAnimationFrame(() => container.classList.remove('no-fade'));
+      }
+    });
+  })();
+  </script>
+
+
+  <!-- ================================================================
+       CHARACTERS / CUSTOM FADE SYNCING  
+       ================================================================ -->
+  <!-- Seats 3/7/8 + POT fade sync using FILTER opacity (leaves transitions/animations alone)
+     - Fades ONLY when VC.classList toggles 'chars-hidden'
+     - On other DOM changes (e.g., checkmark clicks), just snap to current state (no fade)
+     - Preserves all CSS transforms/animations/timings -->
+<script>
+(() => {
+  const VC = document.getElementById('videoContainer');
+  if (!VC) return;
+
+  /* ===== SHOW TIMING (only when chars-hidden flips) ===== */
+  const SHOW_DELAY_S    = 0.60;
+  const SHOW_DURATION_S = 0.60;
+
+  // Optional per-element overrides:
+  //   data-fade-delay="0.8"  data-fade-duration="1.2"
+
+  /* ===== Targets ===== */
+  const SELECTORS = [
+    '.chip-stack.stack-character3-seat1:not(.chip-stack-ghost)',
+    '.chip-stack.stack-character7-seat1:not(.chip-stack-ghost)',
+    '.chip-stack.stack-character8-seat1:not(.chip-stack-ghost)',
+    '.chip-stack.demoted.stack-character3-seat1',
+    '.chip-stack.demoted.stack-character7-seat1',
+    '.chip-stack.demoted.stack-character8-seat1',
+    '#pot'
+  ];
+
+  const animMap   = new WeakMap();   // element -> current WAAPI animation
+  const filterMap = new WeakMap();   // element -> original computed filter string
+
+  function getTargets(){
+    const set = new Set();
+    SELECTORS.forEach(sel => {
+      document.querySelectorAll(sel).forEach(el => { if (el instanceof HTMLElement) set.add(el); });
+    });
+    return Array.from(set);
+  }
+
+  /* ===== Helpers ===== */
+  function cacheOriginalFilter(el){
+    if (!filterMap.has(el)) {
+      const f = getComputedStyle(el).filter || 'none';
+      filterMap.set(el, f);
+      // Ensure inline filter is set to original to give us a stable base
+      if (f && f !== 'none') el.style.filter = f;
+      else el.style.removeProperty('filter');
+    }
+    return filterMap.get(el);
+  }
+
+  function cancelAnim(el){
+    const a = animMap.get(el);
+    if (a) { try { a.cancel(); } catch(_){} }
+  }
+
+  function readShowTimingFor(el){
+    const dDelay = parseFloat(el.dataset?.fadeDelay || '');
+    const dDur   = parseFloat(el.dataset?.fadeDuration || '');
+    const delay  = Number.isNaN(dDelay) ? SHOW_DELAY_S    : Math.max(0, dDelay);
+    const dur    = Number.isNaN(dDur)   ? SHOW_DURATION_S : Math.max(0.001, dDur);
+    return { delay, dur, easing: 'ease' };
+  }
+
+  /* ===== SNAP (no animation) using filter opacity ===== */
+  function snapHidden(el, hidden){
+    cancelAnim(el);
+    const base = cacheOriginalFilter(el);
+    if (hidden) {
+      // Apply base + opacity(0)
+      el.style.filter = (base && base !== 'none') ? (base + ' opacity(0)') : 'opacity(0)';
+    } else {
+      // Restore exactly the original filter
+      if (base && base !== 'none') el.style.filter = base;
+      else el.style.removeProperty('filter');
+    }
+  }
+
+  /* ===== Animated show/hide (only on zoom toggle) ===== */
+  function animateHide(el){
+    cancelAnim(el);
+    const base = cacheOriginalFilter(el);
+    // Start from current visual state; animate filter opacity to 0
+    const from = getComputedStyle(el).filter || (base && base !== 'none' ? base : 'none');
+    const a = el.animate(
+      [{ filter: from }, { filter: (base && base !== 'none') ? (base + ' opacity(0)') : 'opacity(0)' }],
+      { duration: 1, delay: 0, easing: 'linear', fill: 'forwards' }
+    );
+    animMap.set(el, a);
+  }
+
+  function animateShow(el){
+    cancelAnim(el);
+    const base = cacheOriginalFilter(el);
+    // Ensure we start visually at 0 without touching opacity/transition props
+    const hiddenFilter = (base && base !== 'none') ? (base + ' opacity(0)') : 'opacity(0)';
+    el.style.filter = hiddenFilter;
+
+    // Two RAFs to let layout settle (avoids flash with parent visibility flips)
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+      const { delay, dur, easing } = readShowTimingFor(el);
+      const a = el.animate(
+        [{ filter: hiddenFilter }, { filter: (base && base !== 'none') ? base : 'none' }],
+        {
+          duration: Math.max(1, dur*1000),
+          delay:    Math.max(0, delay*1000),
+          easing,
+          fill: 'forwards'
+        }
+      );
+      animMap.set(el, a);
+    }));
+  }
+
+  /* ===== State drivers ===== */
+  function applyHiddenStateWithAnimation(){
+    const hidden = VC.classList.contains('chars-hidden');
+    const T = getTargets();
+    if (hidden) T.forEach(animateHide);
+    else        T.forEach(animateShow);
+  }
+
+  function snapToCurrentStateNoAnim(){
+    const hidden = VC.classList.contains('chars-hidden');
+    const T = getTargets();
+    T.forEach(el => snapHidden(el, hidden));
+  }
+
+  /* ===== Wire-up ===== */
+  // Initial snap so first paint matches current state
+  snapToCurrentStateNoAnim();
+
+  // Animate ONLY when the hidden flag actually changes
+  let prevHidden = VC.classList.contains('chars-hidden');
+  const classObs = new MutationObserver(() => {
+    const nowHidden = VC.classList.contains('chars-hidden');
+    if (nowHidden === prevHidden) return;
+    prevHidden = nowHidden;
+    applyHiddenStateWithAnimation();
+  });
+  classObs.observe(VC, { attributes:true, attributeFilter:['class'] });
+
+  // On subtree churn (checkmarks etc.), keep filters consistent but do NOT animate
+  const treeObs = new MutationObserver(() => {
+    // Recache any new nodes' base filters and snap; do not alter timings/animations
+    getTargets().forEach(el => cacheOriginalFilter(el));
+    snapToCurrentStateNoAnim();
+  });
+  treeObs.observe(document.body, { childList:true, subtree:true });
+
+  // Keep things tidy on resize without triggering fades
+  window.addEventListener('resize', snapToCurrentStateNoAnim, { passive:true });
+})();
+</script>
+
+
+  <!-- ================================================================
+       TIME-OF-DAY BACKGROUND SWITCHER 
+       ================================================================ -->
+  <script>
+  (function(){
+    const VIDEO_MAP = {
+      morning: 'video/bg-morning.mp4',
+      day:     'video/bg-day.mp4',
+      evening: 'video/bg-evening.mp4',
+      night:   'video/bg-night.mp4'
+    };
+
+    function toDecimal(timeStr){ const [h,m]=timeStr.split(':').map(Number); return h+(m||0)/60; }
+
+    const RANGES = [
+      { name: 'morning', start: toDecimal('05:00'), end: toDecimal('06:00') },
+      { name: 'day',     start: toDecimal('06:00'), end: toDecimal('17:00') },
+      { name: 'evening', start: toDecimal('17:00'), end: toDecimal('18:00') },
+      { name: 'night',   start: toDecimal('18:00'), end: toDecimal('24:00') },
+      { name: 'night',   start: toDecimal('00:00'), end: toDecimal('05:00') }
+    ];
+
+    const STORAGE_PREFIX = 'bgOffset:';
+    const CLASSES = ['bg-morning','bg-day','bg-evening','bg-night'];
+
+    const bgWrap = document.querySelector('.bg-stack');
+    const video  = document.getElementById('backgroundVideo');
+
+    function getLocalHM(tz){
+      const now = new Date();
+      const h = new Intl.DateTimeFormat('en-US', { timeZone: tz, hour: 'numeric', hour12:false }).format(now);
+      const m = new Intl.DateTimeFormat('en-US', { timeZone: tz, minute: 'numeric', hour12:false }).format(now);
+      return { hour: Number(h), minute: Number(m) };
+    }
+
+    function periodFor(hourDec){
+      for (const r of RANGES) if (r.start <= hourDec && hourDec < r.end) return r.name;
+      return 'night';
+    }
+
+    function minutesUntilBoundary(hour, minute){
+      const hourDec = hour + minute/60;
+      let end = null;
+      for (const r of RANGES) {
+        if (r.start <= hourDec && hourDec < r.end) { end = r.end; break; }
+      }
+      if (end === null) end = (hourDec >= 21 ? 24 : 5);
+      const nowMin = (hour * 60) + minute;
+      const endMin = Math.round(end * 60);
+      let diff = (endMin - nowMin);
+      if (diff <= 0) diff += 1440;
+      return diff;
+    }
+
+    function storageKey(period){ return STORAGE_PREFIX + period; }
+    function saveOffset(period){
+      try {
+        const t = Math.max(0, video.currentTime || 0);
+        localStorage.setItem(storageKey(period), String(t));
+      } catch(_) {}
+    }
+    function readOffset(period){
+      try {
+        const v = localStorage.getItem(storageKey(period));
+        return v ? Math.max(0, parseFloat(v)) : 0;
+      } catch(_) { return 0; }
+    }
+
+    let saveTimer = null;
+    function startSaving(period){
+      stopSaving();
+      saveTimer = setInterval(() => saveOffset(period), 2000);
+    }
+    function stopSaving(){
+      if (saveTimer) { clearInterval(saveTimer); saveTimer = null; }
+    }
+
+    async function fadeBlack(on){
+      const fader = document.getElementById('bgFader');
+      if (!fader) return Promise.resolve();
+      return new Promise(resolve => {
+        const dur = parseFloat(getComputedStyle(fader).transitionDuration || '0') * 1000;
+        const done = () => resolve();
+        const handler = (e) => { if (e.target === fader){ fader.removeEventListener('transitionend', handler); done(); } };
+        if (dur > 0) fader.addEventListener('transitionend', handler, { once:true });
+        requestAnimationFrame(() => {
+          fader.classList.toggle('is-on', on);
+          if (dur === 0) done();
+        });
+        if (dur > 0) setTimeout(done, dur + 50);
+      });
+    }
+
+    async function applyPeriod(period){
+      bgWrap.classList.remove(...CLASSES);
+      bgWrap.classList.add('bg-' + period);
+
+      if (video.dataset.current === period) return;
+
+      const src = VIDEO_MAP[period];
+
+      const desiredOffset = readOffset(period);
+      let pendingSeek = desiredOffset;
+
+      await fadeBlack(true);
+
+      try { video.pause(); } catch(_){}
+      video.src = src;
+      video.dataset.current = period;
+      video.autoplay = true;
+      video.muted = true;
+      video.playsInline = true;
+
+      await new Promise(res => {
+        const onMeta = () => {
+          video.removeEventListener('loadedmetadata', onMeta);
+          const dur = isFinite(video.duration) ? video.duration : 0;
+          let seekTo = pendingSeek || 0;
+          if (dur > 0) seekTo = seekTo % dur;
+          try { if (!isNaN(seekTo)) video.currentTime = seekTo; } catch(_){}
+          const p = video.play && video.play();
+          p && p.finally ? p.finally(res) : res();
+        };
+        video.addEventListener('loadedmetadata', onMeta, { once:true });
+        video.load();
+      });
+
+      await fadeBlack(false);
+
+      video.onplay  = () => startSaving(period);
+      video.onpause = () => saveOffset(period);
+      video.onended = () => saveOffset(period);
+
+      const saveNow = () => saveOffset(period);
+      document.addEventListener('visibilitychange', saveNow);
+      window.addEventListener('pagehide', saveNow, { once:true });
+    }
+
+    let boundaryTimer = 0;
+    function scheduleNextSwap(tz){
+      if (boundaryTimer) clearTimeout(boundaryTimer);
+      const {hour, minute} = getLocalHM(tz);
+      const mins = minutesUntilBoundary(hour, minute);
+      boundaryTimer = setTimeout(() => swapByTime(tz), mins * 60 * 1000);
+    }
+
+    function swapByTime(tz){
+      const { hour, minute } = getLocalHM(tz);
+      const period = periodFor(hour + minute/60);
+      applyPeriod(period);
+      scheduleNextSwap(tz);
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+      swapByTime(tz);
+
+      document.addEventListener('visibilitychange', () => {
+        if (!document.hidden) swapByTime(tz);
+      });
+
+      setInterval(() => swapByTime(tz), 60 * 1000);
+    });
+  })();
+  </script>
+
+  <!-- ================================================================
+       LIVE PIP CAMERA 
+       ================================================================ -->
+  <script>
+  (function () {
+    // === CONFIG: which character/seat the PiP should follow ===
+    const CHARACTER = 1;
+    const SEAT = 1;
+    const TARGET_ID = `video_character${CHARACTER}_seat${SEAT}`;
+    const BTN_SELECTOR = '#btnLiveC1';
+
+    let liveStream = null;
+    let pipEl = null;
+
+    function findOverlayForVideoId(videoId) {
+      return document.getElementById('overlay_' + videoId);
+    }
+
+    function stopLiveTracks() {
+      if (liveStream) {
+        try { liveStream.getTracks().forEach(t => t.stop()); } catch(_) {}
+        liveStream = null;
+      }
+    }
+
+    function ensureOverlayExists(videoEl) {
+      if (!window.__overlayHelpers__ || !window.__overlayHelpers__.makeOverlay) return null;
+      window.__overlayHelpers__.makeOverlay(videoEl);
+      return findOverlayForVideoId(videoEl.id);
+    }
+
+    async function toggleLivePip(e) {
+      if (e) e.preventDefault();
+
+      const mainVideo = document.getElementById(TARGET_ID);
+      if (!mainVideo) {
+        alert('Character 1 / Seat 1 is not visible. Select Seat 1 and enable Character 1 first.');
+        return;
+      }
+
+      if (pipEl && pipEl.isConnected) {
+        pipEl.remove();
+        pipEl = null;
+        stopLiveTracks();
+        const btn = document.querySelector(BTN_SELECTOR);
+        if (btn && btn.querySelector('span')) btn.querySelector('span').textContent = 'Go Live (C1)';
+        return;
+      }
+
+      const overlay = ensureOverlayExists(mainVideo) || findOverlayForVideoId(TARGET_ID);
+      if (!overlay) {
+        console.warn('Overlay box missing for', TARGET_ID);
+        return;
+      }
+
+      try {
+        if (!liveStream) {
+          liveStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
+        }
+
+        const v = document.createElement('video');
+        v.className = 'live-pip';
+        v.autoplay = true;
+        v.muted = true;
+        v.playsInline = true;
+        v.controls = false;
+        v.srcObject = liveStream;
+
+        overlay.appendChild(v);
+        pipEl = v;
+
+        if (window.__overlayHelpers__ && window.__overlayHelpers__.repositionAllOverlays) {
+          window.__overlayHelpers__.repositionAllOverlays();
+        }
+
+        const btn = document.querySelector(BTN_SELECTOR);
+        if (btn && btn.querySelector('span')) btn.querySelector('span').textContent = 'Stop Live (C1)';
+
+      } catch (err) {
+        console.error('Camera error:', err);
+        alert('Could not access camera. Check permissions and try again.');
+      }
+    }
+
+    const btn = document.querySelector(BTN_SELECTOR);
+    if (btn) btn.addEventListener('click', toggleLivePip);
+
+    window.__livePipC1__ = { toggle: toggleLivePip };
+  })();
+  </script>
+
+  <!-- ================================================================
+      CUSTOM CHIP STACK — PIN SEATS 1, 2, 9 ABOVE VIDEOS; DEMOTE OTHERS
+      ================================================================ -->
+  <script>
+  (function () {
+    const VC = document.getElementById('videoContainer');
+    const GHOST = 'chip-stack-ghost';
+    const PINNED_SEATS = new Set([1, 2, 9]); // seats that should NOT be demoted
+
+    // overlay id pattern: overlay_video_character{ch}_seat{seat}
+    function isPinnedSeat(overlayId){
+      const m = /overlay_video_character(\d+)_seat(\d+)/.exec(overlayId || '');
+      if (!m) return false;
+      const seat = Number(m[1]); // in your overlay IDs, {ch} maps to the seat/character index
+      return PINNED_SEATS.has(seat);
+    }
+
+    function ensureGhost(overlay, realStack){
+      let ghost = overlay.querySelector('.' + GHOST);
+      if (!ghost){
+        ghost = document.createElement('img');
+        ghost.className = `${GHOST} chip-stack`;
+        ghost.alt = 'ghost';
+        ghost.style.visibility = 'hidden';
+        ghost.style.pointerEvents = 'none';
+        ghost.style.opacity = '0';
+        // copy seat-specific classes so your CSS anchors still apply
+        realStack.className.split(' ').forEach(c=>{
+          if (c && c !== 'chip-stack' && !ghost.classList.contains(c)) ghost.classList.add(c);
+        });
+        overlay.appendChild(ghost);
+      }
+      ghost.src = realStack.src;
+      return ghost;
+    }
+
+    function promoteIfPinned(overlay, stack){
+      // If a stack was previously demoted but its seat is pinned now, move it back into the overlay.
+      if (stack.classList.contains('demoted')){
+        overlay.appendChild(stack);
+        stack.classList.remove('demoted');
+        stack.style.left = stack.style.top = stack.style.translate = '';
+      }
+    }
+
+    function demoteIfNotPinned(overlay, stack){
+      if (!stack.classList.contains('demoted')){
+        ensureGhost(overlay, stack);
+        stack.classList.add('demoted');
+        stack.style.position = 'absolute';
+        stack.style.pointerEvents = 'none';
+        VC.appendChild(stack);
+      }
+    }
+
+    function demoteStacksOnce(){
+      document.querySelectorAll('.overlay-box').forEach(overlay=>{
+        const stack = overlay.querySelector('.chip-stack:not(.'+GHOST+')');
+        if (!stack) return;
+        if (isPinnedSeat(overlay.id)) {
+          promoteIfPinned(overlay, stack); // keep seats 1, 2, 9 above
+        } else {
+          demoteIfNotPinned(overlay, stack); // everyone else goes under videos
+        }
+      });
+    }
+
+    function syncDemotedPositions(){
+      const vcRect = VC.getBoundingClientRect();
+      document.querySelectorAll('.chip-stack.demoted').forEach(real=>{
+        const ovId = real.id.replace(/^stack_/, 'overlay_');
+        const overlay = document.getElementById(ovId);
+        if (!overlay) return;
+        const ghost = overlay.querySelector('.' + GHOST);
+        if (!ghost) return;
+        const r = ghost.getBoundingClientRect();
+        real.style.left = (r.left - vcRect.left) + 'px';
+        real.style.top  = (r.top  - vcRect.top)  + 'px';
+      });
+    }
+
+    function tick(){
+      demoteStacksOnce();
+      syncDemotedPositions();
+      requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+
+    // React to DOM changes (seat toggles/loads)
+    const mo = new MutationObserver(demoteStacksOnce);
+    mo.observe(document.body, { childList:true, subtree:true });
+
+    // Cooperate with overlay helpers if present.
+    const oh = (window.__overlayHelpers__ = window.__overlayHelpers__ || {});
+    const mk = oh.makeOverlay?.bind(oh);
+    oh.makeOverlay = function(v){ if (mk) mk(v); demoteStacksOnce(); };
+    const rp = oh.repositionAllOverlays?.bind(oh);
+    oh.repositionAllOverlays = function(){ if (rp) rp(); syncDemotedPositions(); };
+  })();
+  </script>
+
+  <!-- ================================================================
+       CONTROLS MENU - TOP HEADER DROP-DOWN
+       ================================================================ -->
+
+<script>
+  (function () {
+    const btn = document.getElementById('menuButton');
+    const root = document.documentElement;
+    if (!btn) return;
+
+    function toggleMenu(force){
+      document.body.classList.toggle('menu-open', force ?? !document.body.classList.contains('menu-open'));
+    }
+
+    btn.addEventListener('click', () => toggleMenu());
+
+    // Close on ESC
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') toggleMenu(false);
+    });
+  })();
+</script>
+
+  <!-- ================================================================
+       CONTROLS MENU - MAKES MENU BUTTON HIDE ON MOUSE STOP
+       ================================================================ -->
+
+<script>
+(function () {
+  const btn = document.getElementById('menuButton');
+  let mouseTimer;
+  const hideDelay = 2000; // ms of no movement before hiding
+
+  function showButton() {
+    if (!document.body.classList.contains('menu-open')) {
+      btn.style.opacity = '1';
+      btn.style.pointerEvents = 'auto';
+    }
+  }
+
+  function hideButton() {
+    if (!document.body.classList.contains('menu-open')) {
+      btn.style.opacity = '0';
+      btn.style.pointerEvents = 'none';
+    }
+  }
+
+  // Track mouse movement anywhere on the window
+  window.addEventListener('mousemove', () => {
+    showButton();
+    clearTimeout(mouseTimer);
+    mouseTimer = setTimeout(hideButton, hideDelay);
+  });
+
+  // Keep the button visible while menu is open
+  const observer = new MutationObserver(() => {
+    if (document.body.classList.contains('menu-open')) {
+      btn.style.opacity = '1';
+      btn.style.pointerEvents = 'auto';
+    }
+  });
+  observer.observe(document.body, { attributes: true, attributeFilter: ['class'] });
+})();
+</script>
+
+  <!-- ================================================================
+       GAME LOBBY MENU AND GAME BUTTON OPTIONS
+       ================================================================ -->
+<script>
+(function(){
+  const menu   = document.getElementById('lobbyMenu');
+  if (!menu) return;
+
+  const btns   = menu.querySelectorAll('.lobby-btn');
+
+  function setActive(btn){
+    // toggle button visuals + ARIA
+    btns.forEach(b => {
+      const on = (b === btn);
+      b.classList.toggle('is-active', on);
+      b.setAttribute('aria-selected', on ? 'true' : 'false');
+    });
+
+    // collect all targets from buttons
+    const targets = Array.from(btns)
+      .map(b => b.dataset.target)
+      .filter(Boolean);
+
+    // hide all targets, then show the one for the clicked button
+    targets.forEach(sel => {
+      const el = document.querySelector(sel);
+      if (el) el.classList.add('is-hidden');
+    });
+
+    const show = document.querySelector(btn.dataset.target);
+    if (show) show.classList.remove('is-hidden');
+  }
+
+  // click handlers
+  btns.forEach(b => b.addEventListener('click', () => setActive(b)));
+
+  // optional: ensure initial state matches any pre-set is-active
+  const initial = Array.from(btns).find(b => b.classList.contains('is-active')) || btns[0];
+  if (initial) setActive(initial);
+})();
+</script>
+
+
+<script>
+  (function(){
+    const header = document.querySelector('.landing-header');
+    if (!header) return;
+    const menuBtn = header.querySelector('.menu-icon');
+    const nav     = header.querySelector('.site-nav');
+    if (!menuBtn || !nav) return;
+
+    function toggleNav(force){
+      const open = force ?? !header.classList.contains('menu-visible');
+      header.classList.toggle('menu-visible', open);
+    }
+    menuBtn.addEventListener('click', () => toggleNav());
+    menuBtn.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggleNav(); }
+    });
+    document.addEventListener('click', (e) => {
+      if (!header.contains(e.target)) toggleNav(false);
+    });
+    window.addEventListener('keydown', (e) => { if (e.key === 'Escape') toggleNav(false); });
+  })();
+</script>
+
+
+  <!-- ================================================================
+       EMPTY SEAT - OPEN SEAT FUNCTION
+       ================================================================ -->
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const box = document.getElementById('checkboxContainer');
+
+  // Add a simple toggle if one isn't already there
+  if (!document.getElementById('toggleOpenSeats')) {
+    const label = document.createElement('label');
+    label.style.color = '#fff';
+    label.style.display = 'inline-flex';
+    label.style.alignItems = 'center';
+    label.style.gap = '6px';
+
+    const cb = document.createElement('input');
+    cb.type = 'checkbox';
+    cb.id = 'toggleOpenSeats';
+    cb.checked = true; // checked = hide OPEN (current behavior)
+
+    label.append(cb, document.createTextNode(' Hide OPEN on empty seats'));
+    box.appendChild(label);
+  }
+
+  const toggle = document.getElementById('toggleOpenSeats');
+
+  function syncOpenSeatMode(){
+    // Unchecked => show OPEN on empty seats
+    document.body.classList.toggle('show-open-seats', !toggle.checked);
+  }
+
+  toggle.addEventListener('change', syncOpenSeatMode);
+  syncOpenSeatMode(); // set initial state
+});
+</script>
+
+<script>
+/* ================================================================
+   EMPTY SEATS AT START (ghost-seeded, seats 1,2,3,7,8,9 only)
+   - Fixes seat 2 sizing by giving ghosts an intrinsic portrait size
+   - Excludes seats 4,5,6 from startup
+   ================================================================ */
+(() => {
+  const VC = document.getElementById('videoContainer');
+  if (!VC) return;
+
+  // Only seed these seats at boot:
+  const SEATS = [1, 2, 3, 7, 8, 9];
+
+  const vidId   = s => `video_character${s}_seat1`;
+  const vidCls  = s => `character${s}-seat1`;
+  const hasReal = s => !!document.getElementById(vidId(s));
+
+  function readyHelpers(cb){
+    if (
+      window.__overlayHelpers__ &&
+      typeof window.__overlayHelpers__.makeOverlay        === 'function' &&
+      typeof window.__overlayHelpers__.showEmptySeatForId === 'function' &&
+      typeof window.__overlayHelpers__.clearEmptySeatForId=== 'function'
+    ){ cb(); }
+    else requestAnimationFrame(() => readyHelpers(cb));
+  }
+
+  // Create a temporary ghost video so CSS seat rules apply,
+  // then let overlay helper compute & place the overlay.
+  function seedEmptySeat(seat){
+    if (hasReal(seat)) return;
+
+    const ov = document.getElementById(`overlay_${vidId(seat)}`);
+    if (ov && ov.dataset.empty === '1') return;
+
+    const ghost = document.createElement('video');
+    ghost.id = vidId(seat);
+    ghost.className = vidCls(seat);
+    ghost.setAttribute('data-ghost', '1');
+
+    // 👇 Critical: give the ghost a portrait intrinsic size so
+    // CSS like width:19%; height:auto has real dimensions.
+    ghost.setAttribute('width',  '1080');   // intrinsic width
+    ghost.setAttribute('height', '1920');  // intrinsic height
+    ghost.style.aspectRatio   = '9 / 16';
+    ghost.style.position      = 'absolute';
+    ghost.style.opacity       = '0';
+    ghost.style.pointerEvents = 'none';
+
+    VC.appendChild(ghost);
+
+    // Position overlay relative to the ghost, then mark empty
+    window.__overlayHelpers__.makeOverlay(ghost);
+    window.__overlayHelpers__.showEmptySeatForId(ghost.id);
+
+    // Remove ghost; overlay stays put
+    ghost.remove();
+  }
+
+  function syncAll(){
+    document.body.classList.add('show-open-seats');
+    SEATS.forEach(seat => {
+      if (hasReal(seat)){
+        window.__overlayHelpers__.clearEmptySeatForId(vidId(seat));
+      } else {
+        seedEmptySeat(seat);
+      }
+    });
+  }
+
+  function onDomChange(){
+    SEATS.forEach(seat => {
+      if (hasReal(seat)){
+        window.__overlayHelpers__.clearEmptySeatForId(vidId(seat));
+      } else {
+        seedEmptySeat(seat);
+      }
+    });
+  }
+
+  function onOpenClick(e){
+    const box = e.target.closest('.overlay-box[data-empty="1"]');
+    if (!box) return;
+    const m = /^overlay_video_character(\d+)_seat1$/.exec(box.id);
+    if (!m) return;
+    const seat = parseInt(m[1], 10);
+
+    // Only respond for seats we manage at boot
+    if (!SEATS.includes(seat)) return;
+
+    const cb = document.querySelector(
+      `#checkboxContainer input[type="checkbox"][data-seat="${seat}"],` +
+      `#checkboxContainer input[type="checkbox"][value="${seat}"]`
+    );
+    if (cb && !cb.checked){
+      cb.checked = true;
+      cb.dispatchEvent(new Event('change', { bubbles: true }));
+    }
+  }
+
+  readyHelpers(() => {
+    // Initial boot
+    syncAll();
+
+    // Watch only for real video mount/unmount under VC
+    const mo = new MutationObserver(onDomChange);
+    mo.observe(VC, { childList: true, subtree: true });
+
+    // Claim on click
+    VC.addEventListener('click', onOpenClick, { passive: true });
+
+    // Harmless resync on resize
+    addEventListener('resize', onDomChange, { passive: true });
+  });
+})();
+</script>
+
+
+  <!-- ================================================================
+       GAME LOBBY MENU HOVER OVER CARDS
+       ================================================================ -->
+<script>
+(function () {
+  const menu = document.getElementById('lobbyMenu');
+  if (!menu) return;
+
+  // Create one reusable hover card appended to <body>
+  const card = document.createElement('div');
+  card.className = 'lobby-hover-card';
+  card.innerHTML = `<div class="lobby-hover-card__title"></div>`;
+  document.body.appendChild(card);
+
+  let mediaEl = null;     // <img> or <video> inserted into card
+  let activeBtn = null;   // currently hovered button
+  let hideTimer = null;
+
+  function ensureMediaEl(tag) {
+    if (mediaEl && mediaEl.tagName.toLowerCase() === tag) return mediaEl;
+    if (mediaEl) mediaEl.remove();
+    mediaEl = document.createElement(tag);
+    mediaEl.className = 'lobby-hover-card__media';
+    if (tag === 'video') {
+      mediaEl.autoplay = true;
+      mediaEl.loop = true;
+      mediaEl.muted = true;
+      mediaEl.playsInline = true;
+      mediaEl.setAttribute('playsinline','');
+      mediaEl.setAttribute('muted','');
+      mediaEl.setAttribute('autoplay','');
+      mediaEl.setAttribute('loop','');
+    }
+    card.insertBefore(mediaEl, card.firstChild);
+    return mediaEl;
+  }
+
+  function getTarget(btn) {
+    const sel = btn.getAttribute('data-target');
+    if (!sel) return null;
+    return document.querySelector(sel);
+  }
+
+  function getMediaFromTarget(target) {
+    if (!target) return null;
+    // Accept either direct <img>/<video> child or nested inside
+    const vid = target.querySelector('video');
+    const img = target.querySelector('img');
+    if (vid && (vid.currentSrc || vid.src)) {
+      return { type: 'video', src: vid.currentSrc || vid.src, poster: vid.getAttribute('poster') || '' };
+    }
+    if (img && img.src) {
+      return { type: 'image', src: img.src };
+    }
+    // Also accept data attributes if you store them that way
+    const dataSrc = target.getAttribute('data-media');
+    const dataType = target.getAttribute('data-type');
+    if (dataSrc) {
+      return { type: (dataType || 'image').toLowerCase(), src: dataSrc };
+    }
+    return null;
+  }
+
+  function getTitleFromTarget(target, fallback) {
+    return target?.getAttribute('data-title')
+        || target?.getAttribute('aria-label')
+        || (target?.textContent || '').trim()
+        || fallback;
+  }
+
+  function positionCard(btn) {
+    const rect = btn.getBoundingClientRect();
+    const width = Math.round(rect.width);
+
+    // Set card width to exact button width
+    card.style.width = width + 'px';
+
+    // Compute height from CSS aspect ratio (16/9 default)
+    const ratio = 16/9;
+    const height = width / ratio;
+
+    const gap = 10;
+    let left = Math.round(rect.left);
+    let top = Math.round(rect.top - height - gap);
+
+    // Keep on screen horizontally
+    left = Math.max(8, Math.min(left, window.innerWidth - width - 8));
+    // Flip below if no space above
+    if (top < 8) top = Math.round(rect.bottom + gap);
+
+    card.style.left = left + 'px';
+    card.style.top  = top  + 'px';
+  }
+
+  function showCard(btn) {
+    const target = getTarget(btn);
+    const mediaInfo = getMediaFromTarget(target);
+    if (!mediaInfo || !mediaInfo.src) return;
+
+    activeBtn = btn;
+    clearTimeout(hideTimer);
+
+    // Title
+    const titleText = getTitleFromTarget(target, btn.textContent.trim());
+    card.querySelector('.lobby-hover-card__title').textContent = titleText;
+
+    // Media
+    if (mediaInfo.type === 'video') {
+      const v = ensureMediaEl('video');
+      if (v.src !== mediaInfo.src) {
+        v.src = mediaInfo.src;
+        if (mediaInfo.poster) v.poster = mediaInfo.poster;
+      }
+      v.currentTime = 0;
+      v.play().catch(()=>{});
+    } else {
+      const i = ensureMediaEl('img');
+      if (i.src !== mediaInfo.src) i.src = mediaInfo.src;
+    }
+
+    positionCard(btn);
+    requestAnimationFrame(() => card.classList.add('is-on'));
+  }
+
+  function hideCard(immediate = false) {
+    clearTimeout(hideTimer);
+    const doHide = () => {
+      card.classList.remove('is-on');
+      activeBtn = null;
+    };
+    if (immediate) doHide();
+    else hideTimer = setTimeout(doHide, 60);
+  }
+
+  // Events — mouse + keyboard focus
+  menu.addEventListener('mouseenter', onEnter, true);
+  menu.addEventListener('mouseleave', onLeave, true);
+  menu.addEventListener('focusin',  onEnter, true);
+  menu.addEventListener('focusout', onLeave, true);
+
+  function onEnter(e) {
+    const btn = e.target.closest('.lobby-btn');
+    if (!btn) return;
+    showCard(btn);
+  }
+  function onLeave(e) {
+    const btn = e.target.closest('.lobby-btn');
+    if (!btn) return;
+    if (btn === activeBtn) hideCard();
+  }
+
+  // Keep positions correct
+  window.addEventListener('scroll', () => hideCard(true), { passive: true });
+  window.addEventListener('resize', () => hideCard(true));
+})();
+</script>
+
+
+
+  <!-- ================================================================
+       SCRIPT FOR ADDING EXTRA GAME ROOMS INTO THE LOBBY
+       ================================================================ -->
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  // --- Room 1 baseline anchors (existing DOM)
+  const r1 = {
+    bgVideo: document.getElementById('backgroundVideo'),
+    roomImg: document.querySelector('img.room'),
+    tableImg: document.querySelector('img.tabletop'),
+    chairs:   document.getElementById('chairsLayer'),
+    videos:   document.getElementById('videoContainer'),
+    zoom:     document.getElementById('zoomArea'),
+    pot:      document.getElementById('pot')
+  };
+
+  // --- Extra room sections (appended above)
+  const sections = {
+    2: document.getElementById('room2Section'),
+    3: document.getElementById('room3Section'),
+    4: document.getElementById('room4Section')
+  };
+  const videos = {
+    1: r1.bgVideo,
+    2: document.getElementById('backgroundVideo_2'),
+    3: document.getElementById('backgroundVideo_3'),
+    4: document.getElementById('backgroundVideo_4')
+  };
+
+  // Map lobby buttons ($5-10, etc.) => #tableMediaX => X
+  const lobbyBtns = document.querySelectorAll('.lobby-btn');
+  const parseNum  = (sel) => { const m = (sel||'').match(/\d+$/); return m ? parseInt(m[0],10) : 1; };
+
+  // Utility: load a src only when needed, with fallback to Room 1’s current media if missing
+  function safeSet(el, src, fallback) {
+    if (!el) return;
+    if (!src) { el.removeAttribute('src'); return; }
+    // apply and probe; if it errors, use fallback
+    const tag = el.tagName.toLowerCase();
+    const onErr = () => {
+      if (fallback) { el.src = fallback; }
+      el.dispatchEvent(new Event('errorHandled'));
+    };
+    el.addEventListener('error', onErr, { once: true });
+    el.src = src;
+    if (tag === 'video' && el.load) el.load();
+  }
+
+  function hideRoom1(hide) {
+    const v = hide ? 'none' : '';
+    if (r1.bgVideo) r1.bgVideo.style.display = v;
+    if (r1.roomImg) r1.roomImg.style.display = v;
+    if (r1.tableImg) r1.tableImg.style.display = v;
+    if (r1.chairs)  r1.chairs.style.display  = v;
+    if (r1.videos)  r1.videos.style.display  = v;
+    if (r1.zoom)    r1.zoom.style.display    = v;
+    if (r1.pot)     r1.pot.style.display     = v;
+  }
+
+  function pauseAllExcept(n) {
+    for (let i=1;i<=4;i++) {
+      const v = videos[i];
+      if (!v) continue;
+      const hasSrc = v.getAttribute('src') || v.currentSrc;
+      try { (i===n && hasSrc) ? v.play() : v.pause(); } catch(e){}
+    }
+  }
+
+  function activateRoom(n) {
+    // Deactivate all appended sections
+    for (const k of [2,3,4]) {
+      const s = sections[k];
+      if (s) { s.classList.remove('active'); s.setAttribute('aria-hidden','true'); }
+    }
+
+    if (n === 1) {
+      // Show Room 1
+      hideRoom1(false);
+      pauseAllExcept(1);
+      return;
+    }
+
+    const s = sections[n];
+    if (!s) { hideRoom1(false); pauseAllExcept(1); return; }
+
+    // Lazy-apply sources from data-* only when first activated
+    const bgSrc    = s.getAttribute('data-bg');
+    const roomSrc  = s.getAttribute('data-room');
+    const tableSrc = s.getAttribute('data-table');
+
+    const v = videos[n];
+    const imgRoom  = s.querySelector('img.room');
+    const imgTable = s.querySelector('img.tabletop');
+
+    // Use current Room 1 media as fallback (guaranteed existing)
+    const fbVideo = r1.bgVideo ? (r1.bgVideo.getAttribute('src') || r1.bgVideo.currentSrc) : '';
+    const fbRoom  = r1.roomImg ? r1.roomImg.getAttribute('src') : '';
+    const fbTable = r1.tableImg ? r1.tableImg.getAttribute('src') : '';
+
+    // Only set sources if not already set (prevents repeat 404 spam)
+    if (v && !v.getAttribute('src'))       safeSet(v, bgSrc, fbVideo);
+    if (imgRoom && !imgRoom.getAttribute('src'))  safeSet(imgRoom,  roomSrc, fbRoom);
+    if (imgTable && !imgTable.getAttribute('src')) safeSet(imgTable, tableSrc, fbTable);
+
+    // Show this section; hide Room 1
+    hideRoom1(true);
+    s.classList.add('active');
+    s.setAttribute('aria-hidden','false');
+
+    // Play/pause
+    pauseAllExcept(n);
+  }
+
+  // Lobby click wiring
+  function setActiveBtn(btn) {
+    const sibs = btn.parentElement.querySelectorAll('.lobby-btn');
+    sibs.forEach(b => {
+      const on = (b === btn);
+      b.classList.toggle('is-active', on);
+      b.setAttribute('aria-selected', on ? 'true' : 'false');
+    });
+  }
+  lobbyBtns.forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.preventDefault?.();
+      setActiveBtn(btn);
+      const n = parseNum(btn.getAttribute('data-target'));
+      activateRoom(n);
+    });
+  });
+
+  // Init: respect current .is-active button
+  const initial = document.querySelector('.lobby-btn.is-active') || lobbyBtns[0];
+  activateRoom(parseNum(initial?.getAttribute('data-target')) || 1);
+
+  // Optional: Game Mode toggle (unchanged)
+  const gameModeBtn = document.querySelector('#controls button:last-child');
+  gameModeBtn?.addEventListener('click', () => {
+    document.body.classList.toggle('game-mode-active');
+  });
+
+  // Hide broken small icons (e.g., camera.png) without console spam
+  document.querySelectorAll('img').forEach(im => {
+    im.addEventListener('error', () => { im.style.display = 'none'; }, { once: true });
+  });
+});
+</script>
+
+  <!-- ================================================================
+       INTERNAL TESTING SCRIPTS
+       ================================================================ -->
+<script>
+/* ================================================================
+   Keep character layer visible across rooms
+   - No DOM moves. No CSS changes. No "OPEN" badges.
+   - Checkboxes keep controlling your original #videoContainer.
+   - Rooms 2–4: no extra UI injected.
+   ================================================================= */
+(function () {
+  // Seats present on the table (kept for parity; unused now)
+  const SEATS = [1,2,3,4,5,6,7,8,9];
+  const SEAT_VIEW = 1; // matches your existing id pattern: video_character{N}_seat1
+
+  // 1) Keep character layer ALWAYS visible (so characters appear when toggled).
+  //    If any prior script hides it on room switch, force it back on.
+  const chairsLayer = document.getElementById('chairsLayer');
+  const videoContainer = document.getElementById('videoContainer');
+
+  function keepCharacterLayersVisible(){
+    if (videoContainer) videoContainer.style.display = '';
+    if (chairsLayer) chairsLayer.style.display = '';
+  }
+
+  // 2) Helpers (kept minimal; no OPEN logic)
+  function activeRoomNumber(){
+    const btn = document.querySelector('.lobby-btn.is-active');
+    const id  = btn?.getAttribute('data-target') || '';
+    const m   = id.match(/\d+$/);
+    return m ? parseInt(m[0],10) : 1;
+  }
+
+  // 3) Wire checkbox changes (do NOT interfere with your existing handlers)
+  document.addEventListener('change', function(ev){
+    const t = ev.target;
+    if (t && t.matches('input.seatCheckbox')) {
+      // Make sure character layers remain visible after toggles
+      keepCharacterLayersVisible();
+    }
+  }, true);
+
+  // 4) On lobby switch, just keep character layers visible
+  document.querySelectorAll('.lobby-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      // Let your existing room-switcher finish first
+      setTimeout(() => {
+        keepCharacterLayersVisible();
+        // activeRoomNumber() is intentionally unused here; we just ensure visibility
+      }, 0);
+    });
+  });
+
+  // 5) First run
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', keepCharacterLayersVisible);
+  } else {
+    keepCharacterLayersVisible();
+  }
+})();
+</script>
+
+  <!-- ================================================================
+       INTERNAL TESTING SCRIPT 
+       ================================================================ -->
+<script>
+/* ==============================================================
+   ROOMS 2–4: Pot alignment + chip-stack settle (safe & minimal)
+   - No CSS/DOM moves, no play()/pause() calls.
+   - Mirrors Room 1's on-screen pot placement using RELATIVE offsets.
+   - Lifts chip stacks above the table and forces a layout tick so they settle.
+   ============================================================== */
+(function () {
+  // ---- helpers ----
+  function activeRoom() {
+    const a = document.querySelector('.lobby-btn.is-active');
+    const t = a ? a.getAttribute('data-target') || '' : '';
+    const m = t.match(/\d+$/);
+    return m ? parseInt(m[0], 10) : 1;
+  }
+  function r1Refs() {
+    return { pot: document.getElementById('pot'), zoom: document.getElementById('zoomArea') };
+  }
+  function rNRefs(n) {
+    return {
+      pot:  document.getElementById('pot_' + n),
+      zoom: document.getElementById('zoomArea_' + n),
+      vc:   document.getElementById('videoContainer_' + n)
+    };
+  }
+
+  // Measure Room 1 → get RELATIVE offsets (pot vs zoom center/right)
+  function getRoom1Delta() {
+    const { pot, zoom } = r1Refs();
+    if (!pot || !zoom) return null;
+    const pr = pot.getBoundingClientRect();
+    const zr = zoom.getBoundingClientRect();
+    return {
+      dx: pr.left - zr.right,                 // horizontal delta from zoom right edge
+      dy: pr.top  - (zr.top + zr.height/2),   // vertical delta from zoom vertical center
+      width: getComputedStyle(pot).width || '120px',
+      z: getComputedStyle(pot).zIndex || '30',
+      transform: getComputedStyle(pot).transform
+    };
+  }
+
+  // Apply Room 1’s relative offsets to Room N
+  function placePotForRoom(n, base) {
+    if (n === 1 || !base) return;
+    const { pot, zoom } = rNRefs(n);
+    if (!pot || !zoom) return;
+
+    const zr = zoom.getBoundingClientRect();
+    const left = zr.right + base.dx;
+    const top  = (zr.top + zr.height/2) + base.dy;
+
+    pot.style.position      = 'fixed';
+    pot.style.left          = left + 'px';
+    pot.style.top           = top  + 'px';
+    pot.style.width         = base.width;
+    pot.style.zIndex        = base.z;
+    pot.style.pointerEvents = 'none';
+    pot.style.transform     = (base.transform && base.transform !== 'none') ? base.transform : 'translateY(-50%)';
+    pot.style.visibility    = 'visible';
+    pot.style.display       = 'block';
+  }
+
+  // Only the active room pot should be visible
+  function showOnlyPot(room) {
+    [2,3,4].forEach(n => {
+      const p = document.getElementById('pot_' + n);
+      if (!p) return;
+      p.style.display = (n === room) ? 'block' : 'none';
+      p.style.visibility = (n === room) ? 'visible' : 'hidden';
+    });
+  }
+
+  // Lift chip stacks in rooms 2–4 above the table and “settle” transforms
+  function settleChipStacks(vc) {
+    if (!vc) return;
+    vc.querySelectorAll('.chips, .chip-stack, .stack, .bet, .chips-layer, [data-role="chips"]').forEach(el => {
+      if (!el.style.position) el.style.position = 'absolute';
+      el.style.zIndex = '22';       // table ~10, videos ~20/21, overlays 200; this sits above table
+      el.style.pointerEvents = 'none';
+    });
+    // force layout so transforms snap in the now-visible section
+    vc.offsetWidth; requestAnimationFrame(() => { vc.offsetHeight; });
+  }
+
+  function updateForActiveRoom() {
+    const r = activeRoom();
+    const base = getRoom1Delta();   // always mirror current Room 1 relation
+    if (r === 1) { showOnlyPot(-1); return; }
+
+    showOnlyPot(r);
+    requestAnimationFrame(() => {
+      placePotForRoom(r, base);
+      const { vc } = rNRefs(r);
+      settleChipStacks(vc);
+    });
+  }
+
+  // init + events
+  const run = () => requestAnimationFrame(updateForActiveRoom);
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', run);
+  else run();
+
+  // after your room-toggle finishes
+  document.querySelectorAll('.lobby-btn').forEach(btn => btn.addEventListener('click', () => setTimeout(run, 0)));
+  // keep aligned on resize
+  window.addEventListener('resize', run);
+})();
+</script>
+
+  <!-- ================================================================
+       BACKGROUND VIDEO SPEED SCRIPT 
+       ================================================================ -->
+<script>
+/* Force a custom playback speed for Room 3's background video */
+(function setRoom3BgSpeed(){
+  const RATE = 1; // <-- your desired speed
+  const v = document.getElementById('backgroundVideo_3');
+  if (!v) return;
+
+  // Apply both default and current rate
+  function applyRate(){
+    if (!v) return;
+    v.defaultPlaybackRate = RATE;
+    if (v.playbackRate !== RATE) v.playbackRate = RATE;
+  }
+
+  // Re-apply on common lifecycle points where the browser or your code might reset it
+  ['loadedmetadata','loadeddata','canplay','play','playing','ratechange','seeking','seeked'].forEach(ev =>
+    v.addEventListener(ev, applyRate, { passive:true })
+  );
+
+  // If your code swaps the source (common with data-bg loaders), re-apply
+  new MutationObserver(muts => {
+    for (const m of muts) {
+      if (m.type === 'attributes' && (m.attributeName === 'src' || m.attributeName === 'srcObject')) {
+        applyRate();
+      }
+    }
+  }).observe(v, { attributes:true, attributeFilter:['src','srcObject'] });
+
+  // If your room toggle adds/removes .active on sections, set rate when room 3 is shown
+  const room3 = document.getElementById('room3Section');
+  if (room3) {
+    new MutationObserver(() => { 
+      if (room3.classList.contains('active')) applyRate();
+    }).observe(room3, { attributes:true, attributeFilter:['class'] });
+  }
+
+  // Initial pass (covers cases where the video is already ready)
+  applyRate();
+})();
+</script>
+
+  <!-- ================================================================
+       GAME HEADER SCRIPT 
+       ================================================================ -->
+<script>
+/**
+ * Game Header: clone the existing .landing-header.header-top as a second header
+ * and swap visibility based on Game Mode. If the original has any IDs inside,
+ * we strip them from the clone to avoid duplicate IDs.
+ */
+(function () {
+  const ORIGINAL_SEL = '.landing-header.header-top';
+  const original = document.querySelector(ORIGINAL_SEL);
+  if (!original) return;
+
+  // Avoid double-injecting on reloads
+  if (document.getElementById('gameHeader')) return;
+
+  // Deep clone
+  const clone = original.cloneNode(true);
+  clone.id = 'gameHeader';
+  clone.classList.add('game-header'); // used by CSS to control visibility
+
+  // Strip any IDs in the clone to avoid duplicates
+  clone.querySelectorAll('[id]').forEach(el => el.removeAttribute('id'));
+
+  // Insert right after the original header
+  original.insertAdjacentElement('afterend', clone);
+
+  // (Optional) If you want a different logo/text in Game Mode by default:
+  // const logoInClone = clone.querySelector('.logo-wrapper .logo');
+  // if (logoInClone) logoInClone.textContent = 'GAME MODE'; // you can customize later
+
+  // Hook into the existing Game Mode button (already used in your file).
+  // If that listener already toggles body.game-mode-active, we don't need
+  // to add anything else here. This block is only a safety net:
+  const gameModeBtn = document.querySelector('#controls button:last-child');
+  if (gameModeBtn && !gameModeBtn.dataset._gmWired) {
+    gameModeBtn.dataset._gmWired = '1';
+    // No-op: the file already toggles game-mode-active elsewhere.
+    // If for any reason it didn’t, uncomment the next line:
+    // gameModeBtn.addEventListener('click', () => document.body.classList.toggle('game-mode-active'));
+  }
+})();
+</script>
+
+
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.0/jquery-ui.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/custom.js"></script>
+
+
+
+</body>
+</html>

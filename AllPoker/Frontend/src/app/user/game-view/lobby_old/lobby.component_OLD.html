@@ -1,0 +1,160 @@
+<div class="lobby_banner expandsrea">
+  <div class="arrange-seat">
+    <ul>
+      <!-- <li class="chair_one">
+        <a class="seated empty-chair">
+          <i class="fa-solid fa-plus"></i> SEAT OPEN
+        </a>
+      </li> -->
+      <li class="seat_one">
+        <a (click)="modalOpen(1, content)" class="seated empty-chair">
+          <span *ngIf="checkSeatOpen(1)">
+            <i class="fa-solid fa-plus"></i> SEAT OPEN
+          </span>
+          <span *ngIf="!checkSeatOpen(1)"> SEAT BOOKED </span>
+        </a>
+      </li>
+      <!-- <li class="seat_two">
+        <a (click)="modalOpen(2, content)" class="seated empty-chair">
+          <span *ngIf="checkSeatOpen(2)">
+            <i class="fa-solid fa-plus"></i> SEAT OPEN
+          </span>
+          <span *ngIf="!checkSeatOpen(2)"> SEAT BOOKED </span>
+        </a>
+      </li> -->
+      <li class="seat_three">
+        <a (click)="modalOpen(3, content)" class="seated empty-chair">
+          <span *ngIf="checkSeatOpen(3)">
+            <i class="fa-solid fa-plus"></i> SEAT OPEN
+          </span>
+          <span *ngIf="!checkSeatOpen(3)"> SEAT BOOKED </span>
+        </a>
+      </li>
+      <!-- <li class="seat_four">
+        <a (click)="modalOpen(4, content)" class="seated empty-chair">
+          <span *ngIf="checkSeatOpen(4)">
+            <i class="fa-solid fa-plus"></i> SEAT OPEN
+          </span>
+          <span *ngIf="!checkSeatOpen(4)"> SEAT BOOKED </span>
+        </a>
+      </li> -->
+      <li class="seat_five">
+        <a (click)="modalOpen(5, content)" class="seated empty-chair">
+          <span *ngIf="checkSeatOpen(5)">
+            <i class="fa-solid fa-plus"></i> SEAT OPEN
+          </span>
+          <span *ngIf="!checkSeatOpen(5)"> SEAT BOOKED </span>
+        </a>
+      </li>
+      <li class="seat_six">
+        <a (click)="modalOpen(6, content)" class="seated empty-chair">
+          <span *ngIf="checkSeatOpen(6)">
+            <i class="fa-solid fa-plus"></i> SEAT OPEN
+          </span>
+          <span *ngIf="!checkSeatOpen(6)"> SEAT BOOKED </span>
+        </a>
+      </li>
+      <li class="seat_seven">
+        <a (click)="modalOpen(7, content)" class="seated empty-chair">
+          <span *ngIf="checkSeatOpen(7)">
+            <i class="fa-solid fa-plus"></i> SEAT OPEN
+          </span>
+          <span *ngIf="!checkSeatOpen(7)"> SEAT BOOKED </span>
+        </a>
+      </li>
+      <li class="seat_eight">
+        <a (click)="modalOpen(8, content)" class="seated empty-chair">
+          <span *ngIf="checkSeatOpen(8)">
+            <i class="fa-solid fa-plus"></i> SEAT OPEN
+          </span>
+          <span *ngIf="!checkSeatOpen(8)"> SEAT BOOKED </span>
+        </a>
+      </li>
+      <li class="seat_nine">
+        <a (click)="modalOpen(9, content)" class="seated empty-chair">
+          <span *ngIf="checkSeatOpen(9)">
+            <i class="fa-solid fa-plus"></i> SEAT OPEN
+          </span>
+          <span *ngIf="!checkSeatOpen(9)"> SEAT BOOKED </span>
+        </a>
+      </li>
+    </ul>
+  </div>
+
+  <img
+    class="img-fluid banner-image d-none d-md-block"
+    src="assets/images/lobby_expand.jpg"
+    alt=""
+  />
+
+  <img
+    class="img-fluid banner-image d-block d-md-none"
+    src="assets/images/lobby-mobile-banner.png"
+    alt=""
+  />
+</div>
+
+<!--  -->
+<ng-template #content let-modal let-closeModal="close">
+  <div class="popup-welcome cam-setting">
+    <div class="welcome-wrapper" style="max-width: none">
+      <div class="modal-body">
+        <h3>Camera Settings</h3>
+        <button (click)="modal.close()" type="button" class="close">
+          <img src="assets/images/Close-Icon.svg" alt="" />
+        </button>
+        <div class="avatar-outer">
+          <!-- <img class="sm" src="assets/images/SM.svg" alt="" /> -->
+          <video
+            id="lobby_user_vid"
+            autoplay
+            style="width: 100%; max-width: 300px"
+          ></video>
+
+          <!-- <video muted autoplay loop style="width: 500px">
+            <source src="{{ videoSource }}" />
+            Browser not supported
+          </video> -->
+
+          <!-- <div class="avatar-bx">
+            <img src="assets/images/avater2.jpg" alt="" />
+          </div> -->
+        </div>
+        <p>Enter Buy-In Amount</p>
+        <span class="amount">$1000</span>
+        <p *ngIf="profileDetails" class="additional-text">
+          Available Funds: {{ profileDetails.cash_balance }}
+        </p>
+        <div
+          class="botton-area"
+          style="
+            position: absolute;
+            left: 0;
+            bottom: -100px;
+            padding-bottom: 50px;
+          "
+        >
+          <ul *ngIf="availSeat" class="m-0">
+            <li>
+              <button type="button" class="tnx">
+                <img src="assets/images/eye-o.svg" alt="" /> Watch
+              </button>
+            </li>
+            <li>
+              <!-- <a
+                (click)="modal.close()"
+                routerLink="/game/table-view"
+                class="deposit m-0"
+              >
+                Play Now
+              </a> -->
+              <a (click)="addUserToGame(closeModal)" class="deposit m-0">
+                Play Now
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>

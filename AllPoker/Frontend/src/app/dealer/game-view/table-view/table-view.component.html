@@ -1,0 +1,279 @@
+<div class="table-main">
+  <div class="table-image-holder">
+    <img src="assets/images/table.svg" alt="" />
+  </div>
+
+  <!-- <div
+    *ngFor="let e of [].constructor(9); let i = index"
+    [ngClass]="getUserClass(i + 1)"
+  >
+    <div class="d-text-block">
+      <p class="user-text">username123</p>
+    </div>
+    <div class="card-box-main user-box-main">
+      <img src="assets/images/character-icon2.png" alt="" />
+      <div class="user-card-box user-card-box2">
+        <div class="d-text-block d-text-block2 user-text-block">
+          <p>$2200</p>
+        </div>
+      </div>
+    </div>
+  </div> -->
+
+  <div
+    *ngFor="let e of [].constructor(9); let i = index"
+    [ngClass]="getUserClass(i + 1)"
+  >
+    <!-- Player Basic -->
+    <div
+      *ngIf="
+        getUserDetails(i + 1) &&
+        (!getUserDetails(i + 1)?.turnStatus ||
+          getUserDetails(i + 1)?.turnStatus == 'smallBlind' ||
+          getUserDetails(i + 1)?.turnStatus == 'bigBlind')
+      "
+      class="box-1 box-2 user-box-2"
+    >
+      <div class="d-text-block">
+        <span *ngIf="getUserDetails(i + 1)?.dealer" class="d-text"> D </span>
+        <span
+          *ngIf="getUserDetails(i + 1)?.turnStatus == 'smallBlind'"
+          class="d-text"
+        >
+          SB
+        </span>
+        <span
+          *ngIf="getUserDetails(i + 1)?.turnStatus == 'bigBlind'"
+          class="d-text"
+        >
+          BB
+        </span>
+        <p class="user-text">Player {{ i + 1 }}</p>
+      </div>
+      <div class="card-box-main user-box-main">
+        <img
+          src="assets/images/a{{ i + 1 }}.png"
+          style="width: 110px; height: 130px; object-fit: contain"
+        />
+        <div class="user-card-box">
+          <div class="card-box">
+            <ul
+              *ngIf="
+                !showHandCards(i) &&
+                !getUserDetails(i + 1)?.fold &&
+                !getUserDetails(i + 1)?.sittingOut
+              "
+            >
+              <li *ngFor="let card of getUserDetails(i + 1)?.myCards">
+                <img src="assets/images/card-bg.png" alt="" />
+              </li>
+            </ul>
+
+            <ul *ngIf="showHandCards(i)">
+              <li *ngFor="let card of getUserDetails(i + 1)?.myCards">
+                <img src="assets/cards/{{ card.code }}.svg" class="fold-img" />
+              </li>
+            </ul>
+          </div>
+
+          <div class="d-text-block d-text-block2 user-text-block">
+            <p>${{ getUserDetails(i + 1)?.callValue }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Player Raise || Bet || Call || Check -->
+    <div
+      *ngIf="
+        getUserDetails(i + 1)?.turnStatus == 'raise' ||
+        getUserDetails(i + 1)?.turnStatus == 'bet' ||
+        getUserDetails(i + 1)?.turnStatus == 'call' ||
+        getUserDetails(i + 1)?.turnStatus == 'check'
+      "
+      class="box-1 box-2 box-3 raise-box"
+      style="align-items: center"
+    >
+      <div class="d-text-block d-text-block2" style="padding-bottom: 0">
+        <img
+          *ngIf="
+            getUserDetails(i + 1)?.turnStatus == 'raise' ||
+            getUserDetails(i + 1)?.turnStatus == 'bet'
+          "
+          src="assets/images/raise-arw.svg"
+        />
+
+        <p *ngIf="getUserDetails(i + 1)?.turnStatus == 'raise'">RAISE</p>
+        <p *ngIf="getUserDetails(i + 1)?.turnStatus == 'bet'">BET</p>
+        <p *ngIf="getUserDetails(i + 1)?.turnStatus == 'call'">CALL</p>
+        <p *ngIf="getUserDetails(i + 1)?.turnStatus == 'check'">CHECK</p>
+      </div>
+    </div>
+
+    <!-- Player Fold -->
+    <div
+      *ngIf="getUserDetails(i + 1)?.turnStatus == 'fold'"
+      class="box-1 box-2 box-5 raise-box fold-box"
+    >
+      <div class="d-text-block d-text-block2">
+        <img src="assets/images/cross-blk.svg" alt="" />
+        <p>FOLD</p>
+      </div>
+    </div>
+
+    <!-- Player Winner -->
+    <div
+      *ngIf="getUserDetails(i + 1)?.turnStatus == 'winner'"
+      class="box-1 box-6 raise-box winner-box"
+      style="align-items: center"
+    >
+      <div class="d-text-block d-text-block2" style="padding-bottom: 0">
+        <p class="win-p">WINNER</p>
+        <!-- <p class="winner-pra">$9,850</p> -->
+      </div>
+    </div>
+
+    <div
+      *ngIf="!getUserDetails(i + 1) && !gameStarted"
+      class="box-1 box-0 raise-box winner-box seatempty"
+    >
+      <div class="d-text-block d-text-block2">
+        <p class="win-p">SEAT</p>
+        <p class="winner-pra">OPEN</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Player 1 -->
+  <!-- <div class="right-top">
+    <div class="box-1 box-2 box-3 raise-box">
+      <div class="d-text-block d-text-block2">
+        <img src="assets/images/raise-arw.svg" alt="" />
+        <p>RAISE</p>
+      </div>
+    </div>
+  </div> -->
+
+  <!-- Player 2 -->
+  <!-- <div class="right-middle">
+    <div class="box-1 box-2 user-box-2">
+      <div class="d-text-block">
+        <span class="d-text">D</span>
+        <p class="user-text">username123</p>
+      </div>
+      <div class="card-box-main user-box-main">
+        <img src="assets/images/character-icon.png" alt="" />
+        <div class="user-card-box">
+          <div class="card-box">
+            <ul>
+              <li><img src="assets/images/card-bg.png" alt="" /></li>
+              <li><img src="assets/images/card-bg.png" alt="" /></li>
+            </ul>
+          </div>
+          <div class="d-text-block d-text-block2 user-text-block">
+            <p>$2200</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div> -->
+
+  <!-- Player 3 -->
+  <!-- <div class="bottom-right">
+    <div class="box-1 box-2 box-4 user-box-2 user-box-3 user-box-4">
+      <div class="d-text-block">
+        <p class="user-text">username123</p>
+      </div>
+      <div class="card-box-main user-box-main">
+        <img src="assets/images/character-icon2.png" alt="" />
+        <div class="user-card-box user-card-box2">
+          <div class="d-text-block d-text-block2 user-text-block">
+            <p>$2200</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div> -->
+
+  <!-- Player 7 -->
+  <!-- <div class="bottom-left">
+    <div class="box-1 box-0 raise-box winner-box seatempty">
+      <div class="d-text-block d-text-block2">
+        <p class="win-p">SEAT</p>
+        <p class="winner-pra">OPEN</p>
+      </div>
+    </div>
+  </div> -->
+
+  <!-- Player 8 -->
+  <!-- <div class="left-middle">
+    <div class="box-1 box-6 raise-box winner-box">
+      <div class="d-text-block d-text-block2">
+        <p class="win-p">WINNER</p>
+        <p class="winner-pra">$9,850</p>
+      </div>
+    </div>
+  </div> -->
+
+  <!-- Player 9 -->
+  <!-- <div class="left-top">
+    <div class="box-1 box-2 box-5 raise-box fold-box">
+      <div class="d-text-block d-text-block2">
+        <img src="assets/images/cross-blk.svg" alt="" />
+        <p>FOLD</p>
+      </div>
+    </div>
+  </div> -->
+
+  <div class="card-list">
+    <ul>
+      <li *ngFor="let e of [].constructor(5); let i = index">
+        <a *ngIf="serveCards[i]">
+          <img
+            src="assets/cards/{{ serveCards[i].code }}.svg"
+            alt=""
+            style="width: 100px; height: 150px; object-fit: contain"
+          />
+        </a>
+        <a *ngIf="!serveCards[i]">
+          <img src="assets/images/card-bg.svg" alt="" />
+        </a>
+      </li>
+      <!-- <li>
+        <a ><img src="assets/images/card-2.svg" alt="" /></a>
+      </li>
+      <li>
+        <a ><img src="assets/images/card-3.svg" alt="" /></a>
+      </li>
+      <li>
+        <a ><img src="assets/images/card-4.svg" alt="" /></a>
+      </li>
+      <li>
+        <a ><img src="assets/images/card-bg.svg" alt="" /></a>
+      </li> -->
+    </ul>
+  </div>
+
+  <a
+    (click)="resetGame()"
+    *ngIf="!dealerReset && gameStarted"
+    class="setting-icon"
+  >
+    <img src="assets/images/setting-icon.svg" alt="" />
+  </a>
+
+  <!-- <p class="connected">
+    <span><img src="assets/images/wifi-icon.svg" alt="" /></span> Connected
+  </p> -->
+
+  <a class="pot"><span>POT</span> ${{ potValue }}</a>
+
+  <!-- <ul class="user-chat">
+    <li><span>User2:</span> Hi, this is the chat</li>
+    <li><span>User:</span> Hi, let’s play</li>
+  </ul> -->
+
+  <p *ngIf="cardMessage" class="dealer-pra dealer-pra5" style="font-size: 42px">
+    <span>Alert:</span> {{ cardMessage }}
+  </p>
+</div>

@@ -1,0 +1,101 @@
+.margin-bottom-1 {
+  margin-bottom: 5px;
+}
+
+.margin-bottom-2 {
+  margin-bottom: 7.5px;
+}
+
+.break {
+  display: block;
+}
+
+.main-wrapper {
+  margin: 0 auto;
+  max-width: 775px;
+  font-family: arial, sans-serif;
+  padding: 0 45px;
+  color: #323232;
+  font-size: 15px;
+}
+
+.col-left {
+  float: left;
+}
+
+.col-right {
+  float: right;
+}
+
+.width-1 {
+  width: 60px;
+}
+
+.width-2 {
+  width: 120px;
+}
+
+.section-1 {
+  height: 175px;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.main-title {
+  font-size: 26px;
+}
+
+.section-1 > .col-right {
+  border: 1px solid #ccc;
+  margin-top: 30px;
+  float: right;
+  text-align: center;
+  width: 30%;
+  height: 75px;
+}
+
+.section-1 > .col-right .status {
+  margin-top: 20px;
+  font-size: 26px;
+}
+
+.section-2 {
+  height: 175px;
+}
+
+.section-2 > .col-left {
+  width: 50%;
+}
+
+.section-2 > .col-right {
+  width: 50%;
+  text-align: right;
+}
+
+.section-3 {
+  height: 125px;
+}
+
+.section-4 {
+  height: 100px;
+  border-bottom: 1px solid #ccc;
+  margin-bottom: 7.5px;
+}
+
+.section-3 > .header,
+.section-4 > .header {
+  padding: 15px;
+  background: #efefef;
+  height: 22px;
+}
+
+.section-3 > .body,
+.section-4 > .body {
+  padding: 7.5px 15px;
+}
+
+.section-5 {
+  padding-right: 11px;
+}

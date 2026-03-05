@@ -1,0 +1,40 @@
+{
+  "name": "pure-view-backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "@gnaudio/jabra-js": "^4.2.1",
+    "@gnaudio/jabra-node-sdk": "^3.6.2",
+    "axios": "^1.12.2",
+    "bcrypt": "^5.1.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "fs": "^0.0.1-security",
+    "https": "^1.0.0",
+    "jsonwebtoken": "^9.0.1",
+    "mqtt": "^5.0.4",
+    "mysql2": "^3.6.0",
+    "path": "^0.12.7",
+    "peer": "^1.0.1",
+    "pokersolver": "^2.1.4",
+    "qs": "^6.14.0",
+    "random-org": "^2.2.0",
+    "sequelize": "^6.32.1",
+    "socket.io": "^4.5.1"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://gitlab.com/rajivsydney/pure-view.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://gitlab.com/rajivsydney/pure-view/issues"
+  },
+  "homepage": "https://gitlab.com/rajivsydney/pure-view#readme"
+}
